@@ -91,6 +91,26 @@
         android:alpha="0.5"
         />
 
+    <ImageView
+        android:id="@+id/plum"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/plum"
+        android:layout_below="@+id/banana"
+        android:layout_marginStart="375dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/blueberry"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/blueberry"
+        android:layout_below="@+id/grape"
+        android:layout_marginStart="225dp"
+        android:layout_marginTop="25dp"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
