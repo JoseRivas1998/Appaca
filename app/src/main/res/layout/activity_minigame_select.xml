@@ -19,6 +19,54 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/x_2" />
 
+    <ImageButton
+        android:id="@+id/alpacaJumpIcon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="220dp"
+        android:background="#00FF0000"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/alpacajump_2" />
+
+    <ImageButton
+        android:id="@+id/fruitCatchIcon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="56dp"
+        android:background="#00FF0000"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fruitcatch" />
+
+    <ImageButton
+        android:id="@+id/poopsweeperIcon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="72dp"
+        android:background="#00FF0000"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alpacaJumpIcon"
+        app:srcCompat="@drawable/poopsweaper1" />
+
+    <ImageButton
+        android:id="@+id/matchingIcon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="56dp"
+        android:background="#00FF0000"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fruitCatchIcon"
+        app:srcCompat="@drawable/matching_2" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
