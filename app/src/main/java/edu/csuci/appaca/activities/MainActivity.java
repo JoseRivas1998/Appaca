@@ -23,9 +23,13 @@ public class MainActivity extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final FrameLayout layout = findViewById(R.id.main_libGDX_view);
-        layout.addView(initializeForView(new MainLibGdxView()));
+        initLibGDX();
         initButtons();
+    }
+
+    private void initLibGDX() {
+        final FrameLayout layout = findViewById(R.id.main_libGDX_view);
+        layout.addView(initializeForView(new MainLibGdxView(this)));
     }
 
     private void initButtons() {
