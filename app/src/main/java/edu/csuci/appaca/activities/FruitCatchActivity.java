@@ -2,6 +2,7 @@ package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,8 +16,9 @@ public class FruitCatchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fruit_catch);
     }
 
-    public void close(View view)
+    public void exit(View view)
     {
-        setContentView(R.layout.activity_main);
+        Intent exit = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(exit);
     }
 }
