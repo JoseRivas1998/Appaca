@@ -2,6 +2,7 @@ package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,6 +18,7 @@ public class AlpacaJumpActivity extends AppCompatActivity {
 
     public void exit(View view)
     {
-        setContentView(R.layout.activity_main);
+        Intent exit = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(exit);
     }
 }
