@@ -86,4 +86,12 @@
         android:layout_marginStart="143dp"
         />
 
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/alpacasprite"
+        android:layout_below="@id/plat2"
+        android:layout_marginStart="267dp"
+        />
+
 </RelativeLayout>
