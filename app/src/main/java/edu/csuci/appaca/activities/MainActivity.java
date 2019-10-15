@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -33,8 +34,8 @@ public class MainActivity extends AndroidApplication {
     }
 
     private void initButtons() {
-        final Button shopBtn = findViewById(R.id.shopBtn);
-        final Button playBtn = findViewById(R.id.playBtn);
+        final ImageView shopBtn = findViewById(R.id.shopBtn);
+        final ImageView playBtn = findViewById(R.id.playBtn);
 
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override

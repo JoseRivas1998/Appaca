@@ -85,6 +85,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+        Gdx.app.log("MainLibGdxView", String.format("%d, %d", width, height));
         viewport.update(width, height, true);
     }
 

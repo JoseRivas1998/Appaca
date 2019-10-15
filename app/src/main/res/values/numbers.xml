@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="main_view_libgdx_width">1440</integer>
-    <integer name="main_view_libgdx_height">2229</integer>
+    <integer name="main_view_libgdx_height">2026</integer>
+
 </resources>

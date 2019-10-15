@@ -200,35 +200,45 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <ImageView
                 android:id="@+id/feedBtn"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Feed" />
+                android:layout_marginRight="@dimen/main_view_dock_margin"
+                android:layout_marginLeft="@dimen/main_view_dock_margin"
+                android:src="@drawable/fridge" />
 
-            <Button
+            <ImageView
                 android:id="@+id/clothesBtn"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Clothes" />
+                android:layout_marginRight="@dimen/main_view_dock_margin"
+                android:layout_marginLeft="@dimen/main_view_dock_margin"
+                android:src="@drawable/closet" />
 
-            <Button
+            <ImageView
                 android:id="@+id/shearBtn"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Shear" />
+                android:layout_marginRight="@dimen/main_view_dock_margin"
+                android:layout_marginLeft="@dimen/main_view_dock_margin"
+                android:src="@drawable/shears" />
 
-            <Button
+            <ImageView
                 android:id="@+id/shopBtn"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Shop" />
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/main_view_dock_margin"
+                android:layout_marginLeft="@dimen/main_view_dock_margin"
+                android:src="@drawable/shop"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/playBtn"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Play" />
+                android:layout_marginRight="@dimen/main_view_dock_margin"
+                android:layout_marginLeft="@dimen/main_view_dock_margin"
+                android:src="@drawable/games" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
