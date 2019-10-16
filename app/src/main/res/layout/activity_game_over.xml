@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bkgd3_2"
+    tools:context=".activities.GameOverActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Over"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:translationX="92dp"
+        android:translationY="65dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score: 2,147,483,647"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:translationX="59dp"
+        android:translationY="181dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="High Score: 2,147,483,647"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:translationX="99dp"
+        android:translationY="272dp" />
+
+    <Button
+        android:id="@+id/playAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Again"
+        android:translationX="76dp"
+        android:translationY="350dp" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:translationX="240dp"
+        android:translationY="350dp" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="261dp"
+        android:layout_height="556dp"
+        app:srcCompat="@drawable/paca"
+        android:translationX="169dp"
+        android:translationY="306dp" />
+
+    <TextView
+        android:id="@+id/playAgainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationX="124dp"
+        android:translationY="426dp" />
+
+</RelativeLayout>
