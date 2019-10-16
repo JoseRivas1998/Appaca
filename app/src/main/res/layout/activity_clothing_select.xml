@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#00FFFFFF"
+    tools:context=".ClothesSelect">
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="284dp"
+        tools:layout_editor_absoluteY="423dp" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="22dp"
+        tools:layout_editor_absoluteY="423dp" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="289dp"
+        tools:layout_editor_absoluteY="219dp" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="153dp"
+        tools:layout_editor_absoluteY="219dp" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="423dp" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="13dp"
+        tools:layout_editor_absoluteY="219dp" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="284dp"
+        tools:layout_editor_absoluteY="13dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="22dp"
+        tools:layout_editor_absoluteY="13dp" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:background="#FCFCFC"
+        android:text="xN"
+        tools:layout_editor_absoluteX="298dp"
+        tools:layout_editor_absoluteY="624dp" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FCF7F7"
+        android:text="xN"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="624dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00F8F5F5"
+        android:text="xN"
+        tools:layout_editor_absoluteX="22dp"
+        tools:layout_editor_absoluteY="416dp" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FAF5F5"
+        android:text="xN"
+        tools:layout_editor_absoluteX="171dp"
+        tools:layout_editor_absoluteY="624dp" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00F7F3F3"
+        android:text="xN"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="416dp" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00F8EBEB"
+        android:text="xN"
+        tools:layout_editor_absoluteX="298dp"
+        tools:layout_editor_absoluteY="416dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FAF5F5"
+        android:backgroundTint="#00F7F4F4"
+        android:text="xN"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="213dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FCFBFB"
+        android:text="xN"
+        tools:layout_editor_absoluteX="298dp"
+        tools:layout_editor_absoluteY="213dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00F7F3F3"
+        android:text="xN"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="213dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clothing"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        tools:layout_editor_absoluteX="118dp"
+        tools:layout_editor_absoluteY="31dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/Clothing Selection"
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="82dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="106dp"
+        android:layout_height="292dp"
+        android:src="@drawable/ClothingSelect"
+        tools:layout_editor_absoluteX="153dp"
+        tools:layout_editor_absoluteY="13dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        tools:layout_editor_absoluteX="339dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
