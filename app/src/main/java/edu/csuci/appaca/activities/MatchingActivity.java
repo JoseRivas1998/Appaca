@@ -16,6 +16,7 @@ public class MatchingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
+        getSupportActionBar().setTitle("Matching Game");
 
         returnToMain = (ImageButton) findViewById(R.id.exitButton);
 
