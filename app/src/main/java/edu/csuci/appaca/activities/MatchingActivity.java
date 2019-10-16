@@ -1,10 +1,13 @@
 package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.view.View;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
 
@@ -26,6 +29,16 @@ public class MatchingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        final ImageView imageView22 = findViewById(R.id.imageView22);
+        imageView22.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MatchingActivity.this, GameOverActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
 

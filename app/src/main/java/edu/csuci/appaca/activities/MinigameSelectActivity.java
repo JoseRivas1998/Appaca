@@ -34,7 +34,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
         returnToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                launchActivity(MainActivity.class);
             }
         });
 
@@ -107,7 +107,6 @@ public class MinigameSelectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (selectedClass != null) {
                     launchActivity(selectedClass);
-                    finish();
                 }
             }
         });

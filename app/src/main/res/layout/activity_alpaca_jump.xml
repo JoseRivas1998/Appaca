@@ -87,6 +87,7 @@
         />
 
     <ImageView
+        android:id="@+id/jump_game_over"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/alpacasprite"

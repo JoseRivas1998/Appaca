@@ -36,6 +36,8 @@ public class MainActivity extends AndroidApplication {
     private void initButtons() {
         final ImageView shopBtn = findViewById(R.id.shopBtn);
         final ImageView playBtn = findViewById(R.id.playBtn);
+        final ImageView feedBtn = findViewById(R.id.feedBtn);
+        final ImageView clothesBtn = findViewById(R.id.clothesBtn);
 
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +54,24 @@ public class MainActivity extends AndroidApplication {
                 startActivity(intent);
             }
         });
+
+        feedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FoodSelectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        clothesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ClothingSelectActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
     }
 

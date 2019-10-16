@@ -19,6 +19,7 @@ public class GameOverActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over);
+        initButton();
     }
 
     public void initButton() {
@@ -37,7 +38,7 @@ public class GameOverActivity extends AppCompatActivity {
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAgainText.setText("You can play again later :)");
+                finish();
             }
         });
     }

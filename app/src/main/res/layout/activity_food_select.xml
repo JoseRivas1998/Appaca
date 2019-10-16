@@ -7,9 +7,8 @@
     android:background="@drawable/bkgd3_2"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".activities.ClothingSelectActivity">
-
-
+    tools:context=".activities.FoodSelectActivity">
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +29,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clothing"
+        android:text="Feed"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         tools:layout_editor_absoluteX="118dp"
         tools:layout_editor_absoluteY="31dp" />
@@ -49,7 +48,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -68,7 +67,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -87,7 +86,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -106,7 +105,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -125,7 +124,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -144,7 +143,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -163,7 +162,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -182,7 +181,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -201,7 +200,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/clothing_select" />
+                android:src="@drawable/apple" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -212,7 +211,4 @@
         </LinearLayout>
 
     </GridLayout>
-
-
-
 </LinearLayout>
