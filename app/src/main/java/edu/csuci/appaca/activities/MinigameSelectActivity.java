@@ -2,6 +2,7 @@ package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -39,28 +40,64 @@ public class MinigameSelectActivity extends AppCompatActivity {
         matchingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedClass = MatchingActivity.class;
+                if (selectedClass == MatchingActivity.class) {
+                    matchingButton.setBackgroundResource(R.drawable.unselect_button);
+                    selectedClass = null;
+                } else {
+                    if (selectedClass != null) {
+                        unselectIcon(selectedClass);
+                    }
+                    selectedClass = MatchingActivity.class;
+                    matchingButton.setBackgroundResource(R.drawable.select_button);
+                }
             }
         });
 
         poopsweepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedClass = MinesweeperActivity.class;
+                if (selectedClass == MinesweeperActivity.class) {
+                    poopsweepButton.setBackgroundResource(R.drawable.unselect_button);
+                    selectedClass = null;
+                } else {
+                    if (selectedClass != null) {
+                        unselectIcon(selectedClass);
+                    }
+                    selectedClass = MinesweeperActivity.class;
+                    poopsweepButton.setBackgroundResource(R.drawable.select_button);
+                }
             }
         });
 
         fruitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedClass = FruitCatchActivity.class;
+                if (selectedClass == FruitCatchActivity.class) {
+                    fruitButton.setBackgroundResource(R.drawable.unselect_button);
+                    selectedClass = null;
+                } else {
+                    if (selectedClass != null) {
+                        unselectIcon(selectedClass);
+                    }
+                    selectedClass = FruitCatchActivity.class;
+                    fruitButton.setBackgroundResource(R.drawable.select_button);
+                }
             }
         });
 
         jumpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedClass = AlpacaJumpActivity.class;
+                if (selectedClass == AlpacaJumpActivity.class) {
+                    jumpButton.setBackgroundResource(R.drawable.unselect_button);
+                    selectedClass = null;
+                } else {
+                    if (selectedClass != null) {
+                        unselectIcon(selectedClass);
+                    }
+                    selectedClass = AlpacaJumpActivity.class;
+                    jumpButton.setBackgroundResource(R.drawable.select_button);
+                }
             }
         });
 
@@ -82,10 +119,24 @@ public class MinigameSelectActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void selectIcon(Class gotoClass) {
-
-        Intent intent = new Intent(this, gotoClass);
-        startActivity(intent);
+    private void unselectIcon(Class unselectClass) {
+        System.out.println("unselectClass is " + unselectClass.getName());
+        switch (unselectClass.getName()) {
+            case "edu.csuci.appaca.activities.AlpacaJumpActivity":
+                jumpButton.setBackgroundResource(R.drawable.unselect_button);
+                break;
+            case "edu.csuci.appaca.activities.MatchingActivity":
+                matchingButton.setBackgroundResource(R.drawable.unselect_button);
+                break;
+            case "edu.csuci.appaca.activities.MinesweeperActivity":
+                poopsweepButton.setBackgroundResource(R.drawable.unselect_button);
+                break;
+            case "edu.csuci.appaca.activities.FruitCatchActivity":
+                fruitButton.setBackgroundResource(R.drawable.unselect_button);
+                break;
+            default:
+                break;
+        }
     }
 
 }
