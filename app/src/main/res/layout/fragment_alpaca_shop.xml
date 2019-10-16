@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AlpacaShopFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <GridLayout
+        android:id="@+id/alpaca_shop_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="ALPACA SHOP" />
+        android:columnCount="3"/>
 
 </FrameLayout>
