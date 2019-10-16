@@ -17,11 +17,8 @@ public class MinesweeperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_minesweeper);
     }
 
-
-
     public void initButton()
     {
-
         final Button exitButton = findViewById(R.id.poosweeper_close);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
