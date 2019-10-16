@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8acfab"
     tools:context=".activities.MinigameSelectActivity">
 
     <ImageButton
@@ -29,7 +28,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/alpacajump_2" />
+        app:srcCompat="@drawable/alpaca_icon" />
 
     <ImageButton
         android:id="@+id/fruitCatchIcon"
@@ -41,7 +40,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/fruitcatch" />
+        app:srcCompat="@drawable/smiling_strawberry" />
 
     <ImageButton
         android:id="@+id/poopsweeperIcon"
@@ -53,7 +52,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alpacaJumpIcon"
-        app:srcCompat="@drawable/poopsweaper1" />
+        app:srcCompat="@drawable/sparklesweep" />
 
     <ImageButton
         android:id="@+id/matchingIcon"
@@ -65,7 +64,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fruitCatchIcon"
-        app:srcCompat="@drawable/matching_2"/>
+        app:srcCompat="@drawable/card_icon"/>
 
     <Button
         android:id="@+id/selectButton"

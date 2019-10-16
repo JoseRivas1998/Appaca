@@ -21,6 +21,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minigame_select);
+        getSupportActionBar().setTitle("Minigames");
 
         returnToMain = (ImageButton) findViewById(R.id.exitButton);
 
