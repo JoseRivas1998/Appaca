@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MinigameSelectActivity"></activity>
+        <activity android:name=".activities.GameOverActivity"></activity>
+        <activity android:name=".activities.ClothingSelectActivity" />
+        <activity android:name=".activities.MinigameSelectActivity" />
         <activity android:name=".activities.ShopActivity" />
         <activity android:name=".activities.FruitCatchActivity" />
         <activity android:name=".activities.MatchingActivity" />
