@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,14 @@ public class FoodShopFragment extends Fragment {
             params.height = size;
             params.setMargins(margin, margin, margin, margin);
             appleView.setLayoutParams(params);
+            appleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    FoodConfirmationPage foodConfirmationPage = new FoodConfirmationPage();
+                    foodConfirmationPage.show(fm, "fragment_food_conf");
+                }
+            });
             gridLayout.addView(appleView);
         }
     }

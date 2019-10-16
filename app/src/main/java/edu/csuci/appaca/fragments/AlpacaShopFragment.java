@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,14 +41,22 @@ public class AlpacaShopFragment extends Fragment {
         int size = (int) ScreenUtils.dpToPixels(view.getContext(), 100);
         int margin = (int) ScreenUtils.dpToPixels(view.getContext(), 20);
         for (int i = 0; i < 9; i++) {
-            ImageView appleView = new ImageView(this.getContext());
-            appleView.setImageResource(R.drawable.alpaca_shop_item);
+            ImageView alpacaView = new ImageView(this.getContext());
+            alpacaView.setImageResource(R.drawable.alpaca_shop_item);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
             params.setMargins(margin, margin, margin, margin);
-            appleView.setLayoutParams(params);
-            gridLayout.addView(appleView);
+            alpacaView.setLayoutParams(params);
+            alpacaView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    AlpacaConfirmationPage alpacaConfirmationPage = new AlpacaConfirmationPage();
+                    alpacaConfirmationPage.show(fm, "fragment_alpaca_conf");
+                }
+            });
+            gridLayout.addView(alpacaView);
         }
     }
 
