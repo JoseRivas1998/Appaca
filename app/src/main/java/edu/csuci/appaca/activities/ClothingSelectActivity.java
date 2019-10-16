@@ -14,5 +14,18 @@ public class ClothingSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clothing_select);
     }
 
+    public void initButton()
+    {
+        final Button exitButton = findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClothingSelectActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+}
 
 }
