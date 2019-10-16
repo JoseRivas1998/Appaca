@@ -1,9 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.AlpacaJumpActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/exitbutton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="X"
+        android:onClick="exit"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/timertxt"
+        android:text="2:45"
+        android:textSize="25sp"
+        />
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:background="@color/platform"
+        android:id="@+id/plat1"
+        android:layout_below="@id/timertxt"
+        android:layout_marginTop="75dp"
+        />
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:background="@color/platform"
+        android:id="@+id/plat2"
+        android:layout_below="@id/plat1"
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="143dp"
+        />
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:background="@color/platform"
+        android:id="@+id/plat3"
+        android:layout_below="@id/plat2"
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="267dp"
+        />
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:background="@color/platform"
+        android:id="@+id/plat4"
+        android:layout_below="@id/plat3"
+        android:layout_marginTop="125dp"
+        android:layout_marginStart="123dp"
+        />
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:background="@color/platform"
+        android:id="@+id/plat5"
+        android:layout_below="@id/plat4"
+        android:layout_marginTop="75dp"
+        />
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:background="@color/platform"
+        android:id="@+id/plat6"
+        android:layout_below="@id/plat5"
+        android:layout_marginTop="125dp"
+        android:layout_marginStart="143dp"
+        />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/alpacasprite"
+        android:layout_below="@id/plat2"
+        android:layout_marginStart="267dp"
+        />
+
+</RelativeLayout>
