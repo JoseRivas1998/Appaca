@@ -3,4 +3,13 @@
     <integer name="main_view_libgdx_width">1080</integer>
     <integer name="main_view_libgdx_height">1555</integer>
 
+    <integer name="libgdx_fullscreen_width">1080</integer>
+    <integer name="libgdx_fullscreen_height">2040</integer>
+
+<!--    ALPACA JUMP-->
+    <integer name="velocity_iterations">6</integer>
+    <integer name="position_iterations">2</integer>
+    <item name="pixel_per_meter" type="dimen" format="float">32.0</item>
+    <item name="gravity" type="dimen" format="float">-9.8</item>
+    <item name="world_step_per_second" type="dimen" format="float">60.0</item>
 </resources>
