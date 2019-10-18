@@ -31,4 +31,9 @@ public final class ListUtils {
         int toInt(T value);
     }
 
+    // Yes, I am implementing JDK 8 stuff sue me
+    public interface Consumer<T> {
+        void accept(T t);
+    }
+
 }
