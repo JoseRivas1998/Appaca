@@ -9,7 +9,11 @@
 <!--    ALPACA JUMP-->
     <integer name="velocity_iterations">6</integer>
     <integer name="position_iterations">2</integer>
-    <item name="pixel_per_meter" type="dimen" format="float">32.0</item>
-    <item name="gravity" type="dimen" format="float">-9.8</item>
+    <item name="pixel_per_meter" type="dimen" format="float">100.0</item>
+    <item name="gravity" type="dimen" format="float">-20</item>
     <item name="world_step_per_second" type="dimen" format="float">60.0</item>
+    <item name="max_y_distance" type="dimen" format="float">2.0</item>
+    <item name="min_y_distance" type="dimen" format="float">1</item>
+    <item name="player_x_velocity" type="dimen" format="float">30.0</item>
+    <item name="player_jump_force" type="dimen" format="float">1000.0</item>
 </resources>

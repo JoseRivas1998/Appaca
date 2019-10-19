@@ -22,7 +22,7 @@ public abstract class AbstractSpriteEntity extends AbstractEntity {
 
     protected void setImage(TextureRegion image, boolean updateSize) {
         this.image = image;
-        if(updateSize) {
+        if (updateSize) {
             imageWidth = image.getRegionWidth();
             imageHeight = image.getRegionHeight();
         }
@@ -36,12 +36,17 @@ public abstract class AbstractSpriteEntity extends AbstractEntity {
         setImage(new TextureRegion(texture), updateSize);
     }
 
+    /**
+     * Calls {@link #setImage(Texture, boolean)} with <code>updateSize</code> set to <code>true</code>
+     *
+     * @param texture The texture that will represent the entity
+     */
     protected void setImage(Texture texture) {
         setImage(texture, true);
     }
 
     protected void centerOrigin(boolean useBoundsSize) {
-        if(useBoundsSize) {
+        if (useBoundsSize) {
             originX = getWidth() * 0.5f;
             originY = getHeight() * 0.5f;
         } else {
@@ -50,6 +55,9 @@ public abstract class AbstractSpriteEntity extends AbstractEntity {
         }
     }
 
+    /**
+     * Calls {@link #centerOrigin(boolean)} with <code>useBoundsSize</code> set to <code>false</code>
+     */
     protected void centerOrigin() {
         this.centerOrigin(false);
     }
