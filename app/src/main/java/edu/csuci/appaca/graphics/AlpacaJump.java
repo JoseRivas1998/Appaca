@@ -110,7 +110,7 @@ public class AlpacaJump extends ApplicationAdapter {
     }
 
     private void updatePlaying(float dt) {
-        player.handleInput();
+        player.handleInput(dt);
         player.update(dt);
         updateView();
         createPlatforms();
@@ -162,8 +162,7 @@ public class AlpacaJump extends ApplicationAdapter {
     }
 
     private void updateView() {
-        float mainViewY = Math.max(player.getCenterY(), mainView.getCamera().position.y);
-        mainView.getCamera().position.y = mainViewY;
+        mainView.getCamera().position.y = Math.max(player.getCenterY(), mainView.getCamera().position.y);
         b2dView.getCamera().position.set(
                 new Vector3(mainView.getCamera().position).scl(metersPerPixel())
         );
@@ -189,6 +188,7 @@ public class AlpacaJump extends ApplicationAdapter {
     public void dispose() {
         spriteBatch.dispose();
         shapeRenderer.dispose();
+        AlpacaJump.parent = null;
         StaticContentManager.dispose();
     }
 
@@ -198,6 +198,10 @@ public class AlpacaJump extends ApplicationAdapter {
 
     public static int worldHeight() {
         return parent.getResources().getInteger(R.integer.libgdx_fullscreen_height);
+    }
+
+    public static int getInt(int id) {
+        return parent.getResources().getInteger(id);
     }
 
     public static float getFloat(int id) {

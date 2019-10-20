@@ -43,7 +43,7 @@ public class Platform extends AbstractB2DSpriteEntity {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0;
         fixtureDef.filter.categoryBits = PhysicsLayers.PLATFORM;
-        fixtureDef.filter.maskBits = PhysicsLayers.ALPACA;
+        fixtureDef.filter.maskBits = PhysicsLayers.ALPACA_FOOT;
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(UserData.PLATFORM);

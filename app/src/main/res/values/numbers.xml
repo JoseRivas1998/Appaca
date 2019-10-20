@@ -16,4 +16,7 @@
     <item name="min_y_distance" type="dimen" format="float">1</item>
     <item name="player_x_velocity" type="dimen" format="float">30.0</item>
     <item name="player_jump_force" type="dimen" format="float">1000.0</item>
+    <item name="player_food_height_px" type="dimen" format="float">5.0</item>
+    <item name="player_turn_threshold" type="dimen" format="float">0.5</item>
+    <integer name="accelerometer_frames">5</integer>
 </resources>
