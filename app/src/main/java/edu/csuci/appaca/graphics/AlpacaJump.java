@@ -26,6 +26,7 @@ import java.util.Set;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.content.StaticContentManager;
+import edu.csuci.appaca.graphics.entities.alpacajump.AJHUD;
 import edu.csuci.appaca.graphics.entities.alpacajump.AbstractB2DSpriteEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
 import edu.csuci.appaca.graphics.entities.alpacajump.Player;
@@ -54,6 +55,8 @@ public class AlpacaJump extends ApplicationAdapter {
     private boolean playing;
 
     private Texture bg;
+    private AJHUD hud;
+    private int score;
 
     public AlpacaJump(Context parent) {
         AlpacaJump.parent = parent;
@@ -74,6 +77,8 @@ public class AlpacaJump extends ApplicationAdapter {
         player = new Player(world);
         playing = false;
         bg = StaticContentManager.getTexture(StaticContentManager.Image.ALPACA_JUMP_BG);
+        hud = new AJHUD();
+        score = 0;
     }
 
     private void initPhys() {
@@ -92,10 +97,12 @@ public class AlpacaJump extends ApplicationAdapter {
         float dt = Gdx.graphics.getDeltaTime();
         if(playing) {
             updatePlaying(dt);
+            hud.update(dt, score);
             draw(dt);
             physicsStep(dt);
         } else {
             updatePreGame();
+            hud.update(dt, 0);
             draw(dt);
         }
     }
@@ -112,6 +119,7 @@ public class AlpacaJump extends ApplicationAdapter {
     private void updatePlaying(float dt) {
         player.handleInput(dt);
         player.update(dt);
+        score = (int) Math.max(score, player.getBody().getTransform().getPosition().y);
         updateView();
         createPlatforms();
         findPlatformsToRemove();
@@ -157,6 +165,7 @@ public class AlpacaJump extends ApplicationAdapter {
             platform.draw(dt, spriteBatch, shapeRenderer);
         }
         player.draw(dt, spriteBatch, shapeRenderer);
+        hud.draw(dt, spriteBatch);
         spriteBatch.end();
         debugRenderer.render(world, b2dView.getCamera().combined);
     }
@@ -182,6 +191,7 @@ public class AlpacaJump extends ApplicationAdapter {
     public void resize(int width, int height) {
         mainView.update(width, height);
         b2dView.update(width, height);
+        hud.resize(width, height);
     }
 
     @Override

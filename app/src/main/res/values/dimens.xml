@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_view_dock_margin">10dp</dimen>
+<!--    ALPACA JUMP-->
+    <dimen name="hud_padding">10dp</dimen>
 </resources>
