@@ -115,27 +115,27 @@ public class StaticContentManager {
         return new TextureRegion(getTexture(image));
     }
 
-    public BitmapFont getFont(Font font) {
+    public static BitmapFont getFont(Font font) {
         load();
         return Content.INSTANCE.fonts.get(font);
     }
 
-    public float getWidth(Font font, String s) {
+    public static float getWidth(Font font, String s) {
         Content.INSTANCE.gl.setText(getFont(font), s);
         return Content.INSTANCE.gl.width;
     }
 
-    public float getWidth(Font font, String s, float targetWidth, int halign, boolean wrap) {
+    public static float getWidth(Font font, String s, float targetWidth, int halign, boolean wrap) {
         Content.INSTANCE.gl.setText(getFont(font), s, getFont(font).getColor(), targetWidth, halign, wrap);
         return Content.INSTANCE.gl.width;
     }
 
-    public float getHeight(Font font, String s) {
+    public static float getHeight(Font font, String s) {
         Content.INSTANCE.gl.setText(getFont(font), s);
         return Content.INSTANCE.gl.height;
     }
 
-    public float getHeight(Font font, String s, float targetWidth, int halign, boolean wrap) {
+    public static float getHeight(Font font, String s, float targetWidth, int halign, boolean wrap) {
         Content.INSTANCE.gl.setText(getFont(font), s, getFont(font).getColor(), targetWidth, halign, wrap);
         return Content.INSTANCE.gl.height;
     }

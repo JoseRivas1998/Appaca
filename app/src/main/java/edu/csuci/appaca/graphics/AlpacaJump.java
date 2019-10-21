@@ -204,6 +204,10 @@ public class AlpacaJump extends ApplicationAdapter {
         return parent.getResources().getInteger(id);
     }
 
+    public static float getDimension(int id) {
+        return parent.getResources().getDimension(id);
+    }
+
     public static float getFloat(int id) {
         TypedValue outValue = new TypedValue();
         parent.getResources().getValue(id, outValue, true);
