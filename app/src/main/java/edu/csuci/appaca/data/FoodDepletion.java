@@ -2,16 +2,13 @@ package edu.csuci.appaca.data;
 
 public class FoodDepletion extends Thread
 {
-    public double foodDepletion(double currentFood)
+    public double foodDepletion(Alpaca alpaca, long previousTime, long currentTime)
     {
-        //Assume that this function is called every second
-        final int NUM_HOURS_TIL_DEPLETED = 4; //assuming it takes 4 hours til the hunger is fully depleted
-        final double MAX_FOOD = 1.0; //assume that the max hunger of any alpaca is 1.0
-        final int MINPERHOUR = 60;
-        final int SECPERMIN = 60;
-        final double DECREMENTVAL = (MAX_FOOD/(NUM_HOURS_TIL_DEPLETED * MINPERHOUR * SECPERMIN));
+        final double FOOD_LOSS_PER_MINUTE = 0.015; //how much food is decremented by per minute
 
-        //return the new food value after loss
-        return (currentFood - DECREMENTVAL);
+        long timeInMinutes = (currentTime - previousTime) * 60; //get difference from current and previous timestamp and convert to minutes
+
+        //return the new food loss based on time and loss per minute
+        return (timeInMinutes * FOOD_LOSS_PER_MINUTE);
     }
 }
