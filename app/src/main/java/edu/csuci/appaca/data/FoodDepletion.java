@@ -10,7 +10,9 @@ public class FoodDepletion {
 
         long timeInMinutes = (currentTime - previousTime) * 60; //get difference from current and previous timestamp and convert to minutes
 
+        double alpacaFood = alpaca.getFoodStat();
+
         //return the new food loss based on time and loss per minute
-        return (timeInMinutes * FOOD_LOSS_PER_MINUTE);
+        return (alpacaFood - (timeInMinutes * FOOD_LOSS_PER_MINUTE));
     }
 }
