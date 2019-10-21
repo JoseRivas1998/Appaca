@@ -2,8 +2,7 @@ package edu.csuci.appaca.utils;
 
 public class TimeUtils {
 
-    public long getCurrentTime()
-    {
+    static public long getCurrentTime() {
         return 0; //stub
     }
 }
