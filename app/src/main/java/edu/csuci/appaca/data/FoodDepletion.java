@@ -6,10 +6,10 @@ public class FoodDepletion {
 
     /*
         Alpaca food drain is calculated based on the how much food the alpaca currently has:
-        Normal rate at 100% - 75%, stage 1
-        If less than 75%, the rate is doubled, stage 2
-        If less than 50%, the rate is tripled, stage 3
-        If less than 25%, the rate is quadrupled, stage 4
+        Slowest rate at 100% - 75%, 1/4 max rate, stage 1
+        If less than 75%, 1/2 max rate, stage 2
+        If less than 50%, 3/4 max rate, stage 3
+        If less than 25%, max rate, stage 4
      */
     public static double foodDepletion(Alpaca alpaca, long previousTime) {
         final int TIME_TIL_FULLY_DEPLETED = (8 * 60) / 4; //8 hours * 60 minutes over 4 stages
