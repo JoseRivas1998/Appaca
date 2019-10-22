@@ -1,6 +1,9 @@
 package edu.csuci.appaca.graphics;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.TypedValue;
 
 import com.badlogic.gdx.Application;
@@ -25,6 +28,8 @@ import java.util.List;
 import java.util.Set;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.activities.GameOverActivity;
+import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.alpacajump.AJHUD;
 import edu.csuci.appaca.graphics.entities.alpacajump.AbstractB2DSpriteEntity;
@@ -34,7 +39,7 @@ import edu.csuci.appaca.utils.b2d.BasicContactListener;
 
 public class AlpacaJump extends ApplicationAdapter {
 
-    private static Context parent;
+    private static Activity parent;
 
     private SpriteBatch spriteBatch;
     private ShapeRenderer shapeRenderer;
@@ -58,7 +63,7 @@ public class AlpacaJump extends ApplicationAdapter {
     private AJHUD hud;
     private int score;
 
-    public AlpacaJump(Context parent) {
+    public AlpacaJump(Activity parent) {
         AlpacaJump.parent = parent;
     }
 
@@ -124,6 +129,19 @@ public class AlpacaJump extends ApplicationAdapter {
         createPlatforms();
         findPlatformsToRemove();
         removeEntities();
+        checkDeath();
+    }
+
+    private void checkDeath() {
+        float bottom = mainView.getCamera().position.y - (worldHeight() * 0.5f);
+        float playerTop = player.getY() + player.getHeight();
+        if(Float.compare(playerTop, bottom) < 0) {
+            Intent intent = new Intent(parent, GameOverActivity.class);
+            intent.putExtra("score", score);
+            intent.putExtra("return", MiniGames.ALPACA_JUMP.ordinal());
+            parent.startActivity(intent);
+            parent.finish();
+        }
     }
 
     private void removeEntities() {
@@ -216,6 +234,10 @@ public class AlpacaJump extends ApplicationAdapter {
 
     public static float getDimension(int id) {
         return parent.getResources().getDimension(id);
+    }
+
+    public static String getString(int id) {
+        return parent.getResources().getString(id);
     }
 
     public static float getFloat(int id) {

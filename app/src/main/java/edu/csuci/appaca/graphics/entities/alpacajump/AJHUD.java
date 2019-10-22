@@ -27,7 +27,7 @@ public class AJHUD {
     }
 
     private void updateScore(float dt, int score) {
-        scoreLabel.setText(String.format("Score: %06d", score));
+        scoreLabel.setText(String.format(AlpacaJump.getString(R.string.alpaca_jump_score_format), score));
         scoreLabel.setX(AlpacaJump.getDimension(R.dimen.hud_padding));
         scoreLabel.setY(AlpacaJump.worldHeight() - AlpacaJump.getDimension(R.dimen.hud_padding));
         scoreLabel.update(dt);
