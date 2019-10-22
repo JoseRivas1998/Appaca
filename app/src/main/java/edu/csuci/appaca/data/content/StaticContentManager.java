@@ -17,8 +17,13 @@ public class StaticContentManager {
     public enum Font {
         ALPACA_JUMP_MAIN(
                 "alpaca-jump/fnt/please_write_me_a_song.ttf", 72, Color.BLACK,
-                0, Color.BLACK,
+                3, Color.BLACK,
                 0, 0, Color.BLACK
+        ),
+        ALPACA_JUMP_START(
+                "alpaca-jump/fnt/please_write_me_a_song.ttf", 92, Color.BLACK,
+                3, Color.BLACK,
+                2, 2, Color.WHITE
         );
         public final String path;
         public final int fontSize;

@@ -31,6 +31,7 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
+import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.AJHUD;
 import edu.csuci.appaca.graphics.entities.alpacajump.AbstractB2DSpriteEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
@@ -38,6 +39,8 @@ import edu.csuci.appaca.graphics.entities.alpacajump.Player;
 import edu.csuci.appaca.utils.b2d.BasicContactListener;
 
 public class AlpacaJump extends ApplicationAdapter {
+
+    private static final boolean DEBUG = false;
 
     private static Activity parent;
 
@@ -63,6 +66,8 @@ public class AlpacaJump extends ApplicationAdapter {
     private AJHUD hud;
     private int score;
 
+    private LabelEntity tapToStart;
+
     public AlpacaJump(Activity parent) {
         AlpacaJump.parent = parent;
     }
@@ -84,6 +89,12 @@ public class AlpacaJump extends ApplicationAdapter {
         bg = StaticContentManager.getTexture(StaticContentManager.Image.ALPACA_JUMP_BG);
         hud = new AJHUD();
         score = 0;
+        tapToStart = new LabelEntity();
+        tapToStart.setText(getString(R.string.top_to_start));
+        tapToStart.setFont(StaticContentManager.Font.ALPACA_JUMP_START);
+        tapToStart.setAlign(LabelEntity.MIDDLE_CENTER);
+        tapToStart.setX(worldWidth() * 0.5f);
+        tapToStart.setY(worldHeight() * 0.5f);
     }
 
     private void initPhys() {
@@ -106,15 +117,16 @@ public class AlpacaJump extends ApplicationAdapter {
             draw(dt);
             physicsStep(dt);
         } else {
-            updatePreGame();
+            updatePreGame(dt);
             hud.update(dt, 0);
             draw(dt);
         }
     }
 
-    private void updatePreGame() {
+    private void updatePreGame(float dt) {
         updateView();
         createPlatforms();
+        tapToStart.update(dt);
         if(Gdx.input.justTouched()) {
             playing = true;
             player.jump();
@@ -184,8 +196,11 @@ public class AlpacaJump extends ApplicationAdapter {
         }
         player.draw(dt, spriteBatch, shapeRenderer);
         hud.draw(dt, spriteBatch);
+        if(!playing) {
+            tapToStart.draw(dt, spriteBatch, shapeRenderer);
+        }
         spriteBatch.end();
-        debugRenderer.render(world, b2dView.getCamera().combined);
+        if(DEBUG) debugRenderer.render(world, b2dView.getCamera().combined);
     }
 
     private void updateView() {
