@@ -18,17 +18,17 @@ public class FoodDepletion {
         long currentTime = TimeUtils.getCurrentTime();
         long timeInMinutes = (currentTime - previousTime) * 60; //get difference from current and previous timestamp and convert to minutes
         double percentFood = (alpacaFood / Alpaca.MAX_STAT);
-        int stageModifier = 1; //modifier for stage 1
+        int stageModifier = 4; //modifier for stage 1, 4 times slower
 
         if (percentFood < 0.75 && percentFood >= 0.5) {
-            stageModifier = 2;
+            stageModifier = 3;
         } //stage 2
         else if (percentFood < 0.5 && percentFood >= 0.25) {
-            stageModifier = 3;
+            stageModifier = 2;
         } //stage 3
         else {
-            stageModifier = 4;
-        } //stage 4
+            stageModifier = 1;
+        } //stage 4, max speed
 
         //return the new food loss based on time, max hunger, time til fully depleted, and percent of
         return (alpacaFood - (timeInMinutes / (Alpaca.MAX_STAT / (TIME_TIL_FULLY_DEPLETED * stageModifier))));
