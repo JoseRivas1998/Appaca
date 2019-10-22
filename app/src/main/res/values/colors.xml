@@ -4,4 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="platform">#7777FF</color>
+
+    <color name="yellowPastel">#FFFFC0</color>
+    <color name="brownWarm">#8C603A</color>
+    <color name="greenPastel">#D5F5D5</color>
+    <color name="bluePastel">#C6E0E5</color>
+    <color name="pinkPastel">#EDB2BD</color>
+
 </resources>
