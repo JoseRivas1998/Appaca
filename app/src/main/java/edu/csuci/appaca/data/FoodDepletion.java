@@ -15,6 +15,6 @@ public class FoodDepletion {
         long timeInMinutes = (currentTime - previousTime) / 60; //get difference from current and previous timestamp and convert to minutes
         double percentFood = (alpacaFood / Alpaca.MAX_STAT);
 
-        return (alpacaFood - (timeInMinutes * ((1.0 - percentFood) + 0.01) * Alpaca.MAX_STAT / (TIME_TIL_FULLY_DEPLETED) ) ); //the 0.01 is to make sure that the loss at 100% food is greater than 0
+        return (alpacaFood - (timeInMinutes * (1.0 - percentFood) * Alpaca.MAX_STAT / (TIME_TIL_FULLY_DEPLETED) ) );
     }
 }
