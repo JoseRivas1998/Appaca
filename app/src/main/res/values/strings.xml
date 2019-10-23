@@ -10,4 +10,7 @@
     <string name="ok">OK</string>
     <string name="game_over">Game Over</string>
     <string name="top_to_start">Tap to Start!</string>
+    <string name="hunger">Hunger</string>
+    <string name="happiness">Happiness</string>
+    <string name="hygiene">Hygiene</string>
 </resources>
