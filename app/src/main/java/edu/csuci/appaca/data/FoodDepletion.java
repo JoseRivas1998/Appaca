@@ -16,7 +16,7 @@ public class FoodDepletion {
 
         double alpacaFood = alpaca.getFoodStat();
         long currentTime = TimeUtils.getCurrentTime();
-        long timeInMinutes = (currentTime - previousTime) * 60; //get difference from current and previous timestamp and convert to minutes
+        long timeInMinutes = (currentTime - previousTime) / 60; //get difference from current and previous timestamp and convert to minutes
         double percentFood = (alpacaFood / Alpaca.MAX_STAT);
         int stageModifier = 4; //modifier for stage 1, 4 times slower
 
