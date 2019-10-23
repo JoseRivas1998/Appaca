@@ -35,7 +35,7 @@ public class FoodConfirmationPage extends DialogFragment {
         final Button plus = view.findViewById(R.id.shop_conf_amount_plus_button);
         final Button buy = view.findViewById(R.id.shop_conf_amount_buy);
         final Button cancel = view.findViewById(R.id.shop_conf_amount_cancel);
-        icon.setImageResource(R.drawable.apple);
+        icon.setImageResource(R.drawable.full_apple_food);
         label.setText("Apple");
 
         minus.setOnClickListener(new View.OnClickListener() {
