@@ -6,6 +6,8 @@
     <integer name="libgdx_fullscreen_width">1080</integer>
     <integer name="libgdx_fullscreen_height">2040</integer>
 
+    <integer name="default_alpaca_skin">1</integer>
+
 <!--    ALPACA JUMP-->
     <integer name="velocity_iterations">6</integer>
     <integer name="position_iterations">2</integer>

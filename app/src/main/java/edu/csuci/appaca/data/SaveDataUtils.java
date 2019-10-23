@@ -35,9 +35,21 @@ public class SaveDataUtils {
             AlpacaFarm.load(jsonObject);
         } catch (FileNotFoundException e) {
             // TODO
-            e.printStackTrace();
+            Log.i(SaveDataUtils.class.getName(), "No save data yet!");
+            Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
+            initialize();
         } catch (IOException | JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
+        }
+    }
+
+    private static void initialize() {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("alpacas", new JSONArray());
+            AlpacaFarm.load(jsonObject);
+        } catch (JSONException e) {
+            Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
     }
 
