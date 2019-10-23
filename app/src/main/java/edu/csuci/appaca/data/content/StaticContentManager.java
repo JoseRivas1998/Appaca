@@ -63,7 +63,7 @@ public class StaticContentManager {
     }
 
     public enum Image {
-        PLATFORM("alpaca-jump/img/platform.png"),
+        PLATFORM("alpaca-jump/img/Plain_cloud_large.png"),
         ALPACA_JUMP_BG("alpaca-jump/img/bkgd3_2.jpg"),
         ALPACA_JUMP_PLAYER("alpaca-jump/img/alpaca_shop_item.png");
         final String path;
