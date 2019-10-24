@@ -33,6 +33,7 @@ public class SaveDataUtils {
             }
             JSONObject jsonObject = new JSONObject(sb.toString());
             AlpacaFarm.load(jsonObject);
+            SavedTime.load(jsonObject);
         } catch (FileNotFoundException e) {
             // TODO
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
@@ -48,6 +49,7 @@ public class SaveDataUtils {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("alpacas", new JSONArray());
             AlpacaFarm.load(jsonObject);
+            SavedTime.setToNow();
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -58,6 +60,8 @@ public class SaveDataUtils {
         try {
             JSONArray alpacas = AlpacaFarm.toJSONArray();
             saveData.put("alpacas", alpacas);
+            SavedTime.setToNow();
+            saveData.put("savedTime", SavedTime.lastSavedTime());
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
