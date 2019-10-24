@@ -27,7 +27,7 @@ public class MainActivity extends AndroidApplication {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if(AlpacaFarm.numberOfAlpacas() == 0) {
-            Intent intent = new Intent(this, ShopActivity.class);
+            Intent intent = new Intent(this, FirstAlpacaActivity.class);
             startActivity(intent);
             finish();
         }
