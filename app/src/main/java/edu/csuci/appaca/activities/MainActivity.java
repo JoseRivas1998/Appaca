@@ -13,6 +13,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
@@ -25,6 +26,11 @@ public class MainActivity extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(AlpacaFarm.numberOfAlpacas() == 0) {
+            Intent intent = new Intent(this, FirstAlpacaActivity.class);
+            startActivity(intent);
+            finish();
+        }
         initLibGDX();
         initButtons();
         initStatBars();

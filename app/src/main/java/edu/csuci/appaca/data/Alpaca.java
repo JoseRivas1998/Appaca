@@ -17,7 +17,7 @@ public class Alpaca implements JSONAble {
     private double hygieneStat;
     private double happinessStat;
 
-    public Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat) {
+    private Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat) {
         this.id = id;
         this.name = name;
         this.path = path;
