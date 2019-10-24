@@ -12,7 +12,7 @@ public class FoodDepletion {
 
         double alpacaFood = alpaca.getFoodStat();
         long currentTime = TimeUtils.getCurrentTime();
-        long timeInMinutes = (currentTime - previousTime) / 60; //get difference from current and previous timestamp and convert to minutes
+        double timeInMinutes = TimeUtils.secondsToMinutes(currentTime-previousTime);
         double percentFood = (alpacaFood / Alpaca.MAX_STAT);
 
         return (alpacaFood - (timeInMinutes * (1.0 - percentFood) * Alpaca.MAX_STAT / (TIME_TIL_FULLY_DEPLETED) ) );
