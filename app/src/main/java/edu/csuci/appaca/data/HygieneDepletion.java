@@ -14,7 +14,7 @@ public class HygieneDepletion {
         double alpacaClean = alpaca.getHygieneStat();
         double percentClean = alpacaClean / Alpaca.MAX_STAT;
 
-        return Alpaca.MAX_STAT;
+        return alpacaClean - (timeInMinutes * percentClean * (Alpaca.MAX_STAT/TIME_TIL_FULLY_DEPLETED));
     }
 
 }
