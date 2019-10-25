@@ -14,10 +14,10 @@ public class FoodDepletion {
         long currentTime = TimeUtils.getCurrentTime();
         double timeInMinutes = TimeUtils.secondsToMinutes(currentTime - previousTime);
         double percentFood = (alpacaFood / Alpaca.MAX_STAT);
-        if (percentFood == 1.0) {
-            percentFood -= 0.01; //if food is full make it so 1.0-percentfood isn't zero
+        if (percentFood == Alpaca.MAX_STAT) {
+            percentFood -= 0.01; //if food is full make it so Alpaca.MAX_STAT - percentfood isn't zero
         }
 
-        return (alpacaFood - (timeInMinutes * (1.0 - percentFood) * Alpaca.MAX_STAT / (TIME_TIL_FULLY_DEPLETED)));
+        return (alpacaFood - (timeInMinutes * (Alpaca.MAX_STAT - percentFood) * Alpaca.MAX_STAT / (TIME_TIL_FULLY_DEPLETED)));
     }
 }
