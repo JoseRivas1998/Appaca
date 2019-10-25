@@ -10,6 +10,8 @@ import edu.csuci.appaca.activities.MainActivity;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.FoodDepletion;
+import edu.csuci.appaca.data.HappinessCalc;
+import edu.csuci.appaca.data.HygieneDepletion;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
@@ -75,14 +77,11 @@ public class MainScreenBackground {
                 double currentFood = Math.max(Alpaca.MIN_STAT, FoodDepletion.foodDepletion(current, previousTime));
                 currentValues.put(Stat.HUNGER, currentFood);
 
-                // TODO replace these with algorithms as they come in
-                long currentTIme = TimeUtils.getCurrentTime();
-                double mins = TimeUtils.secondsToMinutes(currentTIme - startTime);
-
-                double currentHappiness = Math.max(Alpaca.MIN_STAT, (2 - mins) / 2);
+                // TODO fix this later
+                double currentHappiness = Math.max(Alpaca.MIN_STAT, HappinessCalc.calcHappiness(null, current, previousTime));
                 currentValues.put(Stat.HAPPINESS, currentHappiness);
 
-                double currentHygiene = Math.max(Alpaca.MIN_STAT, (10 - mins) / 10);
+                double currentHygiene = Math.max(Alpaca.MIN_STAT, HygieneDepletion.hygieneDepletion(current, previousTime));
                 currentValues.put(Stat.HYGIENE, currentHygiene);
 
                 parent.runOnUiThread(new Runnable() {
