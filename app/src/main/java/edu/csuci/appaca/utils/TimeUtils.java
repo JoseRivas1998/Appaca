@@ -18,9 +18,4 @@ public class TimeUtils {
         currentTime /= MILLISECONDS_IN_SECONDS; //turns milliseconds to seconds
         return currentTime;
     }
-
-    public static double secondsToMinutes(long seconds) {
-
-        return seconds/60.0;
-    }
 }
