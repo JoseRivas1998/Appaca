@@ -24,7 +24,8 @@ public class HappinessCalc {
         long currentTime = TimeUtils.getCurrentTime();
         double timeInMinutes = TimeUtils.secondsToMinutes(currentTime - previousTime);
 
-        double clothesValue = clothes.value;
+        // TODO fix this later
+        double clothesValue = clothes != null ? clothes.value : 1.0;
 
         return (currentHappiness - (clothesValue * timeInMinutes * (MAXPERCENT - percentHappiness) * (Alpaca.MAX_STAT / TIME_TIL_FULLY_DEPLETED))); //stub
     }
