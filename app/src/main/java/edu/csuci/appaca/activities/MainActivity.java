@@ -32,6 +32,7 @@ public class MainActivity extends AndroidApplication {
             Intent intent = new Intent(this, FirstAlpacaActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
         initLibGDX();
         initButtons();

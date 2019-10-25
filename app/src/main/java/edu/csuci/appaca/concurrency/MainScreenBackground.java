@@ -67,12 +67,23 @@ public class MainScreenBackground {
             for (Stat stat : Stat.values()) {
                 currentValues.put(stat, Alpaca.MAX_STAT);
             }
+            long startTime = TimeUtils.getCurrentTime();
             while(this.running) {
                 Alpaca current = AlpacaFarm.getCurrentAlpaca();
                 long previousTime = SavedTime.lastSavedTime();
 
                 double currentFood = Math.max(Alpaca.MIN_STAT, FoodDepletion.foodDepletion(current, previousTime));
                 currentValues.put(Stat.HUNGER, currentFood);
+
+                // TODO replace these with algorithms as they come in
+                long currentTIme = TimeUtils.getCurrentTime();
+                double mins = TimeUtils.secondsToMinutes(currentTIme - startTime);
+
+                double currentHappiness = Math.max(Alpaca.MIN_STAT, (2 - mins) / 2);
+                currentValues.put(Stat.HAPPINESS, currentHappiness);
+
+                double currentHygiene = Math.max(Alpaca.MIN_STAT, (10 - mins) / 10);
+                currentValues.put(Stat.HYGIENE, currentHygiene);
 
                 parent.runOnUiThread(new Runnable() {
                     @Override
