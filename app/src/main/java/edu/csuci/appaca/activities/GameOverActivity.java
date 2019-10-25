@@ -12,32 +12,50 @@ import android.widget.TextView;
 import com.badlogic.gdx.Game;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.MiniGames;
 
 public class GameOverActivity extends AppCompatActivity {
+
+    private MiniGames returnTo;
+    private int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over);
+        loadIntentData();
+        getSupportActionBar().hide();
         initButton();
+    }
+
+    private void loadIntentData() {
+        Intent intent = getIntent();
+        this.score = intent.getIntExtra("score", 0);
+        int ordinal = intent.getIntExtra("return", 0);
+        this.returnTo = MiniGames.values()[ordinal];
     }
 
     public void initButton() {
         final Button exitButton = findViewById(R.id.exitButton);
-        final TextView playAgainText = findViewById(R.id.playAgainText);
         final Button playAgainButton = findViewById(R.id.playAgain);
+        final TextView scoreText = findViewById(R.id.scoreText);
+
+        scoreText.setText(String.format(getString(returnTo.scoreFormatId), this.score));
 
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GameOverActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(GameOverActivity.this, returnTo.activityClass);
+                startActivity(intent);
                 finish();
             }
         });

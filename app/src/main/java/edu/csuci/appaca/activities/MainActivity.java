@@ -1,31 +1,56 @@
 package edu.csuci.appaca.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.graphics.GL20;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.Stat;
+import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
 
 public class MainActivity extends AndroidApplication {
+
+    private Map<Stat, StatBarFragment> statBars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(AlpacaFarm.numberOfAlpacas() == 0) {
+            Intent intent = new Intent(this, FirstAlpacaActivity.class);
+            startActivity(intent);
+            finish();
+        }
         initLibGDX();
         initButtons();
+        initStatBars();
+    }
+
+    private void initStatBars() {
+        final FrameLayout stats = findViewById(R.id.stat_bars);
+        statBars = new EnumMap<Stat, StatBarFragment>(Stat.class);
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setId(12345);
+        for (Stat stat : Stat.values()) {
+            StatBarFragment fragment = StatBarFragment.buildStatBar(stat);
+            statBars.put(stat, fragment);
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(ll.getId(), fragment)
+                    .commit();
+        }
+        stats.addView(ll);
     }
 
     private void initLibGDX() {

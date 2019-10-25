@@ -42,7 +42,7 @@ public class FoodShopFragment extends Fragment {
         int margin = (int) ScreenUtils.dpToPixels(view.getContext(), 20);
         for (int i = 0; i < 9; i++) {
             ImageView appleView = new ImageView(this.getContext());
-            appleView.setImageResource(R.drawable.apple);
+            appleView.setImageResource(R.drawable.full_apple_food);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
