@@ -53,4 +53,12 @@ public class MainTester {
         assertEquals(Alpaca.MIN_STAT, actual, 1e-9);
     }
 
+    @Test
+    public void alpacaWithFullFoodStat8HoursEmpty() {
+        Alpaca alpaca = Alpaca.newAlpaca(1, "");
+        long previousTime = TimeUtils.getCurrentTime() - (8 * 60 * 60);
+        double actual = Math.max(Alpaca.MIN_STAT, FoodDepletion.foodDepletion(alpaca, previousTime));
+        assertEquals(Alpaca.MIN_STAT, actual, 1e-9);
+    }
+
 }
