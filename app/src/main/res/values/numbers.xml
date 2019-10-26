@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="main_view_libgdx_width">1080</integer>
-    <integer name="main_view_libgdx_height">1555</integer>
+    <integer name="main_view_libgdx_height">1230</integer>
 
     <integer name="libgdx_fullscreen_width">1080</integer>
     <integer name="libgdx_fullscreen_height">2040</integer>

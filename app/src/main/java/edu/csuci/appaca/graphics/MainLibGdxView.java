@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
 
 public class MainLibGdxView extends ApplicationAdapter {
 
@@ -23,11 +24,10 @@ public class MainLibGdxView extends ApplicationAdapter {
     private final int VIEW_HEIGHT;
 
     private SpriteBatch spriteBatch;
-    private Texture texture;
-    private Rectangle alpacaBounds;
-    private Vector2 alpacaVel;
 
     private Viewport viewport;
+
+    private AlpacaEntity alpaca;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
@@ -39,13 +39,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     public void create() {
         viewport = new StretchViewport(VIEWPORT_WIDTH, VIEW_HEIGHT);
         spriteBatch = new SpriteBatch();
-        texture = new Texture("fatalpaca.png");
-        alpacaBounds = new Rectangle();
-        alpacaBounds.setSize(texture.getWidth(), texture.getHeight());
-        alpacaBounds.setCenter(VIEWPORT_WIDTH * 0.5f, VIEW_HEIGHT * 0.5f);
-        float speed = 750;
-        float angle = MathUtils.random(MathUtils.PI2);
-        alpacaVel = new Vector2(speed * MathUtils.cos(angle), speed * MathUtils.sin(angle));
+        alpaca = new AlpacaEntity(VIEWPORT_WIDTH, VIEW_HEIGHT);
     }
 
     @Override
@@ -55,32 +49,16 @@ public class MainLibGdxView extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float dt = Gdx.graphics.getDeltaTime();
 
-        alpacaBounds.x += alpacaVel.x * dt;
-        alpacaBounds.y += alpacaVel.y * dt;
-
-        if(alpacaBounds.x < 0) {
-            alpacaBounds.x = 0;
-            alpacaVel.x *= -1;
-        }
-        if(alpacaBounds.y < 0) {
-            alpacaBounds.y = 0;
-            alpacaVel.y *= -1;
-        }
-        if(alpacaBounds.x + alpacaBounds.width > VIEWPORT_WIDTH) {
-            alpacaBounds.x = VIEWPORT_WIDTH - alpacaBounds.width;
-            alpacaVel.x *= -1;
-        }
-        if(alpacaBounds.y + alpacaBounds.height > VIEW_HEIGHT) {
-            alpacaBounds.y = VIEW_HEIGHT - alpacaBounds.height;
-            alpacaVel.y *= -1;
-        }
-
         viewport.apply(true);
+        draw(dt);
+
+    }
+
+    private void draw(float dt) {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-        spriteBatch.draw(texture, alpacaBounds.x, alpacaBounds.y);
+        alpaca.draw(dt, spriteBatch, null);
         spriteBatch.end();
-
     }
 
     @Override
@@ -92,6 +70,5 @@ public class MainLibGdxView extends ApplicationAdapter {
     @Override
     public void dispose() {
         spriteBatch.dispose();
-        texture.dispose();
     }
 }
