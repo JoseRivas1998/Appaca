@@ -7,4 +7,10 @@
     <dimen name="game_over_top_margin">90dp</dimen>
     <dimen name="game_over_button_margin">10dp</dimen>
     <dimen name="game_over_paca_size">261dp</dimen>
+    <dimen name="stat_bar_margin">5dp</dimen>
+    <dimen name="stat_bar_border_radius">8dip</dimen>
+    <dimen name="stat_bar_border_width">5dp</dimen>
+    <dimen name="stat_bar_height">25dp</dimen>
+    <dimen name="stat_bar_inner_radius">12dip</dimen>
+    <dimen name="first_alpaca_sprite_height">200dp</dimen>
 </resources>

@@ -48,7 +48,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/apple" />
+                android:src="@drawable/full_apple_food" />
 
             <Button
                 android:layout_width="wrap_content"

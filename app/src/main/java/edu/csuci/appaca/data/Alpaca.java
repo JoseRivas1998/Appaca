@@ -17,7 +17,7 @@ public class Alpaca implements JSONAble {
     private double hygieneStat;
     private double happinessStat;
 
-    public Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat) {
+    private Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat) {
         this.id = id;
         this.name = name;
         this.path = path;
@@ -28,7 +28,12 @@ public class Alpaca implements JSONAble {
 
     public static Alpaca newAlpaca(int shopItemID, String name) {
         int id = AlpacaFarm.getMaxID() + 1;
-        String path = ShopData.getAlpaca(shopItemID).path;
+        String path;
+        if(ShopData.getAlpaca(shopItemID) == null) {
+            path = "";
+        } else {
+            path = ShopData.getAlpaca(shopItemID).path;
+        }
         return new Alpaca(id, name, path, MAX_STAT, MAX_STAT, MAX_STAT);
     }
 
