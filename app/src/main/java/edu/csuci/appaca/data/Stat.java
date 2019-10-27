@@ -4,7 +4,7 @@ import edu.csuci.appaca.R;
 
 public enum Stat {
     HUNGER(R.drawable.hunger_icon, R.string.hunger),
-    HAPPINESS(R.drawable.happiness_stat, R.string.happiness),
+    HAPPINESS(R.drawable.happiness_icon, R.string.happiness),
     HYGIENE(R.drawable.hygeine_stat, R.string.hygiene);
     public final int iconId;
     public final int labelId;
