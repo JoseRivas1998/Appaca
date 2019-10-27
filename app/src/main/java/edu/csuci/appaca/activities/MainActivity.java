@@ -13,10 +13,12 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
+import edu.csuci.appaca.utils.ListUtils;
 
 public class MainActivity extends AndroidApplication {
 
@@ -30,10 +32,12 @@ public class MainActivity extends AndroidApplication {
             Intent intent = new Intent(this, FirstAlpacaActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
         initLibGDX();
         initButtons();
         initStatBars();
+        MainScreenBackground.start(this);
     }
 
     private void initStatBars() {
@@ -41,7 +45,7 @@ public class MainActivity extends AndroidApplication {
         statBars = new EnumMap<Stat, StatBarFragment>(Stat.class);
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setId(12345);
+        ll.setId(View.generateViewId());
         for (Stat stat : Stat.values()) {
             StatBarFragment fragment = StatBarFragment.buildStatBar(stat);
             statBars.put(stat, fragment);
@@ -100,4 +104,27 @@ public class MainActivity extends AndroidApplication {
 
     }
 
+    public void forEachStatBar(ListUtils.DuelConsumer<Stat, StatBarFragment> consumer) {
+        for (Map.Entry<Stat, StatBarFragment> statBarEntry : statBars.entrySet()) {
+            consumer.accept(statBarEntry.getKey(), statBarEntry.getValue());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainScreenBackground.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainScreenBackground.start(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MainScreenBackground.stop();
+    }
 }
