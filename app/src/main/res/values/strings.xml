@@ -13,4 +13,7 @@
     <string name="hunger">Hunger</string>
     <string name="happiness">Happiness</string>
     <string name="hygiene">Hygiene</string>
+    <string name="first_alpaca_title">Congratulations on your new alpaca!</string>
+    <string name="first_alpaca_confirmation_button">Lets Go!</string>
+    <string name="alpaca_name_field_hint">Name your Alpaca!</string>
 </resources>

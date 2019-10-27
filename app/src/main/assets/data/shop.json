@@ -4,5 +4,11 @@
   "clothes": [
   ],
   "alpacas": [
+    {
+      "id": 1,
+      "name": "TEMP DEFAULT",
+      "path": "alpacas/skin_01.png",
+      "cost": 0
+    }
   ]
 }
