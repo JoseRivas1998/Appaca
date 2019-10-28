@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.csuci.appaca.data.statics.ShopData;
+import edu.csuci.appaca.utils.MathFunctions;
 
 public class Alpaca implements JSONAble {
 
@@ -75,6 +76,21 @@ public class Alpaca implements JSONAble {
 
     public double getHappinessStat() {
         return happinessStat;
+    }
+
+    public void updateValuesBasedOnTime() {
+        long previousTime = SavedTime.lastSavedTime();
+        double currentFood = FoodDepletion.foodDepletion(this, previousTime);
+        // TODO implement clothes
+        double currentHappiness = HappinessCalc.calcHappiness(null, this, previousTime);
+        double currentHygiene = HygieneDepletion.hygieneDepletion(this, previousTime);
+        this.foodStat = MathFunctions.clamp(currentFood, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+        this.happinessStat = MathFunctions.clamp(currentHappiness, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+        this.hygieneStat = MathFunctions.clamp(currentHygiene, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+    }
+
+    public void incrementHappinessStat(double increment) {
+        this.happinessStat = MathFunctions.clamp(this.happinessStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
     }
 
     @Override

@@ -194,6 +194,10 @@ public abstract class AbstractEntity {
         return this.collidingWith(entity.bounds);
     }
 
+    public boolean containsPoint(Vector2 point) {
+        return this.bounds.contains(point);
+    }
+
     @Override
     public int hashCode() {
         return this.id;
@@ -202,7 +206,7 @@ public abstract class AbstractEntity {
     @Override
     public boolean equals(Object obj) {
         boolean result;
-        if(obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             result = false;
         } else {
             AbstractEntity other = (AbstractEntity) obj;

@@ -18,6 +18,8 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import edu.csuci.appaca.utils.ListUtils;
+
 public class SaveDataUtils {
 
     private static final String FILENAME = "appacaSaveData.json";
@@ -71,6 +73,16 @@ public class SaveDataUtils {
         } catch (IOException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
+    }
+
+    public static void updateValuesAndSave(Context context) {
+        AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
+            @Override
+            public void accept(Alpaca alpaca) {
+                alpaca.updateValuesBasedOnTime();
+            }
+        });
+        SaveDataUtils.save(context);
     }
 
 }
