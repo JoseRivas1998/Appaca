@@ -16,7 +16,6 @@ public class HappinessCalc {
     static public double calcHappiness(StaticClothesItem clothes, Alpaca alpaca, long previousTime)
     {
         final double TIME_TIL_FULLY_DEPLETED = 8 * 60; //8 hours * 60 minutes
-        final double MAXPERCENT = 1.0;
 
         double currentHappiness = alpaca.getHappinessStat();
         double percentHappiness = currentHappiness/Alpaca.MAX_STAT;
@@ -27,6 +26,6 @@ public class HappinessCalc {
         // TODO fix this later
         double clothesValue = clothes != null ? clothes.value : 1.0;
 
-        return (currentHappiness - (clothesValue * timeInMinutes * (MAXPERCENT - percentHappiness) * (Alpaca.MAX_STAT / TIME_TIL_FULLY_DEPLETED))); //stub
+        return (currentHappiness - (clothesValue * timeInMinutes * percentHappiness * (Alpaca.MAX_STAT / TIME_TIL_FULLY_DEPLETED))); //stub
     }
 }
