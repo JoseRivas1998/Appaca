@@ -12,7 +12,6 @@ public class HygieneDepletion {
      */
 
     public static double hygieneDepletion(Alpaca alpaca, long previousTime) {
-        // TODO see card https://trello.com/c/9S4wpJDt/110-hygiene-depletion
         final double TIME_TIL_FULLY_DEPLETED = 16 * 60; //16 hours * 60 minutes
 
         long currentTime = TimeUtils.getCurrentTime();
