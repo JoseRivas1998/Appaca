@@ -113,7 +113,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
-        petDetector.draw(dt, spriteBatch, shapeRenderer);
+//        petDetector.draw(dt, spriteBatch, shapeRenderer);
         shapeRenderer.end();
 
     }
