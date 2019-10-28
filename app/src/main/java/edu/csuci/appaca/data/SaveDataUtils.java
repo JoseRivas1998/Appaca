@@ -36,6 +36,12 @@ public class SaveDataUtils {
             JSONObject jsonObject = new JSONObject(sb.toString());
             AlpacaFarm.load(jsonObject);
             SavedTime.load(jsonObject);
+            if(jsonObject.has("currency")) {
+                JSONObject currency = jsonObject.getJSONObject("currency");
+                CurrencyManager.load(currency);
+            } else {
+                CurrencyManager.init();
+            }
         } catch (FileNotFoundException e) {
             // TODO
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
@@ -52,6 +58,7 @@ public class SaveDataUtils {
             jsonObject.put("alpacas", new JSONArray());
             AlpacaFarm.load(jsonObject);
             SavedTime.setToNow();
+            CurrencyManager.init();
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -64,6 +71,8 @@ public class SaveDataUtils {
             saveData.put("alpacas", alpacas);
             SavedTime.setToNow();
             saveData.put("savedTime", SavedTime.lastSavedTime());
+            JSONObject currency = CurrencyManager.toJSON();
+            saveData.put("currency", currency);
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
