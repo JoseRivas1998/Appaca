@@ -14,6 +14,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.csuci.appaca.utils.TimeUtils;
+
+import static edu.csuci.appaca.utils.TimeUtils.getCurrentTime;
+
 
 public class StaminaManager {
 
@@ -22,57 +26,44 @@ public class StaminaManager {
         int currentValue;
         int maxValue;
         boolean loaded;
-        List<Alpaca> alpacas;
+        long firstStaminaUsedTime;
 
         StaminaInstance() {
             this.currentValue = 0;
             this.maxValue = 4;
             this.loaded = false;
-            this.alpacas = new ArrayList<>();
+            this.firstStaminaUsedTime = getCurrentTime(); //idk why thats not working lol
         }
 
     }
 
     private static final String FILENAME = "staminaSaveData.json";
 
-    public static int increaseMaxStamina(JSONArray alpacas) {
-        int ret;
-        if (alpacas.length() == 1) {
-            ret = 4;
-        } else {
-            ret = 4 + alpacas.length() - 1;
-        }
+    public static int increaseMaxStamina() {
+
+        int ret = StaminaInstance.INSTANCE.currentValue + 1;
 
         return ret;
     }
 
-    public static void saveStamina(Context context) {
-        JSONObject saveData = new JSONObject();
-        try {
-            saveData.put("currentStamina", StaminaInstance.INSTANCE.currentValue);
-            SavedTime.setToNow();
-            saveData.put("savedTime", SavedTime.lastSavedTime());
-        } catch (JSONException e) {
-            Log.e(StaminaManager.class.getName(), e.getMessage(), e);
-        }
-        try (FileOutputStream fo = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-             OutputStreamWriter osw = new OutputStreamWriter(fo)) {
-            osw.write(saveData.toString());
-        } catch (IOException e) {
-            Log.e(StaminaManager.class.getName(), e.getMessage(), e);
-        }
+    public static JSONObject toJSONObject() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("currentStamina", StaminaInstance.INSTANCE.currentValue);
+        jsonObject.put("maxValue", StaminaInstance.INSTANCE.maxValue);
+        jsonObject.put("loaded", StaminaInstance.INSTANCE.loaded);
+
+        return jsonObject;
     }
 
     public static boolean load(JSONObject jsonObject) throws JSONException {
         if (StaminaManager.StaminaInstance.INSTANCE.loaded) return true;
 
         if (!jsonObject.has("stamina")) throw new JSONException("Stamina is missing!");
-
-        JSONArray alpacas = jsonObject.getJSONArray("alpacas");
-        for (int i = 0; i < alpacas.length(); i++) {
-            StaminaManager.StaminaInstance.INSTANCE.alpacas.add(Alpaca.ofJSON(alpacas.getJSONObject(i)));
-        }
-        StaminaInstance.INSTANCE.currentValue = increaseMaxStamina(alpacas);
+//
+//        JSONArray alpacas = jsonObject.getJSONArray("alpacas");
+//        for (int i = 0; i < alpacas.length(); i++) {
+//        }
+//        StaminaInstance.INSTANCE.currentValue = increaseMaxStamina(alpacas);
 
         StaminaInstance.INSTANCE.loaded = true;
 
