@@ -36,11 +36,17 @@ public class SaveDataUtils {
             JSONObject jsonObject = new JSONObject(sb.toString());
             AlpacaFarm.load(jsonObject);
             SavedTime.load(jsonObject);
-            if(jsonObject.has("currency")) {
+            if (jsonObject.has("currency")) {
                 JSONObject currency = jsonObject.getJSONObject("currency");
                 CurrencyManager.load(currency);
             } else {
                 CurrencyManager.init();
+            }
+            if (jsonObject.has("stamina")) {
+                JSONObject stamina = jsonObject.getJSONObject("stamina");
+                StaminaManager.load(stamina);
+            } else {
+                StaminaManager.init();
             }
         } catch (FileNotFoundException e) {
             // TODO
@@ -59,6 +65,7 @@ public class SaveDataUtils {
             AlpacaFarm.load(jsonObject);
             SavedTime.setToNow();
             CurrencyManager.init();
+            StaminaManager.init();
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -73,6 +80,8 @@ public class SaveDataUtils {
             saveData.put("savedTime", SavedTime.lastSavedTime());
             JSONObject currency = CurrencyManager.toJSON();
             saveData.put("currency", currency);
+            JSONObject stamina = StaminaManager.toJSONObject();
+            saveData.put("stamina", stamina);
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
