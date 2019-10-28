@@ -18,6 +18,8 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import edu.csuci.appaca.utils.ListUtils;
+
 public class SaveDataUtils {
 
     private static final String FILENAME = "appacaSaveData.json";
@@ -34,6 +36,12 @@ public class SaveDataUtils {
             JSONObject jsonObject = new JSONObject(sb.toString());
             AlpacaFarm.load(jsonObject);
             SavedTime.load(jsonObject);
+            if(jsonObject.has("currency")) {
+                JSONObject currency = jsonObject.getJSONObject("currency");
+                CurrencyManager.load(currency);
+            } else {
+                CurrencyManager.init();
+            }
         } catch (FileNotFoundException e) {
             // TODO
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
@@ -50,6 +58,7 @@ public class SaveDataUtils {
             jsonObject.put("alpacas", new JSONArray());
             AlpacaFarm.load(jsonObject);
             SavedTime.setToNow();
+            CurrencyManager.init();
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -62,6 +71,8 @@ public class SaveDataUtils {
             saveData.put("alpacas", alpacas);
             SavedTime.setToNow();
             saveData.put("savedTime", SavedTime.lastSavedTime());
+            JSONObject currency = CurrencyManager.toJSON();
+            saveData.put("currency", currency);
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
@@ -71,6 +82,16 @@ public class SaveDataUtils {
         } catch (IOException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
+    }
+
+    public static void updateValuesAndSave(Context context) {
+        AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
+            @Override
+            public void accept(Alpaca alpaca) {
+                alpaca.updateValuesBasedOnTime();
+            }
+        });
+        SaveDataUtils.save(context);
     }
 
 }
