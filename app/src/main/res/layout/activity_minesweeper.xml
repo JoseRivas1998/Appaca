@@ -32,14 +32,4 @@
         android:translationX="301dp"
         android:translationY="262dp" />
 
-    <ImageView
-        android:id="@+id/poosweeper_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#673AB7"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:translationX="383dp"
-        android:translationY="16dp" />
-
 </RelativeLayout>
