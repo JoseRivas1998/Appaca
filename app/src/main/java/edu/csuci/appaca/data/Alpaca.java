@@ -5,11 +5,14 @@ import org.json.JSONObject;
 
 import edu.csuci.appaca.data.statics.ShopData;
 import edu.csuci.appaca.utils.MathFunctions;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class Alpaca implements JSONAble {
 
     public static final double MAX_STAT = 1.0;
     public static final double MIN_STAT = 0.0;
+
+    private static final long INITIAL_SECONDS_SINCE_SHEAR = 12 * 60 * 60;
 
     private int id;
     private String name;
@@ -17,14 +20,16 @@ public class Alpaca implements JSONAble {
     private double foodStat;
     private double hygieneStat;
     private double happinessStat;
+    private long lastShearTime;
 
-    private Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat) {
+    private Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat, long lastShearTime) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.foodStat = foodStat;
         this.hygieneStat = hygieneStat;
         this.happinessStat = happinessStat;
+        this.lastShearTime = lastShearTime;
     }
 
     public static Alpaca newAlpaca(int shopItemID, String name) {
@@ -35,7 +40,8 @@ public class Alpaca implements JSONAble {
         } else {
             path = ShopData.getAlpaca(shopItemID).path;
         }
-        return new Alpaca(id, name, path, MAX_STAT, MAX_STAT, MAX_STAT);
+        long lastShearTime = TimeUtils.getCurrentTime() - INITIAL_SECONDS_SINCE_SHEAR;
+        return new Alpaca(id, name, path, MAX_STAT, MAX_STAT, MAX_STAT, lastShearTime);
     }
 
     public static Alpaca ofJSON(JSONObject json) throws JSONException {
@@ -51,7 +57,13 @@ public class Alpaca implements JSONAble {
         double foodStat = json.getDouble("foodStat");
         double hygieneStat = json.getDouble("hygieneStat");
         double happinessStat = json.getDouble("happinessStat");
-        return new Alpaca(id, name, path, foodStat, hygieneStat, happinessStat);
+        long lastShearTime;
+        if(json.has("lastShearTime")) {
+            lastShearTime = json.getLong("lastShearTime");
+        } else {
+            lastShearTime = TimeUtils.getCurrentTime() - INITIAL_SECONDS_SINCE_SHEAR;
+        }
+        return new Alpaca(id, name, path, foodStat, hygieneStat, happinessStat, lastShearTime);
     }
 
     public int getId() {
@@ -102,6 +114,7 @@ public class Alpaca implements JSONAble {
         jsonObject.put("foodStat", this.foodStat);
         jsonObject.put("hygieneStat", this.hygieneStat);
         jsonObject.put("happinessStat", this.happinessStat);
+        jsonObject.put("lastShearTime", this.lastShearTime);
         return jsonObject;
     }
 }
