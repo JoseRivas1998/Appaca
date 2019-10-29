@@ -14,16 +14,14 @@ public class MinigameSelectActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        GridLayout gridLayout = new GridLayout(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minigame_select);
+        GridLayout gridLayout = findViewById(R.id.game_select_grid);
         getSupportActionBar().hide();
-        int size = (int) ScreenUtils.dpToPixels(this, 400);
+        int size = (int) ScreenUtils.dpToPixels(this, 200);
         int margin = (int) ScreenUtils.dpToPixels(this, 30);
 
-
         for (MiniGames miniGame : MiniGames.values()) {
-            int id = miniGame.iconId;
             ImageView gameView = new ImageView(this);
             gameView.setImageResource(miniGame.iconId);
 
