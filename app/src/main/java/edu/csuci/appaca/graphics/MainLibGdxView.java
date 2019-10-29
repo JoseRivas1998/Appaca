@@ -17,11 +17,13 @@ import java.util.List;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
+import edu.csuci.appaca.utils.ShearUtils;
 
 public class MainLibGdxView extends ApplicationAdapter {
 
@@ -116,6 +118,14 @@ public class MainLibGdxView extends ApplicationAdapter {
 //        petDetector.draw(dt, spriteBatch, shapeRenderer);
         shapeRenderer.end();
 
+    }
+
+    public void shear() {
+        Alpaca currentAlpaca = AlpacaFarm.getCurrentAlpaca();
+        int coinsToGet = ShearUtils.getShearValue(currentAlpaca, parent);
+        CurrencyManager.gainCurrencyOther(coinsToGet);
+        currentAlpaca.setLastShearTimeToNow();
+        SaveDataUtils.updateValuesAndSave(parent);
     }
 
     @Override
