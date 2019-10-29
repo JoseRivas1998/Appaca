@@ -8,6 +8,18 @@
     tools:context=".activities.MinigameSelectActivity">
 
     <ImageButton
+        android:id="@+id/exitButton"
+        android:layout_width="59dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/x_2" />
+
+    <ImageButton
         android:id="@+id/alpacaJumpIcon"
         android:layout_width="200dp"
         android:layout_height="200dp"
