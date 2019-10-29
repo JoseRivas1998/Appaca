@@ -15,7 +15,9 @@ import java.util.Map;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.Stat;
+import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
 import edu.csuci.appaca.utils.ListUtils;
@@ -23,6 +25,9 @@ import edu.csuci.appaca.utils.ListUtils;
 public class MainActivity extends AndroidApplication {
 
     private Map<Stat, StatBarFragment> statBars;
+    private CurrencyDisplayFragment currencyAlpacaDisplay;
+    private CurrencyDisplayFragment currencyOtherDisplay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,21 @@ public class MainActivity extends AndroidApplication {
         initLibGDX();
         initButtons();
         initStatBars();
+        initCurrencyDisplays();
         MainScreenBackground.start(this);
+    }
+
+    private void initCurrencyDisplays() {
+        currencyAlpacaDisplay = (CurrencyDisplayFragment) getFragmentManager().findFragmentById(R.id.main_view_currency_alpacas);
+        currencyAlpacaDisplay.setIconResource(R.drawable.currency_alpacas);
+        currencyOtherDisplay = (CurrencyDisplayFragment) getFragmentManager().findFragmentById(R.id.main_view_currency_other);
+        currencyOtherDisplay.setIconResource(R.drawable.currency_other);
+        updateCurrencyValues();
+    }
+
+    public void updateCurrencyValues() {
+        currencyAlpacaDisplay.setCurrencyTextValue(CurrencyManager.getCurrencyAlpaca());
+        currencyOtherDisplay.setCurrencyTextValue(CurrencyManager.getCurrencyOther());
     }
 
     private void initStatBars() {
@@ -120,6 +139,7 @@ public class MainActivity extends AndroidApplication {
     protected void onResume() {
         super.onResume();
         MainScreenBackground.start(this);
+        updateCurrencyValues();
     }
 
     @Override
