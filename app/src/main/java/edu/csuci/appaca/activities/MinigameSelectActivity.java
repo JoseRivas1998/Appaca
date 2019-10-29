@@ -2,7 +2,9 @@ package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
@@ -21,15 +23,22 @@ public class MinigameSelectActivity extends AppCompatActivity {
         int size = (int) ScreenUtils.dpToPixels(this, 200);
         int margin = (int) ScreenUtils.dpToPixels(this, 30);
 
-        for (MiniGames miniGame : MiniGames.values()) {
+        for (final MiniGames miniGame : MiniGames.values()) {
             ImageView gameView = new ImageView(this);
             gameView.setImageResource(miniGame.iconId);
-
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
             params.setMargins(margin, margin, margin, margin);
             gameView.setLayoutParams(params);
+            gameView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
             gridLayout.addView(gameView);
         }
