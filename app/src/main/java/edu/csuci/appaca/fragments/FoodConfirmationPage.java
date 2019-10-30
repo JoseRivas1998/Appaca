@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.CurrencyManager;
+import edu.csuci.appaca.data.Inventory;
+import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.statics.StaticFoodItem;
 import edu.csuci.appaca.utils.AssetsUtils;
 
@@ -77,16 +79,16 @@ public class FoodConfirmationPage extends DialogFragment {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(amount == 0) return;
                 int cost = amount * foodItem.cost;
-//                try {
-
-                // TODO get food item in inventory
-
-//                    CurrencyManager.spendCurrencyOther(cost);
-//                    dismiss();
-//                } catch (CurrencyManager.CurrencyException e) {
-//                    cantAffordThatMuchToast();
-//                }
+                try {
+                    CurrencyManager.spendCurrencyOther(cost);
+                    Inventory.addFood(foodItem.id, amount);
+                    SaveDataUtils.updateValuesAndSave(getContext());
+                    dismiss();
+                } catch (CurrencyManager.CurrencyException e) {
+                    cantAffordThatMuchToast();
+                }
             }
         });
 
