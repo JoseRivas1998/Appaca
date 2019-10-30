@@ -1,5 +1,6 @@
 package edu.csuci.appaca.activities;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -114,4 +115,10 @@ public class ShopActivity extends AppCompatActivity {
         viewPager.setCurrentItem(page.ordinal());
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
