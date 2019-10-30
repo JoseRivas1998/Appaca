@@ -24,6 +24,7 @@ public class IconBadgeFragment extends Fragment {
     private int iconId = -1;
     private String badgeText;
     private String iconPath;
+    private View.OnClickListener onIconClick;
 
     public IconBadgeFragment() {
         // Required empty public constructor
@@ -33,6 +34,7 @@ public class IconBadgeFragment extends Fragment {
         IconBadgeFragment fragment = new IconBadgeFragment();
         fragment.iconId = iconId;
         fragment.badgeText = badgeText;
+        fragment.onIconClick = null;
         return fragment;
     }
 
@@ -40,9 +42,13 @@ public class IconBadgeFragment extends Fragment {
         IconBadgeFragment fragment = new IconBadgeFragment();
         fragment.iconPath = iconPath;
         fragment.badgeText = badgeText;
+        fragment.onIconClick = null;
         return fragment;
     }
 
+    public void setOnIconClick(View.OnClickListener onIconClick) {
+        this.onIconClick = onIconClick;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +68,9 @@ public class IconBadgeFragment extends Fragment {
             icon.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), iconPath));
         } else {
             icon.setImageResource(iconId);
+        }
+        if(onIconClick != null) {
+            icon.setOnClickListener(onIconClick);
         }
     }
 }
