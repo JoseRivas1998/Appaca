@@ -108,7 +108,6 @@ public class MainActivity extends AndroidApplication {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ShopActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 

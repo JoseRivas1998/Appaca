@@ -114,11 +114,4 @@ public class ShopActivity extends AppCompatActivity {
     private void switchToPage(ShopPagerAdapter.Page page) {
         viewPager.setCurrentItem(page.ordinal());
     }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }
