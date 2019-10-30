@@ -16,13 +16,5 @@ public class FoodSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_select);
-        final ImageView exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FoodSelectActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }
