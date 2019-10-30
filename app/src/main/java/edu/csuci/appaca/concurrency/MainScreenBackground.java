@@ -104,7 +104,14 @@ public class MainScreenBackground {
                     currentDisplayedCurrencyOther--;
                 }
             }
-            parent.updateCurrencyValues(currentDisplayedCurrencyAlpaca, currentDisplayedCurrencyOther);
+            final int finalCurrentDisplayedCurrencyAlpaca = currentDisplayedCurrencyAlpaca;
+            final int finalCurrentDisplayedCurrencyOther = currentDisplayedCurrencyOther;
+            parent.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parent.updateCurrencyValues(finalCurrentDisplayedCurrencyAlpaca, finalCurrentDisplayedCurrencyOther);
+                }
+            });
         }
 
         private void updateStats(final Map<Stat, Double> currentValues, Alpaca current) {

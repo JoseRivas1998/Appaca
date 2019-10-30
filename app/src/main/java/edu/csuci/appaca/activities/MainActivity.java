@@ -29,6 +29,11 @@ public class MainActivity extends AndroidApplication {
     private CurrencyDisplayFragment currencyAlpacaDisplay;
     private CurrencyDisplayFragment currencyOtherDisplay;
     private MainLibGdxView libGDXView;
+    private ImageView shopBtn;
+    private ImageView playBtn;
+    private ImageView feedBtn;
+    private ImageView clothesBtn;
+    private ImageView shearBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +97,11 @@ public class MainActivity extends AndroidApplication {
     }
 
     private void initButtons() {
-        final ImageView shopBtn = findViewById(R.id.shopBtn);
-        final ImageView playBtn = findViewById(R.id.playBtn);
-        final ImageView feedBtn = findViewById(R.id.feedBtn);
-        final ImageView clothesBtn = findViewById(R.id.clothesBtn);
-        final ImageView shearBtn = findViewById(R.id.shearBtn);
+        shopBtn = findViewById(R.id.shopBtn);
+        playBtn = findViewById(R.id.playBtn);
+        feedBtn = findViewById(R.id.feedBtn);
+        clothesBtn = findViewById(R.id.clothesBtn);
+        shearBtn = findViewById(R.id.shearBtn);
 
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
