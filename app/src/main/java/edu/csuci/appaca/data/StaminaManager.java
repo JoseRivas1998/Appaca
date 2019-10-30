@@ -32,6 +32,14 @@ public class StaminaManager {
 
     }
 
+    public static void decreaseCurrentStamina() {
+        StaminaInstance.INSTANCE.currentValue--;
+    }
+
+    public static int getCurrentStamina() {
+        return StaminaInstance.INSTANCE.currentValue;
+    }
+
     public static JSONObject toJSONObject() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("currentStamina", StaminaInstance.INSTANCE.currentValue);
