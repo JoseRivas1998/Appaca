@@ -21,4 +21,9 @@
     <item name="player_food_height_px" type="dimen" format="float">5.0</item>
     <item name="player_turn_threshold" type="dimen" format="float">0.5</item>
     <integer name="accelerometer_frames">5</integer>
+
+<!--    24 hours in seconds-->
+    <integer name="time_to_full_wool">86400</integer>
+    <integer name="money_for_full_shear">50</integer>
+
 </resources>

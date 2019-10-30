@@ -7,12 +7,12 @@ public class CurrencyManager {
 
     private enum Currency {
         INSTANCE;
-        int currency1;
-        int currency2;
+        int currencyAlpaca;
+        int currencyOther;
         boolean loaded;
         Currency() {
-            currency1 = 0;
-            currency2 = 0;
+            currencyAlpaca = 0;
+            currencyOther = 0;
             loaded = false;
         }
     }
@@ -20,10 +20,10 @@ public class CurrencyManager {
     public static void load(JSONObject jsonObject) {
         if(Currency.INSTANCE.loaded) return;
         try {
-            if(!jsonObject.has("currency1")) throw new JSONException("No Currency 1");
-            if(!jsonObject.has("currency2")) throw new JSONException("No Currency 2");
-            Currency.INSTANCE.currency1 = jsonObject.getInt("currency1");
-            Currency.INSTANCE.currency2 = jsonObject.getInt("currency2");
+            if(!jsonObject.has("currencyAlpaca")) throw new JSONException("No Currency 1");
+            if(!jsonObject.has("currencyOther")) throw new JSONException("No Currency 2");
+            Currency.INSTANCE.currencyAlpaca = jsonObject.getInt("currencyAlpaca");
+            Currency.INSTANCE.currencyOther = jsonObject.getInt("currencyOther");
         } catch (JSONException je) {
             CurrencyManager.init();
         }
@@ -31,45 +31,45 @@ public class CurrencyManager {
     }
 
     public static void init() {
-        Currency.INSTANCE.currency1 = 0;
-        Currency.INSTANCE.currency2 = 0;
+        Currency.INSTANCE.currencyAlpaca = 0;
+        Currency.INSTANCE.currencyOther = 0;
     }
 
     public static JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("currency1", Currency.INSTANCE.currency1);
-        jsonObject.put("currency2", Currency.INSTANCE.currency2);
+        jsonObject.put("currencyAlpaca", Currency.INSTANCE.currencyAlpaca);
+        jsonObject.put("currencyOther", Currency.INSTANCE.currencyOther);
         return jsonObject;
     }
 
-    public static int getCurrency1() {
-        return Currency.INSTANCE.currency1;
+    public static int getCurrencyAlpaca() {
+        return Currency.INSTANCE.currencyAlpaca;
     }
 
-    public static int getCurrency2() {
-        return Currency.INSTANCE.currency2;
+    public static int getCurrencyOther() {
+        return Currency.INSTANCE.currencyOther;
     }
 
-    public static void spendCurrency1(int amount) throws CurrencyException {
-        if(amount > Currency.INSTANCE.currency1) {
+    public static void spendCurrencyAlpaca(int amount) throws CurrencyException {
+        if(amount > Currency.INSTANCE.currencyAlpaca) {
             throw new CurrencyException("Not enough money!");
         }
-        Currency.INSTANCE.currency1 -= amount;
+        Currency.INSTANCE.currencyAlpaca -= amount;
     }
 
-    public static void spendCurrency2(int amount) throws CurrencyException {
-        if(amount > Currency.INSTANCE.currency2) {
+    public static void spendCurrencyOther(int amount) throws CurrencyException {
+        if(amount > Currency.INSTANCE.currencyOther) {
             throw new CurrencyException("Not enough money!");
         }
-        Currency.INSTANCE.currency2 -= amount;
+        Currency.INSTANCE.currencyOther -= amount;
     }
 
-    public static void gainCurrency1(int amount) {
-        Currency.INSTANCE.currency1 += amount;
+    public static void gainCurrencyAlpaca(int amount) {
+        Currency.INSTANCE.currencyAlpaca += amount;
     }
 
-    public static void gainCurrency2(int amount) {
-        Currency.INSTANCE.currency2 += amount;
+    public static void gainCurrencyOther(int amount) {
+        Currency.INSTANCE.currencyOther += amount;
     }
 
     public static class CurrencyException extends Exception {

@@ -1,5 +1,6 @@
 package edu.csuci.appaca.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +16,23 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.CurrencyManager;
+import edu.csuci.appaca.data.Inventory;
+import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.statics.StaticFoodItem;
+import edu.csuci.appaca.utils.AssetsUtils;
 
 public class FoodConfirmationPage extends DialogFragment {
 
     private int amount = 0;
+    private StaticFoodItem foodItem;
+    private TextView costView;
+
+    public static FoodConfirmationPage newInstance(StaticFoodItem foodItem) {
+        FoodConfirmationPage confirmationPage = new FoodConfirmationPage();
+        confirmationPage.foodItem = foodItem;
+        return confirmationPage;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,8 +50,11 @@ public class FoodConfirmationPage extends DialogFragment {
         final Button plus = view.findViewById(R.id.shop_conf_amount_plus_button);
         final Button buy = view.findViewById(R.id.shop_conf_amount_buy);
         final Button cancel = view.findViewById(R.id.shop_conf_amount_cancel);
-        icon.setImageResource(R.drawable.full_apple_food);
-        label.setText("Apple");
+        costView = view.findViewById(R.id.shop_conf_amount_cost);
+
+        label.setText(foodItem.name);
+        icon.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), foodItem.path));
+
 
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +67,11 @@ public class FoodConfirmationPage extends DialogFragment {
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amount++;
+                int maxAfford = CurrencyManager.getCurrencyOther() / foodItem.cost;
+                if(amount + 1 > maxAfford) {
+                    cantAffordThatMuchToast();
+                }
+                amount = Math.min(amount + 1, maxAfford);
                 updateAmountText(view);
             }
         });
@@ -57,7 +79,16 @@ public class FoodConfirmationPage extends DialogFragment {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                if(amount == 0) return;
+                int cost = amount * foodItem.cost;
+                try {
+                    CurrencyManager.spendCurrencyOther(cost);
+                    Inventory.addFood(foodItem.id, amount);
+                    SaveDataUtils.updateValuesAndSave(getContext());
+                    dismiss();
+                } catch (CurrencyManager.CurrencyException e) {
+                    cantAffordThatMuchToast();
+                }
             }
         });
 
@@ -68,11 +99,22 @@ public class FoodConfirmationPage extends DialogFragment {
             }
         });
 
+        updateAmountText(view);
+
     }
 
     private void updateAmountText(View view) {
         final TextView amountText = view.findViewById(R.id.shop_conf_amount_amount);
         amountText.setText(String.format("%d", amount));
+        costView.setText(String.format("%d", amount * foodItem.cost));
+    }
+
+    private void cantAffordThatMuchToast() {
+        Context context = getContext();
+        CharSequence text = "You cannot afford that!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
 }
