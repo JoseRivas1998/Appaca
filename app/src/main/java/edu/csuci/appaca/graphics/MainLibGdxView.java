@@ -66,7 +66,6 @@ public class MainLibGdxView extends ApplicationAdapter {
         hearts = new ArrayList<>();
         StaticContentManager.load();
         coinPopupsToAdd = new Stack<>();
-        coinPopupsToAdd.add(5);
         zoomTexts = new ArrayList<>();
     }
 
@@ -110,6 +109,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         while(iter.hasNext()) {
             ZoomText zoomText = iter.next();
             zoomText.update(dt);
+            if(zoomText.isDone()) iter.remove();
         }
     }
 
@@ -160,6 +160,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     public void shear() {
         Alpaca currentAlpaca = AlpacaFarm.getCurrentAlpaca();
         int coinsToGet = ShearUtils.getShearValue(currentAlpaca, parent);
+        coinPopupsToAdd.push(coinsToGet);
         CurrencyManager.gainCurrencyOther(coinsToGet);
         currentAlpaca.setLastShearTimeToNow();
         SaveDataUtils.updateValuesAndSave(parent);
@@ -172,6 +173,16 @@ public class MainLibGdxView extends ApplicationAdapter {
         for (ZoomText zoomText : zoomTexts) {
             zoomText.resize(width, height);
         }
+    }
+
+    @Override
+    public void pause() {
+        StaticContentManager.dispose();
+    }
+
+    @Override
+    public void resume() {
+        StaticContentManager.load();
     }
 
     @Override

@@ -51,7 +51,6 @@ public class PetDetector extends AbstractEntity {
         if(Float.compare(Math.abs(swipeAngle - previousSwipeAngle), THRESHOLD) > 0) {
             this.numPets++;
             this.heartsToAdd.push(touchPoint);
-            Gdx.app.log(getClass().getName(), "PET" + this.numPets);
         }
 
         this.previousSwipeAngle = swipeAngle;

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -18,18 +19,57 @@ public class ZoomText {
     private LabelEntity label;
 
     private Viewport viewport;
+    private float stateTime;
+
+
+    private static final float ZOOM_IN_TIME = 0.535f;
+    private static final float TIME_TO_LEAVE = 1.5f;
+    private static final float END_TIME = 2.0f;
 
     public ZoomText(int viewportWidth, int viewportHeight) {
         label = new LabelEntity();
         viewport = new FitViewport(viewportWidth, viewportHeight);
+        stateTime = 0;
     }
 
 
     public void update(float dt) {
-        ((OrthographicCamera) viewport.getCamera()).zoom += dt;
-        Log.i(getClass().getName(), String.valueOf(((OrthographicCamera) viewport.getCamera()).zoom));
+        stateTime += dt;
+        ((OrthographicCamera) viewport.getCamera()).zoom = zoomFunction(stateTime);
         viewport.apply(true);
         label.update(dt);
+    }
+
+    //https://www.desmos.com/calculator/ig6lo1riud
+
+    private static float zoomFunction(float x) {
+        if(Float.compare(x, 0) >= 0 && Float.compare(x, ZOOM_IN_TIME) < 0) {
+            return zoomIn(x);
+        } else if(Float.compare(x, ZOOM_IN_TIME) >= 1 && Float.compare(x, TIME_TO_LEAVE) < 0) {
+            return 1.0f;
+        } else {
+            return zoomOut(x);
+        }
+    }
+
+    private static float zoomIn(float x) {
+        final float h = 0.9f;
+        final float a = 1.84f;
+        final float b = 0.15f;
+        final float c = 2.4f;
+        return a * MathUtils.cos((x - h) / b) + c;
+    }
+
+    private static float zoomOut(float x) {
+        final float a = 20.0f;
+        final float h = 1.6f;
+        final float k = 0.8f;
+        float xMinusHSql = (x - h) * (x - h);
+        return a * xMinusHSql + k;
+    }
+
+    public boolean isDone() {
+        return Float.compare(stateTime, END_TIME) > 0;
     }
 
     public void draw(float dt, SpriteBatch sb, ShapeRenderer sr) {
