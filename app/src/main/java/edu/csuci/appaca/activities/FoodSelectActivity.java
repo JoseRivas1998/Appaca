@@ -28,6 +28,16 @@ public class FoodSelectActivity extends AppCompatActivity {
             int amount = Inventory.getFoodAmount(foodItem.id);
             if(amount > 0) {
                 IconBadgeFragment iconBadge = IconBadgeFragment.ofAsset(foodItem.path, String.valueOf(amount));
+                iconBadge.setOnIconClick(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SaveDataUtils.updateValuesAndSave(FoodSelectActivity.this);
+                        AlpacaFarm.getCurrentAlpaca().incrementHungerStat(foodItem.value);
+                        Inventory.useFood(foodItem.id);
+                        SaveDataUtils.save(FoodSelectActivity.this);
+                        finish();
+                    }
+                });
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.food_select_inventory, iconBadge)
