@@ -141,6 +141,10 @@ public class MainLibGdxView extends ApplicationAdapter {
     private void draw(float dt) {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        spriteBatch.draw(
+                StaticContentManager.getTexture(StaticContentManager.Image.MAIN_SCREEN_BG),
+                0, 0, VIEWPORT_WIDTH, VIEW_HEIGHT
+        );
         alpaca.draw(dt, spriteBatch, shapeRenderer);
         for (Heart heart : hearts) {
             heart.draw(dt, spriteBatch, shapeRenderer);
