@@ -1,6 +1,7 @@
 package edu.csuci.appaca.data.statics;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +67,7 @@ public class ShopData {
 
             ShopInstance.INSTANCE.loaded = true;
         } catch (JSONException je) {
-            je.printStackTrace();
+            Log.e(ShopData.class.getName(), je.getMessage(), je);
         }
         return ShopInstance.INSTANCE.loaded;
     }

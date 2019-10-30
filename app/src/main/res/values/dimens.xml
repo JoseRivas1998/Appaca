@@ -13,4 +13,6 @@
     <dimen name="stat_bar_height">25dp</dimen>
     <dimen name="stat_bar_inner_radius">12dip</dimen>
     <dimen name="first_alpaca_sprite_height">200dp</dimen>
+    <dimen name="conf_page_icon_size">200dp</dimen>
+    <dimen name="conf_page_icon_margin">10dp</dimen>
 </resources>
