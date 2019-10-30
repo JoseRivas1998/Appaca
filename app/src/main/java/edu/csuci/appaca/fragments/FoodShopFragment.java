@@ -44,7 +44,7 @@ public class FoodShopFragment extends Fragment {
         int size = (int) ScreenUtils.dpToPixels(view.getContext(), 100);
         int margin = (int) ScreenUtils.dpToPixels(view.getContext(), 20);
         ShopData.load(getContext());
-        for (StaticFoodItem foodItem : ShopData.getAllFood()) {
+        for (final StaticFoodItem foodItem : ShopData.getAllFood()) {
             ImageView foodView = new ImageView(this.getContext());
             foodView.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), foodItem.path));
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -56,7 +56,7 @@ public class FoodShopFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    FoodConfirmationPage foodConfirmationPage = new FoodConfirmationPage();
+                    FoodConfirmationPage foodConfirmationPage = FoodConfirmationPage.newInstance(foodItem);
                     foodConfirmationPage.show(fm, "fragment_food_conf");
                 }
             });
