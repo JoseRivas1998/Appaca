@@ -7,21 +7,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
+import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
+import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.utils.ShearUtils;
 
 public class MainLibGdxView extends ApplicationAdapter {
 
@@ -41,6 +47,9 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private List<Heart> hearts;
 
+    private Stack<Integer> coinPopupsToAdd;
+    private List<ZoomText> zoomTexts;
+
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
@@ -56,6 +65,8 @@ public class MainLibGdxView extends ApplicationAdapter {
         this.petDetector = new PetDetector(alpaca);
         hearts = new ArrayList<>();
         StaticContentManager.load();
+        coinPopupsToAdd = new Stack<>();
+        zoomTexts = new ArrayList<>();
     }
 
     @Override
@@ -88,7 +99,32 @@ public class MainLibGdxView extends ApplicationAdapter {
                 heart.update(dt);
             }
         }
+        updateZoomTexts(dt);
         viewport.apply(true);
+    }
+
+    private void updateZoomTexts(float dt) {
+        addZoomTexts();
+        Iterator<ZoomText> iter = zoomTexts.iterator();
+        while(iter.hasNext()) {
+            ZoomText zoomText = iter.next();
+            zoomText.update(dt);
+            if(zoomText.isDone()) iter.remove();
+        }
+    }
+
+    private void addZoomTexts() {
+        if(zoomTexts.isEmpty()) {
+            if(!coinPopupsToAdd.isEmpty()) {
+                int coins = coinPopupsToAdd.pop();
+                ZoomText zoomText = new ZoomText(VIEWPORT_WIDTH, VIEW_HEIGHT);
+                zoomText.setFont(StaticContentManager.Font.ALPACA_JUMP_START);
+                zoomText.setAlign(LabelEntity.MIDDLE_CENTER);
+                zoomText.setPosition(VIEWPORT_WIDTH * 0.5f, VIEW_HEIGHT * 0.5f);
+                zoomText.setText("+" + coins);
+                zoomTexts.add(zoomText);
+            }
+        }
     }
 
     private void updatePetting(float dt) {
@@ -109,6 +145,9 @@ public class MainLibGdxView extends ApplicationAdapter {
         for (Heart heart : hearts) {
             heart.draw(dt, spriteBatch, shapeRenderer);
         }
+        for (ZoomText zoomText : zoomTexts) {
+            zoomText.draw(dt, spriteBatch, shapeRenderer);
+        }
         spriteBatch.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -118,10 +157,32 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     }
 
+    public void shear() {
+        Alpaca currentAlpaca = AlpacaFarm.getCurrentAlpaca();
+        int coinsToGet = ShearUtils.getShearValue(currentAlpaca, parent);
+        coinPopupsToAdd.push(coinsToGet);
+        CurrencyManager.gainCurrencyOther(coinsToGet);
+        currentAlpaca.setLastShearTimeToNow();
+        SaveDataUtils.updateValuesAndSave(parent);
+    }
+
     @Override
     public void resize(int width, int height) {
         Gdx.app.log("MainLibGdxView", String.format("%d, %d", width, height));
         viewport.update(width, height, true);
+        for (ZoomText zoomText : zoomTexts) {
+            zoomText.resize(width, height);
+        }
+    }
+
+    @Override
+    public void pause() {
+        StaticContentManager.dispose();
+    }
+
+    @Override
+    public void resume() {
+        StaticContentManager.load();
     }
 
     @Override

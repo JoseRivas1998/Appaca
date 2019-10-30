@@ -17,6 +17,7 @@ import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.Stat;
+import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
@@ -27,7 +28,7 @@ public class MainActivity extends AndroidApplication {
     private Map<Stat, StatBarFragment> statBars;
     private CurrencyDisplayFragment currencyAlpacaDisplay;
     private CurrencyDisplayFragment currencyOtherDisplay;
-
+    private MainLibGdxView libGDXView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +52,20 @@ public class MainActivity extends AndroidApplication {
         currencyAlpacaDisplay.setIconResource(R.drawable.currency_alpacas);
         currencyOtherDisplay = (CurrencyDisplayFragment) getFragmentManager().findFragmentById(R.id.main_view_currency_other);
         currencyOtherDisplay.setIconResource(R.drawable.currency_other);
-        updateCurrencyValues();
+        updateCurrencyValues(CurrencyManager.getCurrencyAlpaca(), CurrencyManager.getCurrencyOther());
     }
 
-    public void updateCurrencyValues() {
-        currencyAlpacaDisplay.setCurrencyTextValue(CurrencyManager.getCurrencyAlpaca());
-        currencyOtherDisplay.setCurrencyTextValue(CurrencyManager.getCurrencyOther());
+    public void updateCurrencyValues(int currencyAlpaca, int currencyOther) {
+        currencyAlpacaDisplay.setCurrencyValue(currencyAlpaca);
+        currencyOtherDisplay.setCurrencyValue(currencyOther);
+    }
+
+    public int getDisplayedCurrencyAlpaca() {
+        return currencyAlpacaDisplay.getCurrencyValue();
+    }
+
+    public int getDisplayedCurrencyOther() {
+        return currencyOtherDisplay.getCurrencyValue();
     }
 
     private void initStatBars() {
@@ -78,7 +87,8 @@ public class MainActivity extends AndroidApplication {
 
     private void initLibGDX() {
         final FrameLayout layout = findViewById(R.id.main_libGDX_view);
-        layout.addView(initializeForView(new MainLibGdxView(this)));
+        libGDXView = new MainLibGdxView(this);
+        layout.addView(initializeForView(libGDXView));
     }
 
     private void initButtons() {
@@ -86,6 +96,7 @@ public class MainActivity extends AndroidApplication {
         final ImageView playBtn = findViewById(R.id.playBtn);
         final ImageView feedBtn = findViewById(R.id.feedBtn);
         final ImageView clothesBtn = findViewById(R.id.clothesBtn);
+        final ImageView shearBtn = findViewById(R.id.shearBtn);
 
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +130,12 @@ public class MainActivity extends AndroidApplication {
             }
         });
 
+        shearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                libGDXView.shear();
+            }
+        });
 
 
     }
@@ -139,7 +156,6 @@ public class MainActivity extends AndroidApplication {
     protected void onResume() {
         super.onResume();
         MainScreenBackground.start(this);
-        updateCurrencyValues();
     }
 
     @Override
