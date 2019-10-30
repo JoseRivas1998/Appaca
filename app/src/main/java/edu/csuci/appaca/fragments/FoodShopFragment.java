@@ -15,6 +15,9 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.statics.ShopData;
+import edu.csuci.appaca.data.statics.StaticFoodItem;
+import edu.csuci.appaca.utils.AssetsUtils;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 /**
@@ -40,15 +43,16 @@ public class FoodShopFragment extends Fragment {
         final GridLayout gridLayout = view.findViewById(R.id.food_shop_grid);
         int size = (int) ScreenUtils.dpToPixels(view.getContext(), 100);
         int margin = (int) ScreenUtils.dpToPixels(view.getContext(), 20);
-        for (int i = 0; i < 9; i++) {
-            ImageView appleView = new ImageView(this.getContext());
-            appleView.setImageResource(R.drawable.full_apple_food);
+        ShopData.load(getContext());
+        for (StaticFoodItem foodItem : ShopData.getAllFood()) {
+            ImageView foodView = new ImageView(this.getContext());
+            foodView.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), foodItem.path));
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
             params.setMargins(margin, margin, margin, margin);
-            appleView.setLayoutParams(params);
-            appleView.setOnClickListener(new View.OnClickListener() {
+            foodView.setLayoutParams(params);
+            foodView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -56,7 +60,7 @@ public class FoodShopFragment extends Fragment {
                     foodConfirmationPage.show(fm, "fragment_food_conf");
                 }
             });
-            gridLayout.addView(appleView);
+            gridLayout.addView(foodView);
         }
     }
 }
