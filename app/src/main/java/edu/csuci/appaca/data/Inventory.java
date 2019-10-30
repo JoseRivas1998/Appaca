@@ -94,6 +94,18 @@ public class Inventory {
         return ListUtils.getOrDefault(InventoryInstance.INSTANCE.food, foodItem, 0);
     }
 
+    public static void addFood(int foodId, int amount) {
+        StaticFoodItem foodItem = ShopData.getFood(foodId);
+        int newAmount = getFoodAmount(foodItem) + amount;
+        InventoryInstance.INSTANCE.food.put(foodItem, newAmount);
+    }
+
+    public static void useFood(int foodId) {
+        StaticFoodItem foodItem = ShopData.getFood(foodId);
+        int newAmount = getFoodAmount(foodItem) - 1;
+        InventoryInstance.INSTANCE.food.put(foodItem, Math.max(newAmount, 0));
+    }
+
     public static int getClothesAmount(int clothesId) {
         StaticClothesItem clothesItem = ShopData.getClothes(clothesId);
         return getClothesAmount(clothesItem);
@@ -101,6 +113,18 @@ public class Inventory {
 
     private static int getClothesAmount(StaticClothesItem clothesItem) {
         return ListUtils.getOrDefault(InventoryInstance.INSTANCE.clothes, clothesItem, 0);
+    }
+
+    public static void addClothes(int clothesId, int amount) {
+        StaticClothesItem clothesItem = ShopData.getClothes(clothesId);
+        int newAmount = getClothesAmount(clothesItem) + amount;
+        InventoryInstance.INSTANCE.clothes.put(clothesItem, newAmount);
+    }
+
+    public static void useClothes(int clothesId) {
+        StaticClothesItem clothesItem = ShopData.getClothes(clothesId);
+        int newAmount = getClothesAmount(clothesItem) - 1;
+        InventoryInstance.INSTANCE.clothes.put(clothesItem, Math.max(newAmount, 0));
     }
 
 }
