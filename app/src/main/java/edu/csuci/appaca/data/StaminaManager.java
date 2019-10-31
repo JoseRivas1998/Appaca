@@ -29,11 +29,15 @@ public class StaminaManager {
 
     public static void increaseMaxStamina() {
         StaminaInstance.INSTANCE.currentValue++;
-
     }
 
     public static void decreaseCurrentStamina() {
         StaminaInstance.INSTANCE.currentValue--;
+    }
+
+    public static void increaseCurrentStamina() {
+        if (StaminaInstance.INSTANCE.currentValue < StaminaInstance.INSTANCE.maxValue)
+            StaminaInstance.INSTANCE.currentValue++;
     }
 
     public static int getCurrentStamina() {
