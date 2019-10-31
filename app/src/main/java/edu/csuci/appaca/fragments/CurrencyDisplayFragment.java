@@ -19,6 +19,7 @@ public class CurrencyDisplayFragment extends Fragment {
 
     private ImageView iconView;
     private TextView valueText;
+    private int currencyValue;
 
     public CurrencyDisplayFragment() {
         // Required empty public constructor
@@ -37,13 +38,20 @@ public class CurrencyDisplayFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         iconView = view.findViewById(R.id.currency_display_image);
         valueText = view.findViewById(R.id.currency_display_text);
+        this.currencyValue = 0;
     }
 
     public void setIconResource(int resourceId) {
         iconView.setImageResource(resourceId);
     }
 
-    public void setCurrencyTextValue(int currency) {
+    public void setCurrencyValue(int currency) {
+        this.currencyValue = currency;
         valueText.setText(Integer.toString(currency));
     }
+
+    public int getCurrencyValue() {
+        return this.currencyValue;
+    }
+
 }

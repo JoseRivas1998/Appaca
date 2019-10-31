@@ -90,6 +90,14 @@ public class Alpaca implements JSONAble {
         return happinessStat;
     }
 
+    public long getLastShearTime() {
+        return lastShearTime;
+    }
+
+    public void setLastShearTimeToNow() {
+        this.lastShearTime = TimeUtils.getCurrentTime();
+    }
+
     public void updateValuesBasedOnTime() {
         long previousTime = SavedTime.lastSavedTime();
         double currentFood = FoodDepletion.foodDepletion(this, previousTime);
@@ -103,6 +111,10 @@ public class Alpaca implements JSONAble {
 
     public void incrementHappinessStat(double increment) {
         this.happinessStat = MathFunctions.clamp(this.happinessStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+    }
+
+    public void incrementHungerStat(double increment) {
+        this.foodStat = MathFunctions.clamp(this.foodStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
     }
 
     @Override

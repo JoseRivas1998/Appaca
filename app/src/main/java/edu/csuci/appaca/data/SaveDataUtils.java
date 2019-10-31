@@ -48,6 +48,12 @@ public class SaveDataUtils {
             } else {
                 StaminaManager.init();
             }
+            if (jsonObject.has("inventory")) {
+                JSONObject inventory = jsonObject.getJSONObject("inventory");
+                Inventory.load(inventory);
+            } else {
+                Inventory.init();
+            }
         } catch (FileNotFoundException e) {
             // TODO
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
@@ -66,6 +72,7 @@ public class SaveDataUtils {
             SavedTime.setToNow();
             CurrencyManager.init();
             StaminaManager.init();
+            Inventory.init();
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -82,6 +89,8 @@ public class SaveDataUtils {
             saveData.put("currency", currency);
             JSONObject stamina = StaminaManager.toJSONObject();
             saveData.put("stamina", stamina);
+            JSONObject inventory = Inventory.toJSON();
+            saveData.put("inventory", inventory);
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }

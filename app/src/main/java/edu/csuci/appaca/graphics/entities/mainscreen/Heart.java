@@ -28,6 +28,8 @@ public class Heart extends AbstractSpriteEntity {
 
     @Override
     public void update(float dt) {
+        // In case static content manager needs to reload
+        setImage(StaticContentManager.getTexture(StaticContentManager.Image.HEART));
         this.applyVelocity(dt);
         float diffY = this.getY() - spawnCenter.y;
         float halfWidth = getWidth() * 0.5f;
