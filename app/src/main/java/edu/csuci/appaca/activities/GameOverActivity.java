@@ -15,6 +15,7 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
+import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
 
 public class GameOverActivity extends AppCompatActivity {
@@ -41,7 +42,9 @@ public class GameOverActivity extends AppCompatActivity {
     }
 
     private void updateCurrencyAlpacas() {
-        CurrencyManager.gainCurrencyAlpaca(returnTo.coinsForScore(this.score));
+        int coinsToGet = returnTo.coinsForScore(this.score);
+        CurrencyManager.gainCurrencyAlpaca(coinsToGet);
+        PendingCoins.addCoins(coinsToGet);
     }
 
     private void updateHappiness() {
