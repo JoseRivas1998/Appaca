@@ -6,6 +6,7 @@
 
     <string name="alpaca_jump">Alpaca Jump</string>
     <string name="alpaca_jump_score_format">Score: %06d</string>
+    <string name="alpaca_jump_high_score_format">High Score: %06d</string>
     <string name="play_again">Play Again</string>
     <string name="ok">OK</string>
     <string name="game_over">Game Over</string>

@@ -54,6 +54,12 @@ public class SaveDataUtils {
             } else {
                 Inventory.init();
             }
+            if (jsonObject.has("high_scores")) {
+                JSONArray highScores = jsonObject.getJSONArray("high_scores");
+                HighScore.load(highScores);
+            } else {
+                HighScore.init();
+            }
         } catch (FileNotFoundException e) {
             // TODO
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
@@ -73,6 +79,7 @@ public class SaveDataUtils {
             CurrencyManager.init();
             StaminaManager.init();
             Inventory.init();
+            HighScore.init();
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -91,6 +98,8 @@ public class SaveDataUtils {
             saveData.put("stamina", stamina);
             JSONObject inventory = Inventory.toJSON();
             saveData.put("inventory", inventory);
+            JSONArray highScores = HighScore.toJSONArray();
+            saveData.put("high_scores", highScores);
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
