@@ -69,7 +69,7 @@ public class GameOverActivity extends AppCompatActivity {
 
         scoreText.setText(String.format(getString(returnTo.scoreFormatId), this.score));
 
-        highScoreText.setText(String.format(getString(returnTo.highScoreFormatId), this.score));
+        highScoreText.setText(String.format(getString(returnTo.highScoreFormatId), this.highScore));
 
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
