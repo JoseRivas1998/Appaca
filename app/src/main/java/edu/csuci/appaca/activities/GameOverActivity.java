@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.badlogic.gdx.Game;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.SaveDataUtils;
@@ -40,7 +41,7 @@ public class GameOverActivity extends AppCompatActivity {
     }
 
     private void updateCurrencyAlpacas() {
-        // TODO this is a stub
+        CurrencyManager.gainCurrencyAlpaca(returnTo.coinsForScore(this.score));
     }
 
     private void updateHappiness() {
