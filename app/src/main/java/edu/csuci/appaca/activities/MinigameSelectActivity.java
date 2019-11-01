@@ -1,6 +1,7 @@
 package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.ScreenUtils;
+import edu.csuci.appaca.fragments.EmptyStamina;
 
 public class MinigameSelectActivity extends AppCompatActivity {
 
@@ -37,10 +39,16 @@ public class MinigameSelectActivity extends AppCompatActivity {
             gameView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
-                    StaminaManager.decreaseCurrentStamina();
-                    startActivity(intent);
-                    finish();
+                    if (StaminaManager.getCurrentStamina() > 0) {
+                        Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
+                        StaminaManager.decreaseCurrentStamina();
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        FragmentManager fm = getSupportFragmentManager();
+                        EmptyStamina emptyStamina = new EmptyStamina();
+                        emptyStamina.show(fm, "no_remaining_stamina");
+                    }
                 }
             });
 
