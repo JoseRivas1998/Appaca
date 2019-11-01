@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.MiniGames;
+import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 public class MinigameSelectActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
+                    StaminaManager.decreaseCurrentStamina();
                     startActivity(intent);
                     finish();
                 }
