@@ -26,4 +26,7 @@
     <integer name="time_to_full_wool">86400</integer>
     <integer name="money_for_full_shear">50</integer>
 
+<!--    Stamina-->
+    <integer name="recovery_minutes">30</integer>
+
 </resources>
