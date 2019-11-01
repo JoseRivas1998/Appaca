@@ -1,5 +1,6 @@
 package edu.csuci.appaca.activities;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -113,5 +114,4 @@ public class ShopActivity extends AppCompatActivity {
     private void switchToPage(ShopPagerAdapter.Page page) {
         viewPager.setCurrentItem(page.ordinal());
     }
-
 }

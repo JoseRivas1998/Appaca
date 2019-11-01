@@ -3,4 +3,22 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="alpaca_jump">Alpaca Jump</string>
+    <string name="alpaca_jump_score_format">Score: %06d</string>
+    <string name="alpaca_jump_high_score_format">High Score: %06d</string>
+    <string name="play_again">Play Again</string>
+    <string name="ok">OK</string>
+    <string name="game_over">Game Over</string>
+    <string name="top_to_start">Tap to Start!</string>
+    <string name="hunger">Hunger</string>
+    <string name="happiness">Happiness</string>
+    <string name="hygiene">Hygiene</string>
+    <string name="first_alpaca_title">Congratulations on your new alpaca!</string>
+    <string name="first_alpaca_confirmation_button">Lets Go!</string>
+    <string name="alpaca_name_field_hint">Name your Alpaca!</string>
+    <string name="buy">Buy</string>
+    <string name="cancel">Cancel</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
 </resources>

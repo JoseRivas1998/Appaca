@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/paca_image"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/paca" />
+
+    <TextView
+        android:id="@+id/no_stamina_message"
+        android:layout_width="253dp"
+        android:layout_height="45dp"
+        android:text="All Out of Stamina"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/time_until_refill"
+        android:layout_width="253dp"
+        android:layout_height="26dp"
+        android:text="Time Left:"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24dp" />
+
+    <Button
+        android:id="@+id/close_button"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        android:text="Close" />
+
+
+
+</LinearLayout>

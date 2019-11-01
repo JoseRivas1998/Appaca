@@ -1,142 +1,81 @@
 package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.view.View;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.concurrency.StaminaRecovery;
+import edu.csuci.appaca.data.MiniGames;
+import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
+import edu.csuci.appaca.utils.ScreenUtils;
+import edu.csuci.appaca.fragments.EmptyStamina;
 
 public class MinigameSelectActivity extends AppCompatActivity {
-
-    private ImageButton returnToMain, matchingButton, poopsweepButton, fruitButton, jumpButton;
-    private Button playButton;
-    private Class selectedClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minigame_select);
-        getSupportActionBar().setTitle("Minigames");
+        GridLayout gridLayout = findViewById(R.id.game_select_grid);
+        getSupportActionBar().hide();
+        int size = (int) ScreenUtils.dpToPixels(this, 200);
+        int margin = (int) ScreenUtils.dpToPixels(this, 30);
+        StaminaRecovery.start(this);
 
-        returnToMain = (ImageButton) findViewById(R.id.exitButton);
-
-        matchingButton = (ImageButton) findViewById(R.id.matchingIcon);
-        poopsweepButton = (ImageButton) findViewById(R.id.poopsweeperIcon);
-        fruitButton = (ImageButton) findViewById(R.id.fruitCatchIcon);
-        jumpButton = (ImageButton) findViewById(R.id.alpacaJumpIcon);
-        playButton = (Button) findViewById(R.id.selectButton);
-
-        returnToMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchActivity(MainActivity.class);
-            }
-        });
-
-        matchingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedClass == MatchingActivity.class) {
-                    matchingButton.setBackgroundResource(R.drawable.unselect_button);
-                    selectedClass = null;
-                } else {
-                    if (selectedClass != null) {
-                        unselectIcon(selectedClass);
+        for (final MiniGames miniGame : MiniGames.values()) {
+            ImageView gameView = new ImageView(this);
+            gameView.setImageResource(miniGame.iconId);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = size;
+            params.height = size;
+            params.setMargins(margin, margin, margin, margin);
+            gameView.setLayoutParams(params);
+            gameView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (StaminaManager.getCurrentStamina() > 0) {
+                        Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
+                        StaminaManager.decreaseCurrentStamina();
+                        SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        FragmentManager fm = getSupportFragmentManager();
+                        EmptyStamina emptyStamina = new EmptyStamina();
+                        emptyStamina.show(fm, "no_remaining_stamina");
                     }
-                    selectedClass = MatchingActivity.class;
-                    matchingButton.setBackgroundResource(R.drawable.select_button);
                 }
-            }
-        });
+            });
 
-        poopsweepButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedClass == MinesweeperActivity.class) {
-                    poopsweepButton.setBackgroundResource(R.drawable.unselect_button);
-                    selectedClass = null;
-                } else {
-                    if (selectedClass != null) {
-                        unselectIcon(selectedClass);
-                    }
-                    selectedClass = MinesweeperActivity.class;
-                    poopsweepButton.setBackgroundResource(R.drawable.select_button);
-                }
-            }
-        });
-
-        fruitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedClass == FruitCatchActivity.class) {
-                    fruitButton.setBackgroundResource(R.drawable.unselect_button);
-                    selectedClass = null;
-                } else {
-                    if (selectedClass != null) {
-                        unselectIcon(selectedClass);
-                    }
-                    selectedClass = FruitCatchActivity.class;
-                    fruitButton.setBackgroundResource(R.drawable.select_button);
-                }
-            }
-        });
-
-        jumpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedClass == AlpacaJumpActivity.class) {
-                    jumpButton.setBackgroundResource(R.drawable.unselect_button);
-                    selectedClass = null;
-                } else {
-                    if (selectedClass != null) {
-                        unselectIcon(selectedClass);
-                    }
-                    selectedClass = AlpacaJumpActivity.class;
-                    jumpButton.setBackgroundResource(R.drawable.select_button);
-                }
-            }
-        });
-
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedClass != null) {
-                    launchActivity(selectedClass);
-                }
-            }
-        });
-
-    }
-
-    private void launchActivity(Class gotoClass) {
-
-        Intent intent = new Intent(this, gotoClass);
-        startActivity(intent);
-    }
-
-    private void unselectIcon(Class unselectClass) {
-        System.out.println("unselectClass is " + unselectClass.getName());
-        switch (unselectClass.getName()) {
-            case "edu.csuci.appaca.activities.AlpacaJumpActivity":
-                jumpButton.setBackgroundResource(R.drawable.unselect_button);
-                break;
-            case "edu.csuci.appaca.activities.MatchingActivity":
-                matchingButton.setBackgroundResource(R.drawable.unselect_button);
-                break;
-            case "edu.csuci.appaca.activities.MinesweeperActivity":
-                poopsweepButton.setBackgroundResource(R.drawable.unselect_button);
-                break;
-            case "edu.csuci.appaca.activities.FruitCatchActivity":
-                fruitButton.setBackgroundResource(R.drawable.unselect_button);
-                break;
-            default:
-                break;
+            gridLayout.addView(gameView);
         }
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        StaminaRecovery.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StaminaRecovery.start(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        StaminaRecovery.stop();
     }
 
 }

@@ -21,14 +21,6 @@ public class MinesweeperActivity extends AppCompatActivity {
 
     public void initButton()
     {
-        final ImageView exitButton = findViewById(R.id.poosweeper_close);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MinesweeperActivity.this, MinigameSelectActivity.class);
-                startActivity(intent);
-            }
-        });
 
         final ImageView poop = findViewById(R.id.imageView2);
         poop.setOnClickListener(new View.OnClickListener() {
