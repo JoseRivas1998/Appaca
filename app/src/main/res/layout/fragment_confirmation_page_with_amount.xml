@@ -5,18 +5,20 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/bluePastel"
     tools:context=".fragments.FoodConfirmationPage">
 
     <ImageView
         android:id="@+id/shop_conf_amount_item_icon"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
+        android:layout_margin="@dimen/conf_page_icon_margin"
+        android:layout_width="@dimen/conf_page_icon_size"
+        android:layout_height="@dimen/conf_page_icon_size" />
 
     <TextView
         android:id="@+id/shop_conf_amount_item_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24pt"></TextView>
+        android:textSize="24pt"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,29 +27,37 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/shop_conf_amount_minus_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="-"
+            android:text="@string/minus"
+            android:layout_weight=".25"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:textSize="12pt"/>
 
         <TextView
             android:id="@+id/shop_conf_amount_amount"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:layout_weight="0.5"
             android:textSize="12pt" />
         <Button
             android:id="@+id/shop_conf_amount_plus_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="+"
+            android:layout_weight=".25"
+            android:text="@string/plus"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:textSize="12pt"/>
     </LinearLayout>
 
     <TextView
+        android:id="@+id/shop_conf_amount_cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cost"
         android:textSize="18pt" />
 
     <LinearLayout
@@ -58,14 +68,20 @@
             android:id="@+id/shop_conf_amount_buy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buy"
+            android:text="@string/buy"
             android:layout_marginRight="30dp"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:textSize="12pt"/>
         <Button
             android:id="@+id/shop_conf_amount_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:textSize="12pt"/>
     </LinearLayout>
 

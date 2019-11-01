@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bluePastel"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".activities.FirstAlpacaActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/first_alpaca_title"
+        android:textSize="24sp"
+        />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"/>
+
+        <ImageView
+            android:id="@+id/first_alpaca_sprite"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/first_alpaca_sprite_height"
+            android:layout_weight=".5"
+            android:src="@drawable/apple" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"/>
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/main_view_dock_margin"
+        >
+        <EditText
+            android:id="@+id/first_alpaca_name_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/main_view_dock_margin"
+            android:layout_weight=".75"
+            android:hint="@string/alpaca_name_field_hint" />
+        <Button
+            android:id="@+id/first_alpaca_confirmation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/first_alpaca_confirmation_button"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"/>
+    </LinearLayout>
+
+</LinearLayout>
