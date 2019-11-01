@@ -40,15 +40,9 @@ public class StaminaManager {
         }
     }
 
-    public static void increaseCurrentStamina() {
-        if (getCurrentStamina() < StaminaInstance.INSTANCE.maxValue) {
-            StaminaInstance.INSTANCE.currentValue++;
-            if (getCurrentStamina() == StaminaInstance.INSTANCE.maxValue)
-                StaminaInstance.INSTANCE.firstStaminaUsedTime = 0;
-            else
-                StaminaInstance.INSTANCE.firstStaminaUsedTime = getCurrentTime();
-        }
-
+    public static void increaseCurrentStaminaToMax() {
+        StaminaInstance.INSTANCE.currentValue = StaminaInstance.INSTANCE.maxValue;
+        StaminaInstance.INSTANCE.firstStaminaUsedTime = 0;
     }
 
     public static int getCurrentStamina() {

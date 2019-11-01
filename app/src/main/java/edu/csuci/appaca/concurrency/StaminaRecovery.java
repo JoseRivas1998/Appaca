@@ -29,8 +29,6 @@ public class StaminaRecovery {
         }
     }
 
-    private static int recoveryMinutes = 30;
-
     public static void start(MinigameSelectActivity activity) {
         ThreadInstance.INSTANCE.start(activity);
     }
@@ -42,6 +40,8 @@ public class StaminaRecovery {
     private static class BackgroundThread extends Thread {
 
         private static final long UPDATES_PER_SECOND = 60;
+
+        private static final int recoveryMinutes = 30;
 
         private boolean running;
         private MinigameSelectActivity parent;
@@ -59,7 +59,8 @@ public class StaminaRecovery {
                 return;
             }
             while(this.running) {
-                updateStamina();
+                if (StaminaManager.getFirstStaminaUsedTime() != 0)
+                    updateStamina();
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
@@ -71,16 +72,8 @@ public class StaminaRecovery {
         private void updateStamina() {
             long currentTime = TimeUtils.getCurrentTime();
             double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
-            if ((StaminaManager.getFirstStaminaUsedTime() != 0) && (timeDifference >= recoveryMinutes)) {
-                double staminaToRecover = timeDifference/recoveryMinutes;
-                double missingStamina = (double)StaminaManager.MAX_STAMINA - StaminaManager.getCurrentStamina();
-                if (staminaToRecover > missingStamina) {
-                    staminaToRecover = missingStamina;
-                }
-                for (int i = 0; i < staminaToRecover; i++) {
-                    StaminaManager.increaseCurrentStamina();
-                }
-
+            if (timeDifference >= recoveryMinutes) {
+                StaminaManager.increaseCurrentStaminaToMax();
             }
         }
 
