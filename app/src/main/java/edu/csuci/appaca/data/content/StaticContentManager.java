@@ -66,7 +66,8 @@ public class StaticContentManager {
         PLATFORM("alpaca-jump/img/platform_final.png"),
         ALPACA_JUMP_BG("alpaca-jump/img/bkgd3_2.jpg"),
         ALPACA_JUMP_PLAYER("alpaca-jump/img/skin_01.png"),
-        HEART("heart.png");
+        HEART("heart.png"),
+        MAIN_SCREEN_BG("backgrounds/appacabackground.png");
         final String path;
 
         Image(String path) {

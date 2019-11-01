@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bkgd3_2"
+    android:background="@color/bluePastel"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".activities.GameOverActivity">
@@ -24,10 +24,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/highScoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="High Score: 2,147,483,647"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <LinearLayout
@@ -38,6 +37,7 @@
             android:id="@+id/playAgain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/stat_bar_inner_full"
             android:layout_marginRight="@dimen/game_over_button_margin"
             android:text="@string/play_again" />
 
@@ -45,6 +45,7 @@
             android:id="@+id/exitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/stat_bar_inner_full"
             android:text="@string/ok" />
     </LinearLayout>
 

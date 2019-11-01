@@ -20,6 +20,7 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
+import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
@@ -87,9 +88,20 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private void update(float dt) {
         updatePetting(dt);
-        while(!petDetector.heartsEmpty()) {
-            hearts.add(new Heart(petDetector.popHeartsToAdd()));
+        addPendingCoins();
+        addHearts();
+        updateHearts(dt);
+        updateZoomTexts(dt);
+        viewport.apply(true);
+    }
+
+    private void addPendingCoins() {
+        if(PendingCoins.hasPendingCoins()) {
+            coinPopupsToAdd.push(PendingCoins.getCoinsAndEmpty());
         }
+    }
+
+    private void updateHearts(float dt) {
         Iterator<Heart> iter = hearts.iterator();
         while(iter.hasNext()) {
             Heart heart = iter.next();
@@ -99,8 +111,12 @@ public class MainLibGdxView extends ApplicationAdapter {
                 heart.update(dt);
             }
         }
-        updateZoomTexts(dt);
-        viewport.apply(true);
+    }
+
+    private void addHearts() {
+        while(!petDetector.heartsEmpty()) {
+            hearts.add(new Heart(petDetector.popHeartsToAdd()));
+        }
     }
 
     private void updateZoomTexts(float dt) {
@@ -141,6 +157,10 @@ public class MainLibGdxView extends ApplicationAdapter {
     private void draw(float dt) {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        spriteBatch.draw(
+                StaticContentManager.getTexture(StaticContentManager.Image.MAIN_SCREEN_BG),
+                0, 0, VIEWPORT_WIDTH, VIEW_HEIGHT
+        );
         alpaca.draw(dt, spriteBatch, shapeRenderer);
         for (Heart heart : hearts) {
             heart.draw(dt, spriteBatch, shapeRenderer);
