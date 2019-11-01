@@ -9,6 +9,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.ScreenUtils;
@@ -23,6 +24,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         int size = (int) ScreenUtils.dpToPixels(this, 200);
         int margin = (int) ScreenUtils.dpToPixels(this, 30);
+        StaminaRecovery.start(this);
 
         for (final MiniGames miniGame : MiniGames.values()) {
             ImageView gameView = new ImageView(this);
@@ -48,5 +50,22 @@ public class MinigameSelectActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        StaminaRecovery.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StaminaRecovery.start(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        StaminaRecovery.stop();
+    }
 
 }

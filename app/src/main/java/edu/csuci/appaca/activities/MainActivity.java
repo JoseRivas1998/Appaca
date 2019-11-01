@@ -16,8 +16,6 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
-import edu.csuci.appaca.data.StaminaManager;
-import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
@@ -51,7 +49,6 @@ public class MainActivity extends AndroidApplication {
         initStatBars();
         initCurrencyDisplays();
         MainScreenBackground.start(this);
-        StaminaRecovery.start(this);
     }
 
     private void initCurrencyDisplays() {
@@ -169,6 +166,5 @@ public class MainActivity extends AndroidApplication {
     protected void onDestroy() {
         super.onDestroy();
         MainScreenBackground.stop();
-        StaminaRecovery.stop();
     }
 }
