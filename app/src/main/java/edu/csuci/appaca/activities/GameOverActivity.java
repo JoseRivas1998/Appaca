@@ -23,6 +23,7 @@ import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.fragments.EmptyStamina;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class GameOverActivity extends AppCompatActivity {
 
@@ -38,7 +39,6 @@ public class GameOverActivity extends AppCompatActivity {
         updateSaveData();
         getSupportActionBar().hide();
         initButton();
-        StaminaRecovery.start(this);
     }
 
     private void updateSaveData() {
@@ -92,6 +92,7 @@ public class GameOverActivity extends AppCompatActivity {
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkStaminaAndUpdate();
                 if (StaminaManager.getCurrentStamina() > 0) {
                     Intent intent = new Intent(GameOverActivity.this, returnTo.activityClass);
                     StaminaManager.decreaseCurrentStamina();
@@ -107,21 +108,12 @@ public class GameOverActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        StaminaRecovery.stop();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        StaminaRecovery.start(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        StaminaRecovery.stop();
+    private void checkStaminaAndUpdate() {
+        long currentTime = TimeUtils.getCurrentTime();
+        double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
+        if (timeDifference >= this.getResources().getInteger(R.integer.recovery_minutes)) {
+            StaminaManager.increaseCurrentStaminaToMax();
+            SaveDataUtils.updateValuesAndSave(this);
+        }
     }
 }
