@@ -3,7 +3,6 @@ package edu.csuci.appaca.concurrency;
 import android.util.Log;
 
 import edu.csuci.appaca.R;
-import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.activities.MinigameSelectActivity;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.SaveDataUtils;
@@ -24,14 +23,6 @@ public class StaminaRecovery {
             thread.start();
         }
 
-        void start(GameOverActivity activity) {
-            if(thread != null && thread.isRunning()) {
-                thread.stopRunning();
-            }
-            thread = new BackgroundThread(activity);
-            thread.start();
-        }
-
         void stop() {
             if(thread != null && thread.isRunning()) {
                 thread.stopRunning();
@@ -44,10 +35,6 @@ public class StaminaRecovery {
         ThreadInstance.INSTANCE.start(activity);
     }
 
-    public static void start(GameOverActivity activity) {
-        ThreadInstance.INSTANCE.start(activity);
-    }
-
     public static void stop() {
         ThreadInstance.INSTANCE.stop();
     }
@@ -57,19 +44,12 @@ public class StaminaRecovery {
         private static final long UPDATES_PER_SECOND = 60;
 
         private boolean running;
-        private MinigameSelectActivity miniGameParent;
-        private GameOverActivity gameOverParent;
+        private MinigameSelectActivity parent;
 
         public BackgroundThread(MinigameSelectActivity parent) {
             super();
             this.running = false;
-            this.miniGameParent = parent;
-        }
-
-        public BackgroundThread(GameOverActivity parent) {
-            super();
-            this.running = false;
-            this.gameOverParent = parent;
+            this.parent = parent;
         }
 
         @Override
@@ -80,10 +60,7 @@ public class StaminaRecovery {
             }
             while(this.running) {
                 if (StaminaManager.getFirstStaminaUsedTime() != 0)
-                    if (miniGameParent != null)
-                        updateStaminaFromMiniSelect();
-                    else if (gameOverParent != null)
-                        updateStaminaFromGameOver();
+                        updateStamina();
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
@@ -92,22 +69,23 @@ public class StaminaRecovery {
             }
         }
 
-        private void updateStaminaFromMiniSelect() {
+        private void updateStamina() {
             long currentTime = TimeUtils.getCurrentTime();
             double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
-            if (timeDifference >= miniGameParent.getResources().getInteger(R.integer.recovery_minutes)) {
+            if (timeDifference >= parent.getResources().getInteger(R.integer.recovery_minutes)) {
                 StaminaManager.increaseCurrentStaminaToMax();
-                SaveDataUtils.updateValuesAndSave(miniGameParent);
+                SaveDataUtils.updateValuesAndSave(parent);
+                displayStamina();
             }
         }
 
-        private void updateStaminaFromGameOver() {
-            long currentTime = TimeUtils.getCurrentTime();
-            double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
-            if (timeDifference >= gameOverParent.getResources().getInteger(R.integer.recovery_minutes)) {
-                StaminaManager.increaseCurrentStaminaToMax();
-                SaveDataUtils.updateValuesAndSave(gameOverParent);
-            }
+        private void displayStamina() {
+            parent.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parent.updateStaminaMessage();
+                }
+            });
         }
 
         public void stopRunning() {
