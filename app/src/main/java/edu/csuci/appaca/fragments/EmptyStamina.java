@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.StaminaManager;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class EmptyStamina extends DialogFragment {
 
@@ -28,7 +30,10 @@ public class EmptyStamina extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         final ImageView icon = view.findViewById(R.id.paca_image);
         final TextView label = view.findViewById(R.id.no_stamina_message);
+        final TextView timeLeft = view.findViewById(R.id.time_until_refill);
         final Button close = view.findViewById(R.id.close_button);
+
+        timeLeft.setText(timeLeftMessage());
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +42,14 @@ public class EmptyStamina extends DialogFragment {
             }
         });
 
+    }
+
+    private String timeLeftMessage() {
+        long currentTime = TimeUtils.getCurrentTime();
+        double timeUntilRecovery = 30 - TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
+        int minutes = (int)Math.floor(timeUntilRecovery);
+        int seconds = (int)Math.floor((timeUntilRecovery - minutes) * 60);
+        return "Time left: " + minutes + ":" + String.format("%02d", seconds);
     }
 
 }
