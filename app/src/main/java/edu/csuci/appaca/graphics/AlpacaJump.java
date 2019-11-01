@@ -29,6 +29,7 @@ import java.util.Set;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.GameOverActivity;
+import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
@@ -65,6 +66,7 @@ public class AlpacaJump extends ApplicationAdapter {
     private Texture bg;
     private AJHUD hud;
     private int score;
+    private int highScore;
 
     private LabelEntity tapToStart;
 
@@ -89,6 +91,7 @@ public class AlpacaJump extends ApplicationAdapter {
         bg = StaticContentManager.getTexture(StaticContentManager.Image.ALPACA_JUMP_BG);
         hud = new AJHUD();
         score = 0;
+        highScore = HighScore.getHighScore(MiniGames.ALPACA_JUMP);
         tapToStart = new LabelEntity();
         tapToStart.setText(getString(R.string.top_to_start));
         tapToStart.setFont(StaticContentManager.Font.ALPACA_JUMP_START);
@@ -113,12 +116,12 @@ public class AlpacaJump extends ApplicationAdapter {
         float dt = Gdx.graphics.getDeltaTime();
         if(playing) {
             updatePlaying(dt);
-            hud.update(dt, score);
+            hud.update(dt, score, highScore);
             draw(dt);
             physicsStep(dt);
         } else {
             updatePreGame(dt);
-            hud.update(dt, 0);
+            hud.update(dt, 0, highScore);
             draw(dt);
         }
     }

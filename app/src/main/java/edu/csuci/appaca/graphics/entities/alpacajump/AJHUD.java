@@ -14,16 +14,29 @@ public class AJHUD {
 
     private LabelEntity scoreLabel;
     private Viewport viewport;
+    private LabelEntity highScoreLabel;
 
     public AJHUD() {
         scoreLabel = new LabelEntity();
         scoreLabel.setFont(StaticContentManager.Font.ALPACA_JUMP_MAIN);
+        highScoreLabel = new LabelEntity();
+        highScoreLabel.setFont(StaticContentManager.Font.ALPACA_JUMP_MAIN);
+        highScoreLabel.setAlign(LabelEntity.TOP_RIGHT);
         viewport = new FitViewport(AlpacaJump.worldWidth(), AlpacaJump.worldHeight());
     }
 
-    public void update(float dt, int score) {
+    public void update(float dt, int score, int highScore) {
         viewport.apply(true);
         updateScore(dt, score);
+        updateHighScore(dt, score, highScore);
+    }
+
+    private void updateHighScore(float dt, int score, int highScore) {
+        int displayScore = Math.max(score, highScore);
+        highScoreLabel.setText(String.format(AlpacaJump.getString(R.string.alpaca_jump_high_score_format), displayScore));
+        highScoreLabel.setX(AlpacaJump.worldWidth() - AlpacaJump.getDimension(R.dimen.hud_padding));
+        highScoreLabel.setY(AlpacaJump.worldHeight() - AlpacaJump.getDimension(R.dimen.hud_padding));
+        highScoreLabel.update(dt);
     }
 
     private void updateScore(float dt, int score) {
@@ -37,6 +50,7 @@ public class AJHUD {
         Matrix4 projection = sb.getProjectionMatrix();
         sb.setProjectionMatrix(viewport.getCamera().combined);
         scoreLabel.draw(dt, sb, null);
+        highScoreLabel.draw(dt, sb, null);
         sb.setProjectionMatrix(projection);
     }
 
