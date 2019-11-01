@@ -57,19 +57,19 @@ public class StaminaRecovery {
         private static final long UPDATES_PER_SECOND = 60;
 
         private boolean running;
-        private MinigameSelectActivity parent;
-        private GameOverActivity parent2;
+        private MinigameSelectActivity miniGameParent;
+        private GameOverActivity gameOverParent;
 
         public BackgroundThread(MinigameSelectActivity parent) {
             super();
             this.running = false;
-            this.parent = parent;
+            this.miniGameParent = parent;
         }
 
         public BackgroundThread(GameOverActivity parent) {
             super();
             this.running = false;
-            this.parent2 = parent;
+            this.gameOverParent = parent;
         }
 
         @Override
@@ -80,7 +80,10 @@ public class StaminaRecovery {
             }
             while(this.running) {
                 if (StaminaManager.getFirstStaminaUsedTime() != 0)
-                    updateStamina();
+                    if (miniGameParent != null)
+                        updateStaminaFromMiniSelect();
+                    else if (gameOverParent != null)
+                        updateStaminaFromGameOver();
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
@@ -89,19 +92,21 @@ public class StaminaRecovery {
             }
         }
 
-        private void updateStamina() {
+        private void updateStaminaFromMiniSelect() {
             long currentTime = TimeUtils.getCurrentTime();
             double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
-            if (parent != null) {
-                if (timeDifference >= parent.getResources().getInteger(R.integer.recovery_minutes)) {
-                    StaminaManager.increaseCurrentStaminaToMax();
-                    SaveDataUtils.updateValuesAndSave(parent);
-                }
-            } else {
-                if (timeDifference >= parent2.getResources().getInteger(R.integer.recovery_minutes)) {
-                    StaminaManager.increaseCurrentStaminaToMax();
-                    SaveDataUtils.updateValuesAndSave(parent2);
-                }
+            if (timeDifference >= miniGameParent.getResources().getInteger(R.integer.recovery_minutes)) {
+                StaminaManager.increaseCurrentStaminaToMax();
+                SaveDataUtils.updateValuesAndSave(miniGameParent);
+            }
+        }
+
+        private void updateStaminaFromGameOver() {
+            long currentTime = TimeUtils.getCurrentTime();
+            double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
+            if (timeDifference >= gameOverParent.getResources().getInteger(R.integer.recovery_minutes)) {
+                StaminaManager.increaseCurrentStaminaToMax();
+                SaveDataUtils.updateValuesAndSave(gameOverParent);
             }
         }
 
