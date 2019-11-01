@@ -32,16 +32,31 @@ public class StaminaManager {
     }
 
     public static void decreaseCurrentStamina() {
-        StaminaInstance.INSTANCE.currentValue--;
+        if (StaminaInstance.INSTANCE.currentValue > 0) {
+            if (getCurrentStamina() == StaminaInstance.INSTANCE.maxValue)
+                StaminaInstance.INSTANCE.firstStaminaUsedTime = getCurrentTime();
+
+            StaminaInstance.INSTANCE.currentValue--;
+        }
     }
 
     public static void increaseCurrentStamina() {
-        if (StaminaInstance.INSTANCE.currentValue < StaminaInstance.INSTANCE.maxValue)
+        if (getCurrentStamina() < StaminaInstance.INSTANCE.maxValue) {
             StaminaInstance.INSTANCE.currentValue++;
+            if (getCurrentStamina() == StaminaInstance.INSTANCE.maxValue)
+                StaminaInstance.INSTANCE.firstStaminaUsedTime = 0;
+            else
+                StaminaInstance.INSTANCE.firstStaminaUsedTime = getCurrentTime();
+        }
+
     }
 
     public static int getCurrentStamina() {
         return StaminaInstance.INSTANCE.currentValue;
+    }
+
+    public static long getFirstStaminaUsedTime() {
+        return StaminaInstance.INSTANCE.firstStaminaUsedTime;
     }
 
     public static JSONObject toJSONObject() throws JSONException {
