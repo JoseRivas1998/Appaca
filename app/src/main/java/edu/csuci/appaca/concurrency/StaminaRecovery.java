@@ -75,18 +75,9 @@ public class StaminaRecovery {
             if (timeDifference >= parent.getResources().getInteger(R.integer.recovery_minutes)) {
                 StaminaManager.increaseCurrentStaminaToMax();
                 SaveDataUtils.updateValuesAndSave(parent);
-                displayStamina();
             }
         }
 
-        private void displayStamina() {
-            parent.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    parent.updateStaminaMessage();
-                }
-            });
-        }
 
         public void stopRunning() {
             this.running = false;
