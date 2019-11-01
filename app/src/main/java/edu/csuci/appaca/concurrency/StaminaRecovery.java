@@ -2,8 +2,11 @@ package edu.csuci.appaca.concurrency;
 
 import android.util.Log;
 
+import edu.csuci.appaca.R;
+import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.activities.MinigameSelectActivity;
 import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.TimeUtils;
 
@@ -14,6 +17,14 @@ public class StaminaRecovery {
         BackgroundThread thread;
 
         void start(MinigameSelectActivity activity) {
+            if(thread != null && thread.isRunning()) {
+                thread.stopRunning();
+            }
+            thread = new BackgroundThread(activity);
+            thread.start();
+        }
+
+        void start(GameOverActivity activity) {
             if(thread != null && thread.isRunning()) {
                 thread.stopRunning();
             }
@@ -33,6 +44,10 @@ public class StaminaRecovery {
         ThreadInstance.INSTANCE.start(activity);
     }
 
+    public static void start(GameOverActivity activity) {
+        ThreadInstance.INSTANCE.start(activity);
+    }
+
     public static void stop() {
         ThreadInstance.INSTANCE.stop();
     }
@@ -41,15 +56,20 @@ public class StaminaRecovery {
 
         private static final long UPDATES_PER_SECOND = 60;
 
-        private static final int recoveryMinutes = 30;
-
         private boolean running;
         private MinigameSelectActivity parent;
+        private GameOverActivity parent2;
 
         public BackgroundThread(MinigameSelectActivity parent) {
             super();
             this.running = false;
             this.parent = parent;
+        }
+
+        public BackgroundThread(GameOverActivity parent) {
+            super();
+            this.running = false;
+            this.parent2 = parent;
         }
 
         @Override
@@ -72,8 +92,16 @@ public class StaminaRecovery {
         private void updateStamina() {
             long currentTime = TimeUtils.getCurrentTime();
             double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
-            if (timeDifference >= recoveryMinutes) {
-                StaminaManager.increaseCurrentStaminaToMax();
+            if (parent != null) {
+                if (timeDifference >= parent.getResources().getInteger(R.integer.recovery_minutes)) {
+                    StaminaManager.increaseCurrentStaminaToMax();
+                    SaveDataUtils.updateValuesAndSave(parent);
+                }
+            } else {
+                if (timeDifference >= parent2.getResources().getInteger(R.integer.recovery_minutes)) {
+                    StaminaManager.increaseCurrentStaminaToMax();
+                    SaveDataUtils.updateValuesAndSave(parent2);
+                }
             }
         }
 
