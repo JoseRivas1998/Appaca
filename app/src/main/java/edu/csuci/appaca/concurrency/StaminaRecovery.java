@@ -29,6 +29,8 @@ public class StaminaRecovery {
         }
     }
 
+    private static int recoveryMinutes = 30;
+
     public static void start(MainActivity activity) {
         ThreadInstance.INSTANCE.start(activity);
     }
@@ -68,8 +70,13 @@ public class StaminaRecovery {
 
         private void updateStamina() {
             long currentTime = TimeUtils.getCurrentTime();
-            if ((StaminaManager.getFirstStaminaUsedTime() != 0) && (TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime()) >= 1)) {
-                StaminaManager.increaseCurrentStamina();
+            double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
+            if ((StaminaManager.getFirstStaminaUsedTime() != 0) && (timeDifference >= recoveryMinutes)) {
+                double staminaToRecover = (timeDifference/recoveryMinutes < ((double)StaminaManager.MAX_STAMINA - StaminaManager.getCurrentStamina()) ? timeDifference/recoveryMinutes : (double)StaminaManager.MAX_STAMINA - StaminaManager.getCurrentStamina());
+                for (int i = 0; i < staminaToRecover; i++) {
+                    StaminaManager.increaseCurrentStamina();
+                }
+
             }
         }
 
