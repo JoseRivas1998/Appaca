@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.MiniGames;
+import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.ScreenUtils;
 import edu.csuci.appaca.fragments.EmptyStamina;
@@ -42,6 +43,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
                     if (StaminaManager.getCurrentStamina() > 0) {
                         Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
                         StaminaManager.decreaseCurrentStamina();
+                        SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
                         startActivity(intent);
                         finish();
                     } else {
