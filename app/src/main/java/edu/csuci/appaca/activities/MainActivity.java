@@ -17,7 +17,6 @@ import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.Stat;
-import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;

@@ -1,6 +1,7 @@
 package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,12 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.MiniGames;
+import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.ScreenUtils;
+import edu.csuci.appaca.fragments.EmptyStamina;
 
 public class MinigameSelectActivity extends AppCompatActivity {
 
@@ -22,6 +27,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         int size = (int) ScreenUtils.dpToPixels(this, 200);
         int margin = (int) ScreenUtils.dpToPixels(this, 30);
+        StaminaRecovery.start(this);
 
         for (final MiniGames miniGame : MiniGames.values()) {
             ImageView gameView = new ImageView(this);
@@ -34,9 +40,17 @@ public class MinigameSelectActivity extends AppCompatActivity {
             gameView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
-                    startActivity(intent);
-                    finish();
+                    if (StaminaManager.getCurrentStamina() > 0) {
+                        Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
+                        StaminaManager.decreaseCurrentStamina();
+                        SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        FragmentManager fm = getSupportFragmentManager();
+                        EmptyStamina emptyStamina = new EmptyStamina();
+                        emptyStamina.show(fm, "no_remaining_stamina");
+                    }
                 }
             });
 
@@ -46,5 +60,22 @@ public class MinigameSelectActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        StaminaRecovery.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StaminaRecovery.start(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        StaminaRecovery.stop();
+    }
 
 }

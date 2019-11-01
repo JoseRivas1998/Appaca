@@ -1,6 +1,7 @@
 package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +12,18 @@ import android.widget.TextView;
 
 import com.badlogic.gdx.Game;
 
+import java.lang.reflect.GenericSignatureFormatError;
+
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
+import edu.csuci.appaca.fragments.EmptyStamina;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class GameOverActivity extends AppCompatActivity {
 
@@ -85,10 +92,28 @@ public class GameOverActivity extends AppCompatActivity {
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameOverActivity.this, returnTo.activityClass);
-                startActivity(intent);
-                finish();
+                checkStaminaAndUpdate();
+                if (StaminaManager.getCurrentStamina() > 0) {
+                    Intent intent = new Intent(GameOverActivity.this, returnTo.activityClass);
+                    StaminaManager.decreaseCurrentStamina();
+                    SaveDataUtils.updateValuesAndSave(GameOverActivity.this);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    EmptyStamina emptyStamina = new EmptyStamina();
+                    emptyStamina.show(fm, "no_remaining_stamina");
+                }
             }
         });
+    }
+
+    private void checkStaminaAndUpdate() {
+        long currentTime = TimeUtils.getCurrentTime();
+        double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
+        if (timeDifference >= this.getResources().getInteger(R.integer.recovery_minutes)) {
+            StaminaManager.increaseCurrentStaminaToMax();
+            SaveDataUtils.updateValuesAndSave(this);
+        }
     }
 }
