@@ -1,6 +1,7 @@
 package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +12,17 @@ import android.widget.TextView;
 
 import com.badlogic.gdx.Game;
 
+import java.lang.reflect.GenericSignatureFormatError;
+
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
+import edu.csuci.appaca.fragments.EmptyStamina;
 
 public class GameOverActivity extends AppCompatActivity {
 
@@ -32,6 +38,7 @@ public class GameOverActivity extends AppCompatActivity {
         updateSaveData();
         getSupportActionBar().hide();
         initButton();
+        StaminaRecovery.start(this);
     }
 
     private void updateSaveData() {
@@ -85,10 +92,36 @@ public class GameOverActivity extends AppCompatActivity {
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameOverActivity.this, returnTo.activityClass);
-                startActivity(intent);
-                finish();
+                if (StaminaManager.getCurrentStamina() > 0) {
+                    Intent intent = new Intent(GameOverActivity.this, returnTo.activityClass);
+                    StaminaManager.decreaseCurrentStamina();
+                    SaveDataUtils.updateValuesAndSave(GameOverActivity.this);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    EmptyStamina emptyStamina = new EmptyStamina();
+                    emptyStamina.show(fm, "no_remaining_stamina");
+                }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        StaminaRecovery.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StaminaRecovery.start(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        StaminaRecovery.stop();
     }
 }
