@@ -2,7 +2,7 @@ package edu.csuci.appaca.concurrency;
 
 import android.util.Log;
 
-import edu.csuci.appaca.activities.MainActivity;
+import edu.csuci.appaca.activities.MinigameSelectActivity;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.TimeUtils;
@@ -13,7 +13,7 @@ public class StaminaRecovery {
         INSTANCE;
         BackgroundThread thread;
 
-        void start(MainActivity activity) {
+        void start(MinigameSelectActivity activity) {
             if(thread != null && thread.isRunning()) {
                 thread.stopRunning();
             }
@@ -31,7 +31,7 @@ public class StaminaRecovery {
 
     private static int recoveryMinutes = 30;
 
-    public static void start(MainActivity activity) {
+    public static void start(MinigameSelectActivity activity) {
         ThreadInstance.INSTANCE.start(activity);
     }
 
@@ -44,9 +44,9 @@ public class StaminaRecovery {
         private static final long UPDATES_PER_SECOND = 60;
 
         private boolean running;
-        private MainActivity parent;
+        private MinigameSelectActivity parent;
 
-        public BackgroundThread(MainActivity parent) {
+        public BackgroundThread(MinigameSelectActivity parent) {
             super();
             this.running = false;
             this.parent = parent;
@@ -72,7 +72,11 @@ public class StaminaRecovery {
             long currentTime = TimeUtils.getCurrentTime();
             double timeDifference = TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
             if ((StaminaManager.getFirstStaminaUsedTime() != 0) && (timeDifference >= recoveryMinutes)) {
-                double staminaToRecover = (timeDifference/recoveryMinutes < ((double)StaminaManager.MAX_STAMINA - StaminaManager.getCurrentStamina()) ? timeDifference/recoveryMinutes : (double)StaminaManager.MAX_STAMINA - StaminaManager.getCurrentStamina());
+                double staminaToRecover = timeDifference/recoveryMinutes;
+                double missingStamina = (double)StaminaManager.MAX_STAMINA - StaminaManager.getCurrentStamina();
+                if (staminaToRecover > missingStamina) {
+                    staminaToRecover = missingStamina;
+                }
                 for (int i = 0; i < staminaToRecover; i++) {
                     StaminaManager.increaseCurrentStamina();
                 }
