@@ -46,6 +46,8 @@ public class NoStaminaBackground {
         private boolean running;
         private EmptyStamina parent;
 
+        private int secRemaining;
+
         public BackgroundThread(EmptyStamina parent) {
             super();
             this.running = false;
@@ -61,6 +63,10 @@ public class NoStaminaBackground {
             while(this.running) {
                 if (StaminaManager.getFirstStaminaUsedTime() != 0)
                     updateTime();
+                if (StaminaManager.getFirstStaminaUsedTime() == 0 && secRemaining != 0) {
+                    setTimeToZero();
+                    secRemaining = 0;
+                }
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
@@ -75,12 +81,25 @@ public class NoStaminaBackground {
             double timeUntilRecovery = parent.getResources().getInteger(R.integer.recovery_minutes) - TimeUtils.secondsToMinutes(timeDiff);
             int minutes = (int)Math.floor(timeUntilRecovery);
             int seconds = (int)(60 - timeDiff % 60);
+            secRemaining = seconds;
 
             if (seconds == 60)
                 seconds = 0;
 
             final String message = "Time left: " + minutes + ":" + String.format("%02d", seconds);
 
+
+            parent.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parent.updateTimeLeft(message);
+                }
+            });
+        }
+
+        private void setTimeToZero() {
+
+            final String message = "Time left: 0:00";
 
             parent.getActivity().runOnUiThread(new Runnable() {
                 @Override

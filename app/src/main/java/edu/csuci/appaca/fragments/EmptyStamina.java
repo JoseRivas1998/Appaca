@@ -13,10 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import edu.csuci.appaca.R;
-import edu.csuci.appaca.data.StaminaManager;
-import edu.csuci.appaca.utils.TimeUtils;
+import edu.csuci.appaca.concurrency.NoStaminaBackground;
 
 public class EmptyStamina extends DialogFragment {
+    private TextView timeLeftRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,7 +33,9 @@ public class EmptyStamina extends DialogFragment {
         final TextView timeLeft = view.findViewById(R.id.time_until_refill);
         final Button close = view.findViewById(R.id.close_button);
 
-        timeLeft.setText(timeLeftMessage());
+        timeLeftRef = timeLeft;
+
+        NoStaminaBackground.start(this);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,12 +46,25 @@ public class EmptyStamina extends DialogFragment {
 
     }
 
-    private String timeLeftMessage() {
-        long currentTime = TimeUtils.getCurrentTime();
-        double timeUntilRecovery = 30 - TimeUtils.secondsToMinutes(currentTime - StaminaManager.getFirstStaminaUsedTime());
-        int minutes = (int)Math.floor(timeUntilRecovery);
-        int seconds = (int)Math.floor((timeUntilRecovery - minutes) * 60);
-        return "Time left: " + minutes + ":" + String.format("%02d", seconds);
+    public void updateTimeLeft(String message) {
+        timeLeftRef.setText(message);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        NoStaminaBackground.stop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        NoStaminaBackground.start(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NoStaminaBackground.stop();
+    }
 }
