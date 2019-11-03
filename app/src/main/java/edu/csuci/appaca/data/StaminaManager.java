@@ -72,7 +72,7 @@ public class StaminaManager {
 
             // StaminaInstance.INSTANCE.currentValue = jsonObject.getInt("currentValue");
 
-            StaminaInstance.INSTANCE.currentValue = jsonObject.getInt("currenValue");
+            StaminaInstance.INSTANCE.currentValue = jsonObject.getInt("currentStamina");
             StaminaInstance.INSTANCE.maxValue = jsonObject.getInt("maxValue");
             StaminaInstance.INSTANCE.maxValue = jsonObject.getInt("firstStaminaUsedTime");
         } catch (JSONException je) {
