@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_view_dock_margin">10dp</dimen>
+<!--    ALPACA JUMP-->
+    <dimen name="hud_padding">10dp</dimen>
+<!--    Game Over Screen-->
+    <dimen name="game_over_top_margin">90dp</dimen>
+    <dimen name="game_over_button_margin">10dp</dimen>
+    <dimen name="game_over_paca_size">261dp</dimen>
+    <dimen name="stat_bar_margin">5dp</dimen>
+    <dimen name="stat_bar_border_radius">8dip</dimen>
+    <dimen name="stat_bar_border_width">5dp</dimen>
+    <dimen name="stat_bar_height">25dp</dimen>
+    <dimen name="stat_bar_inner_radius">12dip</dimen>
+    <dimen name="first_alpaca_sprite_height">200dp</dimen>
+    <dimen name="conf_page_icon_size">200dp</dimen>
+    <dimen name="conf_page_icon_margin">10dp</dimen>
+    <dimen name="badge_radius">8dp</dimen>
+    <dimen name="badge_border_width">2dip</dimen>
+    <dimen name="badge_padding">5dp</dimen>
+    <dimen name="icon_badge_icon_size">100dp</dimen>
+
+    <dimen name="appaca_text_small">20sp</dimen>
+
 </resources>

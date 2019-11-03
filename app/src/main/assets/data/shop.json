@@ -1,0 +1,21 @@
+{
+  "food": [
+    {
+      "id": 1,
+      "name": "Apple",
+      "path": "food/full-apple-food.png",
+      "cost": 5,
+      "value": 0.2
+    }
+  ],
+  "clothes": [
+  ],
+  "alpacas": [
+    {
+      "id": 1,
+      "name": "TEMP DEFAULT",
+      "path": "alpacas/skin_01.png",
+      "cost": 0
+    }
+  ]
+}
