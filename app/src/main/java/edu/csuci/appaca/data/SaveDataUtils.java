@@ -61,7 +61,6 @@ public class SaveDataUtils {
                 HighScore.init();
             }
         } catch (FileNotFoundException e) {
-            // TODO
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
             initialize();

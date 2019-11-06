@@ -4,12 +4,19 @@ import android.app.Activity;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.AlpacaJumpActivity;
+import edu.csuci.appaca.activities.FruitCatchActivity;
 
 public enum MiniGames {
     ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpaca_icon, R.string.alpaca_jump_high_score_format) {
         @Override
         public int coinsForScore(int score) {
             return score / 100;
+        }
+    },
+    FRUIT_CATCH(R.string.fruit_catch, FruitCatchActivity.class, R.string.fruit_catch_score_format, R.drawable.smiling_strawberry, R.string.fruit_catch_high_score_format) {
+        @Override
+        public int coinsForScore(int score) {
+            return score / 10;
         }
     };
     public final int nameId;

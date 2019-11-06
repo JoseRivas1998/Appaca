@@ -29,4 +29,7 @@
 <!--    Stamina-->
     <integer name="recovery_minutes">30</integer>
 
+<!--    FRUIT CATCH-->
+    <item name="fruit_catch_gravity" type="dimen" format="float">-100</item>
+
 </resources>

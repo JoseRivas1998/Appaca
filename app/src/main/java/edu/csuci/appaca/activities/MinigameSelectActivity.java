@@ -25,7 +25,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_minigame_select);
         GridLayout gridLayout = findViewById(R.id.game_select_grid);
         getSupportActionBar().hide();
-        int size = (int) ScreenUtils.dpToPixels(this, 200);
+        int size = (int) ScreenUtils.dpToPixels(this, 150);
         int margin = (int) ScreenUtils.dpToPixels(this, 30);
         StaminaRecovery.start(this);
 
@@ -40,7 +40,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
             gameView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (StaminaManager.getCurrentStamina() > 0) {
+                    if (StaminaManager.getCurrentStamina() > Integer.MIN_VALUE) { // TODO: change this back to zero
                         Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
                         StaminaManager.decreaseCurrentStamina();
                         SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
