@@ -9,25 +9,25 @@ import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.utils.ListUtils;
 
 abstract public class HygieneNotification extends AppCompatActivity {
-    private final String NOTIFICATION_CHANNEL_ID = "hygiene_id";
-    private NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-    private NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    public static void checkIfAnyAlpacasLowHygiene() {
+    public static void checkIfAnyAlpacasLowHygiene(final Context context) {
 
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
                 if (alpaca.getHygieneStat() == Alpaca.MIN_STAT)
                 {
-                    sendNotification(alpaca.getName());
+                    sendNotification(context, alpaca.getName());
                 }
             }
         });
     }
 
-    public static void sendNotification(String alpacaName) {
-
+    public static void sendNotification(Context context, String alpacaName)
+    {
+        final String NOTIFICATION_CHANNEL_ID = "hygiene_id";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
 }
