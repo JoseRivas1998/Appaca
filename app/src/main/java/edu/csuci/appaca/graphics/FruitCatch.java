@@ -5,15 +5,21 @@ import android.content.Context;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.FruitCatchResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
+import edu.csuci.appaca.graphics.entities.fruitcatch.FruitEntity;
+import edu.csuci.appaca.utils.ActionTimer;
 
 public class FruitCatch extends ApplicationAdapter {
 
@@ -23,6 +29,10 @@ public class FruitCatch extends ApplicationAdapter {
 
     private boolean started;
     private LabelEntity tapToStart;
+
+    private ActionTimer fruitSpawnTimer;
+
+    private List<FruitEntity> fruitEntities;
 
     public FruitCatch(Context parent) {
         super();
@@ -43,6 +53,24 @@ public class FruitCatch extends ApplicationAdapter {
         tapToStart.setText("Tap to Start!");
         tapToStart.setAlign(LabelEntity.MIDDLE_CENTER);
 
+        fruitSpawnTimer = new ActionTimer(nextFruitSpawnTime(), ActionTimer.ActionTimerMode.RUN_CONTINUOUSLY);
+        fruitSpawnTimer.setActionTimerEvent(new ActionTimer.ActionTimerEvent() {
+            @Override
+            public void action() {
+                spawnFruit();
+            }
+        });
+        fruitEntities = new ArrayList<>();
+
+    }
+
+    private float nextFruitSpawnTime() {
+        return MathUtils.random(FruitCatchResources.minSpawnTime(), FruitCatchResources.maxSpawnTime());
+    }
+
+    private void spawnFruit() {
+        fruitSpawnTimer.setTimer(nextFruitSpawnTime());
+        fruitEntities.add(new FruitEntity());
     }
 
     @Override
@@ -56,7 +84,7 @@ public class FruitCatch extends ApplicationAdapter {
 
         float dt = Gdx.graphics.getDeltaTime();
 
-        if(started) {
+        if (started) {
             updatePlaying(dt);
         } else {
             updateStartingState(dt);
@@ -69,11 +97,24 @@ public class FruitCatch extends ApplicationAdapter {
     }
 
     private void updatePlaying(float dt) {
-        // TODO this is a stub
+        fruitSpawnTimer.update(dt);
+        updateFruit(dt);
+    }
+
+    private void updateFruit(float dt) {
+        Iterator<FruitEntity> fruitIter = fruitEntities.iterator();
+        while(fruitIter.hasNext()) {
+            FruitEntity fruit = fruitIter.next();
+            fruit.update(dt);
+            if(fruit.getY() + fruit.getHeight() < 0) {
+                fruit.dispose();
+                fruitIter.remove();
+            }
+        }
     }
 
     private void updateStartingState(float dt) {
-        if(Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched()) {
             started = true;
         }
         tapToStart.setPosition(FruitCatchResources.worldWidth() * 0.5f, FruitCatchResources.worldHeight() * 0.5f);
@@ -84,8 +125,12 @@ public class FruitCatch extends ApplicationAdapter {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
-        if(!started) {
+        if (!started) {
             tapToStart.draw(dt, spriteBatch, shapeRenderer);
+        }
+
+        for (FruitEntity fruit : fruitEntities) {
+            fruit.draw(dt, spriteBatch, shapeRenderer);
         }
 
         spriteBatch.end();
@@ -101,5 +146,15 @@ public class FruitCatch extends ApplicationAdapter {
         StaticContentManager.dispose();
         spriteBatch.dispose();
         shapeRenderer.dispose();
+        disposeAllFruitEntities();
+    }
+
+    private void disposeAllFruitEntities() {
+        Iterator<FruitEntity> fruitIter = fruitEntities.iterator();
+        while (fruitIter.hasNext()) {
+            FruitEntity fruit = fruitIter.next();
+            fruit.dispose();
+            fruitIter.remove();
+        }
     }
 }
