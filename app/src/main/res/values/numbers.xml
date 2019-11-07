@@ -31,5 +31,7 @@
 
 <!--    FRUIT CATCH-->
     <item name="fruit_catch_gravity" type="dimen" format="float">-100</item>
+    <item name="fruit_catch_min_spawn_time" type="dimen" format="float">0.1</item>
+    <item name="fruit_catch_max_spawn_time" type="dimen" format="float">1.0</item>
 
 </resources>
