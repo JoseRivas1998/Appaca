@@ -16,20 +16,17 @@ abstract public class HygieneNotification extends AppCompatActivity {
     public static void checkIfAnyAlpacasLowHygiene() {
 
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
-            private boolean oneAlpacaFound = false;
             @Override
             public void accept(Alpaca alpaca) {
-                boolean hygieneDepleted = alpaca.getHygieneStat() == Alpaca.MIN_STAT;
-                if (hygieneDepleted && !oneAlpacaFound)
+                if (alpaca.getHygieneStat() == Alpaca.MIN_STAT)
                 {
-                    oneAlpacaFound = true;
-                    sendNotification();
+                    sendNotification(alpaca.getName());
                 }
             }
         });
     }
 
-    public static void sendNotification() {
+    public static void sendNotification(String alpacaName) {
 
     }
 
