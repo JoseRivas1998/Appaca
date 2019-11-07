@@ -22,13 +22,15 @@ public class FruitEntity extends AbstractSpriteEntity implements Disposable {
         setImage(texture);
         setSize(imageWidth, imageHeight);
         setX(MathUtils.random(FruitCatchResources.worldWidth() - getWidth()));
-        setY(100);
+        setY(FruitCatchResources.worldHeight() + (getHeight() * 0.5f));
         centerOrigin();
         imageAngle = MathUtils.random(360);
+        setVelocity(0, 0);
     }
 
     @Override
     public void update(float dt) {
+        setVelocityY(getVelocityY() + (FruitCatchResources.gravity() * dt));
         applyVelocity(dt);
     }
 
