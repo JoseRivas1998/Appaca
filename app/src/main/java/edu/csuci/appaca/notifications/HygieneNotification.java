@@ -1,8 +1,6 @@
 package edu.csuci.appaca.notifications;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -10,7 +8,7 @@ import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.utils.ListUtils;
 
-abstract public class HygieneNotification extends AppCompatActivity {
+public class HygieneNotification{
 
     public static void checkIfAnyAlpacasLowHygiene(final Context context) {
 
