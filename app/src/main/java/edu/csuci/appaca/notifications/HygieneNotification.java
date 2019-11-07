@@ -11,7 +11,8 @@ public class HygieneNotification {
             private boolean oneAlpacaFound = false;
             @Override
             public void accept(Alpaca alpaca) {
-                if (alpaca.getHygieneStat() == Alpaca.MIN_STAT && !oneAlpacaFound)
+                boolean hygieneDepleted = alpaca.getHygieneStat() == Alpaca.MIN_STAT;
+                if (hygieneDepleted && !oneAlpacaFound)
                 {
                     oneAlpacaFound = true;
                     sendNotification();
