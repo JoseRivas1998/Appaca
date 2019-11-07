@@ -1,15 +1,9 @@
 package edu.csuci.appaca.notifications;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-
-import com.badlogic.gdx.backends.android.AndroidApplication;
-
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.utils.ListUtils;
