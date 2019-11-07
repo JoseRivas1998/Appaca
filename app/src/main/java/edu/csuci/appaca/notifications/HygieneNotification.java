@@ -5,14 +5,19 @@ import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class HygieneNotification {
-    public static boolean checkIfAnyAlpacasLowHygiene() {
+    public static void checkIfAnyAlpacasLowHygiene() {
+
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
+            private boolean oneAlpacaFound = false;
             @Override
             public void accept(Alpaca alpaca) {
-
+                if (alpaca.getHygieneStat() == Alpaca.MIN_STAT && !oneAlpacaFound)
+                {
+                    oneAlpacaFound = true;
+                    sendNotification();
+                }
             }
         });
-        return false;
     }
 
     public static void sendNotification() {
