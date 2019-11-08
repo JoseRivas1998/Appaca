@@ -118,7 +118,11 @@ public class FruitCatch extends ApplicationAdapter {
         while(fruitIter.hasNext()) {
             FruitEntity fruit = fruitIter.next();
             fruit.update(dt);
-            if(fruit.getY() + fruit.getHeight() < 0) {
+            if(fruit.isTouched(viewport)) {
+                fruit.dispose();
+                fruitIter.remove();
+                score++;
+            } else if(fruit.getY() + fruit.getHeight() < 0) {
                 fruit.dispose();
                 fruitIter.remove();
             }
