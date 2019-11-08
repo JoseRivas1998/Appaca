@@ -8,6 +8,7 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.utils.ListUtils;
@@ -27,13 +28,13 @@ public class HygieneNotification{
         });
     }
 
-    public static void sendNotification(Context context, String alpacaName)
+    private static void sendNotification(Context context, String alpacaName)
     {
         final String CHANNEL_ID = "hygiene_id";
         final String GROUP_ID = "stat_group";
         final int NOTIFY_ID = 0;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NotificationManager.class);
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
@@ -47,6 +48,8 @@ public class HygieneNotification{
         builder.setContentTitle("Appaca");
         builder.setContentText(alpacaName + "is dirty!");
         builder.setGroup(GROUP_ID);
+        builder.setSmallIcon(R.drawable.alpaca_icon); //placeholder
+        builder.setOnlyAlertOnce(true);
 
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
