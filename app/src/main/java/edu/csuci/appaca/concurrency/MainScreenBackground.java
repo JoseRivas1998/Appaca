@@ -77,7 +77,6 @@ public class MainScreenBackground {
                 Alpaca current = AlpacaFarm.getCurrentAlpaca();
                 updateStats(currentValues, current);
                 updateCurrencyDisplays();
-                HygieneNotification.checkIfAnyAlpacasLowHygiene(parent.getApplicationContext());
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
