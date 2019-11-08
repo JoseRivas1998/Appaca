@@ -16,6 +16,7 @@ import edu.csuci.appaca.data.HygieneDepletion;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
+import edu.csuci.appaca.notifications.HygieneNotification;
 import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.TimeUtils;
 
@@ -76,6 +77,7 @@ public class MainScreenBackground {
                 Alpaca current = AlpacaFarm.getCurrentAlpaca();
                 updateStats(currentValues, current);
                 updateCurrencyDisplays();
+                HygieneNotification.checkIfAnyAlpacasLowHygiene(parent.getApplicationContext());
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
