@@ -19,6 +19,9 @@ public class FruitCatchResources {
         private String scoreFormat;
         private String highScoreFormat;
         private Color background;
+        private float minSpawnTime;
+        private float maxSpawnTime;
+        private float hudSpacing;
         private boolean loaded;
 
         FruitCatchRes() {
@@ -35,6 +38,9 @@ public class FruitCatchResources {
         FruitCatchRes.INSTANCE.highScoreFormat = getString(context, R.string.fruit_catch_high_score_format);
         FruitCatchRes.INSTANCE.gravity = getFloat(context, R.dimen.fruit_catch_gravity);
         FruitCatchRes.INSTANCE.background = libGDXColor(context, R.color.bluePastel);
+        FruitCatchRes.INSTANCE.minSpawnTime = getFloat(context, R.dimen.fruit_catch_min_spawn_time);
+        FruitCatchRes.INSTANCE.maxSpawnTime = getFloat(context, R.dimen.fruit_catch_max_spawn_time);
+        FruitCatchRes.INSTANCE.hudSpacing = getDimension(context, R.dimen.hud_padding);
 
         FruitCatchRes.INSTANCE.loaded = true;
     }
@@ -71,6 +77,21 @@ public class FruitCatchResources {
     public static float gravity() {
         verify();
         return FruitCatchRes.INSTANCE.gravity;
+    }
+
+    public static float minSpawnTime() {
+        verify();
+        return FruitCatchRes.INSTANCE.minSpawnTime;
+    }
+
+    public static float maxSpawnTime() {
+        verify();
+        return FruitCatchRes.INSTANCE.maxSpawnTime;
+    }
+
+    public static float hudSpacing() {
+        verify();
+        return FruitCatchRes.INSTANCE.hudSpacing;
     }
 
 }
