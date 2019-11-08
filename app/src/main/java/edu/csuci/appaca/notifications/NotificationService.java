@@ -16,4 +16,19 @@ public class NotificationService extends Service {
     public IBinder onBind(Intent intent) {
         return this.localBinder;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    public int onStartCommand(Intent intent, int flags, int startID)
+    {
+        return START_STICKY;
+    }
 }
