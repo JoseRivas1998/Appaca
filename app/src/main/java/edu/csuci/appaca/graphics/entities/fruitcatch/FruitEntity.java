@@ -1,8 +1,11 @@
 package edu.csuci.appaca.graphics.entities.fruitcatch;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import edu.csuci.appaca.data.gameres.FruitCatchResources;
 import edu.csuci.appaca.data.statics.ShopData;
@@ -37,6 +40,14 @@ public class FruitEntity extends AbstractSpriteEntity implements Disposable {
     @Override
     public void dispose() {
         texture.dispose();
+    }
+
+    public boolean isTouched(Viewport viewport) {
+        if(Gdx.input.isTouched()) {
+            Vector2 touchPoint =  viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+            return containsPoint(touchPoint);
+        }
+        return false;
     }
 
 }

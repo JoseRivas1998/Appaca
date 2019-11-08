@@ -15,9 +15,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.csuci.appaca.data.HighScore;
+import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.FruitCatchResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
+import edu.csuci.appaca.graphics.entities.fruitcatch.FCHUD;
 import edu.csuci.appaca.graphics.entities.fruitcatch.FruitEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 
@@ -33,6 +36,10 @@ public class FruitCatch extends ApplicationAdapter {
     private ActionTimer fruitSpawnTimer;
 
     private List<FruitEntity> fruitEntities;
+
+    private int score;
+    private int highScore;
+    private FCHUD hud;
 
     public FruitCatch(Context parent) {
         super();
@@ -61,6 +68,10 @@ public class FruitCatch extends ApplicationAdapter {
             }
         });
         fruitEntities = new ArrayList<>();
+
+        score = 0;
+        highScore = HighScore.getHighScore(MiniGames.FRUIT_CATCH);
+        hud = new FCHUD();
 
     }
 
@@ -99,6 +110,7 @@ public class FruitCatch extends ApplicationAdapter {
     private void updatePlaying(float dt) {
         fruitSpawnTimer.update(dt);
         updateFruit(dt);
+        hud.update(dt, score, highScore);
     }
 
     private void updateFruit(float dt) {
@@ -106,7 +118,11 @@ public class FruitCatch extends ApplicationAdapter {
         while(fruitIter.hasNext()) {
             FruitEntity fruit = fruitIter.next();
             fruit.update(dt);
-            if(fruit.getY() + fruit.getHeight() < 0) {
+            if(fruit.isTouched(viewport)) {
+                fruit.dispose();
+                fruitIter.remove();
+                score++;
+            } else if(fruit.getY() + fruit.getHeight() < 0) {
                 fruit.dispose();
                 fruitIter.remove();
             }
@@ -131,6 +147,10 @@ public class FruitCatch extends ApplicationAdapter {
 
         for (FruitEntity fruit : fruitEntities) {
             fruit.draw(dt, spriteBatch, shapeRenderer);
+        }
+
+        if(started) {
+            hud.draw(dt, spriteBatch, shapeRenderer);
         }
 
         spriteBatch.end();
