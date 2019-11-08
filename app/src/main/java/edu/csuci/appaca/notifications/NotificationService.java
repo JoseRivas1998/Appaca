@@ -29,6 +29,7 @@ public class NotificationService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startID)
     {
+        HygieneNotification.checkIfAnyAlpacasLowHygiene(this.getApplicationContext());
         return START_STICKY;
     }
 }
