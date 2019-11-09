@@ -14,6 +14,8 @@ public class NotificationChecker implements Runnable
 
     @Override
     public void run() {
-        HygieneNotification.checkIfAnyAlpacasLowHygiene(context);
+        while(true) {
+            HygieneNotification.checkIfAnyAlpacasLowHygiene(context);
+        }
     }
 }
