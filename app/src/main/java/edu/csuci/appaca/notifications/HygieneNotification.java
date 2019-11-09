@@ -13,6 +13,8 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.MainActivity;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.HygieneDepletion;
+import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class HygieneNotification{
@@ -22,7 +24,10 @@ public class HygieneNotification{
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
-                if (alpaca.getHygieneStat() == Alpaca.MIN_STAT)
+                long lastTime = SavedTime.lastSavedTime();
+                double predictedHygieneLoss = HygieneDepletion.hygieneDepletion(alpaca, lastTime);
+                final double DELTA = 0.001;
+                if (predictedHygieneLoss - Alpaca.MIN_STAT < DELTA)
                 {
                     sendNotification(context, alpaca.getName());
                 }
