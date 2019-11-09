@@ -18,8 +18,8 @@ import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class HygieneNotification{
-
     public static void checkIfAnyAlpacasLowHygiene(final Context context) {
+        //use foreach to check hygiene for each alpaca, send notification if it is fully depleted
 
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
@@ -37,6 +37,7 @@ public class HygieneNotification{
 
     private static void sendNotification(Context context, String alpacaName)
     {
+        //send notification saying that the alpaca is dirty
         final String CHANNEL_ID = "hygiene_id";
         final String GROUP_ID = "stat_group";
         final int NOTIFY_ID = 0;
