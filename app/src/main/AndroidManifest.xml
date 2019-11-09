@@ -10,8 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".notifications.NotificationService"/>
         <activity
             android:name=".activities.FirstAlpacaActivity"
             android:screenOrientation="portrait" />

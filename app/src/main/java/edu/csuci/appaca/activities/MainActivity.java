@@ -20,7 +20,6 @@ import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
-import edu.csuci.appaca.notifications.NotificationService;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class MainActivity extends AndroidApplication {
@@ -50,8 +49,6 @@ public class MainActivity extends AndroidApplication {
         initStatBars();
         initCurrencyDisplays();
         MainScreenBackground.start(this);
-        Intent notificationServiceIntent = new Intent(this, NotificationService.class);
-        startService(notificationServiceIntent);
     }
 
     private void initCurrencyDisplays() {
