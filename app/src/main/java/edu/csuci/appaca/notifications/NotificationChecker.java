@@ -2,14 +2,20 @@ package edu.csuci.appaca.notifications;
 
 import android.content.Context;
 
-public class NotificationChecker implements Runnable
+public class NotificationChecker extends Thread
 {
     private Context context;
+    private static final NotificationChecker instance = new NotificationChecker();
 
-    public NotificationChecker(Context context)
+    private NotificationChecker()
     {
-        super();
-        this.context = context;
+
+    }
+
+    public static NotificationChecker getInstance(Context context)
+    {
+        instance.context = context;
+        return instance;
     }
 
     @Override

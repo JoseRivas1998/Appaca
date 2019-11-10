@@ -50,9 +50,8 @@ public class MainActivity extends AndroidApplication {
         initStatBars();
         initCurrencyDisplays();
         MainScreenBackground.start(this);
-        NotificationChecker checker = new NotificationChecker(this.getApplicationContext());
-        Thread notificationThread = new Thread(checker);
-        notificationThread.start();
+        NotificationChecker checker = NotificationChecker.getInstance(this.getApplicationContext());
+        checker.start();
     }
 
     private void initCurrencyDisplays() {
