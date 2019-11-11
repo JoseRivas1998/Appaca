@@ -13,21 +13,18 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.MainActivity;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
-import edu.csuci.appaca.data.HygieneDepletion;
-import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.utils.ListUtils;
+import edu.csuci.appaca.utils.ShearUtils;
 
-public class HygieneNotification{
-    public static void checkIfAnyAlpacasLowHygiene(final Context context) {
-        //use foreach to check hygiene for each alpaca, send notification if it is fully depleted
+public class WoolNotification {
 
+    public static void checkIfAnyAlpacasMaxWool(final Context context){
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
-                long lastTime = SavedTime.lastSavedTime();
-                double predictedHygieneLoss = HygieneDepletion.hygieneDepletion(alpaca, lastTime);
-                final double DELTA = 0.001;
-                if (predictedHygieneLoss - Alpaca.MIN_STAT < DELTA)
+                final int MAX_MONEY = context.getResources().getInteger(R.integer.money_for_full_shear);
+                int money = ShearUtils.getShearValue(alpaca, context);
+                if (money == MAX_MONEY)
                 {
                     sendNotification(context, alpaca.getName());
                 }
@@ -35,32 +32,31 @@ public class HygieneNotification{
         });
     }
 
-    private static void sendNotification(Context context, String alpacaName)
-    {
-        //send notification saying that the alpaca is dirty
-        final String CHANNEL_ID = "hygiene_id";
+    private static void sendNotification(Context context, String alpacaName){
+        //send notification saying that alpaca is ready to shear
+        final String CHANNEL_ID = "wool_id";
         final String GROUP_ID = "stat_group";
-        final int NOTIFY_ID = 0;
+        final int NOTIFY_ID = 1;
         Intent toMainScreen = new Intent(context, MainActivity.class);
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        NotificationManager manager = context.getSystemService(NotificationManager.class);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            CharSequence name = "hygiene";
-            int importance= NotificationManager.IMPORTANCE_HIGH;
+            CharSequence name = "wool";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            notificationManager.createNotificationChannel(channel);
+            manager.createNotificationChannel(channel);
         }
 
         builder.setContentTitle("Appaca");
-        builder.setContentText(alpacaName + " is dirty!");
-        builder.setGroup(GROUP_ID);
-        builder.setSmallIcon(R.drawable.alpaca_icon); //placeholder
+        builder.setContentText(alpacaName + " is ready to be sheared!");
         builder.setOnlyAlertOnce(true);
+        builder.setGroup(GROUP_ID);
+        builder.setSmallIcon(R.drawable.alpaca_icon);
         builder.setContentIntent(notificationIntent);
 
-        notificationManager.notify(NOTIFY_ID, builder.build());
+        manager.notify(NOTIFY_ID, builder.build());
     }
-
 }
