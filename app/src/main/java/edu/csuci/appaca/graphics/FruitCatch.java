@@ -122,7 +122,7 @@ public class FruitCatch extends ApplicationAdapter {
                 fruit.dispose();
                 fruitIter.remove();
                 score++;
-            } else if(fruit.getY() + fruit.getHeight() < 0) {
+            } else if(fruit.getY() + fruit.getHeight() < 0 && fruit.getVelocityY() < 0) {
                 fruit.dispose();
                 fruitIter.remove();
             }
