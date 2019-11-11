@@ -22,6 +22,7 @@ public class NotificationChecker extends Thread
     public void run() {
         while(true) {
             HygieneNotification.checkIfAnyAlpacasLowHygiene(context);
+            WoolNotification.checkIfAnyAlpacasMaxWool(context);
         }
     }
 }
