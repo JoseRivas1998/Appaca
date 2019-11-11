@@ -41,6 +41,8 @@ public class FruitCatch extends ApplicationAdapter {
     private int highScore;
     private FCHUD hud;
 
+    private int misses;
+
     public FruitCatch(Context parent) {
         super();
         FruitCatchResources.load(parent);
@@ -110,7 +112,7 @@ public class FruitCatch extends ApplicationAdapter {
     private void updatePlaying(float dt) {
         fruitSpawnTimer.update(dt);
         updateFruit(dt);
-        hud.update(dt, score, highScore);
+        hud.update(dt, score, highScore, misses);
     }
 
     private void updateFruit(float dt) {
@@ -123,6 +125,7 @@ public class FruitCatch extends ApplicationAdapter {
                 fruitIter.remove();
                 score++;
             } else if(fruit.getY() + fruit.getHeight() < 0 && fruit.getVelocityY() < 0) {
+                misses++;
                 fruit.dispose();
                 fruitIter.remove();
             }

@@ -23,4 +23,5 @@
     <string name="fruit_catch">Fruit Catch</string>
     <string name="fruit_catch_score_format">Score: %03d</string>
     <string name="fruit_catch_high_score_format">High Score: %03d</string>
+    <string name="fruit_catch_misses_format">Misses: %d / %d</string>
 </resources>

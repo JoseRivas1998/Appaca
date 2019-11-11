@@ -35,5 +35,6 @@
     <item name="fruit_catch_max_spawn_time" type="dimen" format="float">1.5</item>
     <item name="fruit_catch_min_spawn_speed" type="dimen" format="float">1000</item>
     <item name="fruit_catch_max_spawn_speed" type="dimen" format="float">2000</item>
+    <integer name="fruit_catch_max_misses">5</integer>
 
 </resources>
