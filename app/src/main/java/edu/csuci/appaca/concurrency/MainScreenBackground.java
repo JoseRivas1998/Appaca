@@ -16,6 +16,7 @@ import edu.csuci.appaca.data.HygieneDepletion;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
+import edu.csuci.appaca.notifications.HygieneNotification;
 import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.TimeUtils;
 
