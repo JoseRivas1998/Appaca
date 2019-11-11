@@ -45,7 +45,6 @@ public class HygieneNotification{
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             CharSequence name = "hygiene";
