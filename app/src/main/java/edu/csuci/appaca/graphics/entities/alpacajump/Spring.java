@@ -60,6 +60,11 @@ public class Spring extends AbstractB2DSpriteEntity implements Collidable {
     }
 
     @Override
+    public void update(float dt) {
+
+    }
+
+    @Override
     public void beginContact(Contact contact, Fixture thisFixture, Fixture other) {
 
     }

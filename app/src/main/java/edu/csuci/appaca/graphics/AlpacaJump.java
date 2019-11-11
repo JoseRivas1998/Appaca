@@ -1,9 +1,6 @@
 package edu.csuci.appaca.graphics;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.TypedValue;
 
 import com.badlogic.gdx.Application;
@@ -28,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 
 import edu.csuci.appaca.R;
-import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
@@ -154,12 +150,13 @@ public class AlpacaJump extends ApplicationAdapter {
         updateView();
         createPlatforms();
         findPlatformsToRemove();
+        updateSprings(dt);
         removeEntities();
         checkDeath();
     }
 
     private void checkDeath() {
-        float bottom = mainView.getCamera().position.y - (worldHeight() * 0.5f);
+        float bottom = getBottomOfMainView();
         float playerTop = player.getY() + player.getHeight();
         if(Float.compare(playerTop, bottom) < 0) {
             MiniGames.endGame(parent, MiniGames.ALPACA_JUMP, score);
@@ -177,7 +174,7 @@ public class AlpacaJump extends ApplicationAdapter {
 
     private void findPlatformsToRemove() {
         Iterator<Platform> iter = platforms.iterator();
-        float bottom = mainView.getCamera().position.y - (worldHeight() * 0.5f);
+        float bottom = getBottomOfMainView();
         while(iter.hasNext()) {
             Platform platform = iter.next();
             if(platform.getY() + platform.getHeight() < bottom) {
@@ -185,6 +182,10 @@ public class AlpacaJump extends ApplicationAdapter {
                 iter.remove();
             }
         }
+    }
+
+    private float getBottomOfMainView() {
+        return mainView.getCamera().position.y - (worldHeight() * 0.5f);
     }
 
     private void createPlatforms() {
@@ -201,22 +202,16 @@ public class AlpacaJump extends ApplicationAdapter {
         }
     }
 
-    private void draw(float dt) {
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(mainView.getCamera().combined);
-        float bgX = mainView.getCamera().position.x - (worldWidth() * 0.5f);
-        float bgY = mainView.getCamera().position.y - (worldHeight() * 0.5f);
-//        spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
-        for (Platform platform : platforms) {
-            platform.draw(dt, spriteBatch, shapeRenderer);
+    private void updateSprings(float dt) {
+        Iterator<Spring> iter = springs.iterator();
+        while (iter.hasNext()) {
+            Spring spring = iter.next();
+            spring.update(dt);
+            if(spring.getY() + spring.getHeight() < getBottomOfMainView()) {
+                toRemove.add(spring);
+                iter.remove();
+            }
         }
-        player.draw(dt, spriteBatch, shapeRenderer);
-        hud.draw(dt, spriteBatch);
-        if(!playing) {
-            tapToStart.draw(dt, spriteBatch, shapeRenderer);
-        }
-        spriteBatch.end();
-        if(DEBUG) debugRenderer.render(world, b2dView.getCamera().combined);
     }
 
     private void updateView() {
@@ -226,6 +221,27 @@ public class AlpacaJump extends ApplicationAdapter {
         );
         mainView.apply();
         b2dView.apply();
+    }
+
+    private void draw(float dt) {
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(mainView.getCamera().combined);
+        float bgX = mainView.getCamera().position.x - (worldWidth() * 0.5f);
+        float bgY = getBottomOfMainView();
+        spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
+        for (Platform platform : platforms) {
+            platform.draw(dt, spriteBatch, shapeRenderer);
+        }
+        for (Spring spring : springs) {
+            spring.draw(dt, spriteBatch, shapeRenderer);
+        }
+        player.draw(dt, spriteBatch, shapeRenderer);
+        hud.draw(dt, spriteBatch);
+        if(!playing) {
+            tapToStart.draw(dt, spriteBatch, shapeRenderer);
+        }
+        spriteBatch.end();
+        if(DEBUG) debugRenderer.render(world, b2dView.getCamera().combined);
     }
 
     private void physicsStep(float dt) {
