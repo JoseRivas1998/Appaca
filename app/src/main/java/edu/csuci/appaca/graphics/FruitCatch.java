@@ -1,5 +1,6 @@
 package edu.csuci.appaca.graphics;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -24,6 +25,8 @@ import edu.csuci.appaca.graphics.entities.fruitcatch.FCHUD;
 import edu.csuci.appaca.graphics.entities.fruitcatch.FruitEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 
+import static edu.csuci.appaca.data.gameres.FruitCatchResources.maxMisses;
+
 public class FruitCatch extends ApplicationAdapter {
 
     private SpriteBatch spriteBatch;
@@ -41,9 +44,13 @@ public class FruitCatch extends ApplicationAdapter {
     private int highScore;
     private FCHUD hud;
 
-    public FruitCatch(Context parent) {
+    private int misses;
+    private Activity parent;
+
+    public FruitCatch(Activity parent) {
         super();
         FruitCatchResources.load(parent);
+        this.parent = parent;
     }
 
     @Override
@@ -110,7 +117,7 @@ public class FruitCatch extends ApplicationAdapter {
     private void updatePlaying(float dt) {
         fruitSpawnTimer.update(dt);
         updateFruit(dt);
-        hud.update(dt, score, highScore);
+        hud.update(dt, score, highScore, misses);
     }
 
     private void updateFruit(float dt) {
@@ -122,9 +129,12 @@ public class FruitCatch extends ApplicationAdapter {
                 fruit.dispose();
                 fruitIter.remove();
                 score++;
-            } else if(fruit.getY() + fruit.getHeight() < 0) {
+            } else if(fruit.getY() + fruit.getHeight() < 0 && fruit.getVelocityY() < 0) {
                 fruit.dispose();
                 fruitIter.remove();
+                if(++misses >= maxMisses()) {
+                    MiniGames.endGame(parent, MiniGames.FRUIT_CATCH, score);
+                }
             }
         }
     }

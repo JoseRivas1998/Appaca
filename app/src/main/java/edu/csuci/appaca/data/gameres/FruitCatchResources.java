@@ -22,6 +22,10 @@ public class FruitCatchResources {
         private float minSpawnTime;
         private float maxSpawnTime;
         private float hudSpacing;
+        private float minSpawnSpeed;
+        private float maxSpawnSpeed;
+        private String missesFormat;
+        private int maxMisses;
         private boolean loaded;
 
         FruitCatchRes() {
@@ -41,6 +45,12 @@ public class FruitCatchResources {
         FruitCatchRes.INSTANCE.minSpawnTime = getFloat(context, R.dimen.fruit_catch_min_spawn_time);
         FruitCatchRes.INSTANCE.maxSpawnTime = getFloat(context, R.dimen.fruit_catch_max_spawn_time);
         FruitCatchRes.INSTANCE.hudSpacing = getDimension(context, R.dimen.hud_padding);
+
+        FruitCatchRes.INSTANCE.minSpawnSpeed = getFloat(context, R.dimen.fruit_catch_min_spawn_speed);
+        FruitCatchRes.INSTANCE.maxSpawnSpeed = getFloat(context, R.dimen.fruit_catch_max_spawn_speed);
+
+        FruitCatchRes.INSTANCE.missesFormat = getString(context, R.string.fruit_catch_misses_format);
+        FruitCatchRes.INSTANCE.maxMisses = getInt(context, R.integer.fruit_catch_max_misses);
 
         FruitCatchRes.INSTANCE.loaded = true;
     }
@@ -92,6 +102,26 @@ public class FruitCatchResources {
     public static float hudSpacing() {
         verify();
         return FruitCatchRes.INSTANCE.hudSpacing;
+    }
+
+    public static float minSpawnSpeed() {
+        verify();
+        return FruitCatchRes.INSTANCE.minSpawnSpeed;
+    }
+
+    public static float maxSpawnSpeed() {
+        verify();
+        return FruitCatchRes.INSTANCE.maxSpawnSpeed;
+    }
+
+    public static String missesFormat() {
+        verify();
+        return FruitCatchRes.INSTANCE.missesFormat;
+    }
+
+    public static int maxMisses() {
+        verify();
+        return FruitCatchRes.INSTANCE.maxMisses;
     }
 
 }

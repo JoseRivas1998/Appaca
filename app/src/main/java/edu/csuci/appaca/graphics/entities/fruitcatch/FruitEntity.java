@@ -10,9 +10,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import edu.csuci.appaca.data.gameres.FruitCatchResources;
 import edu.csuci.appaca.data.statics.ShopData;
 import edu.csuci.appaca.data.statics.StaticFoodItem;
-import edu.csuci.appaca.graphics.FruitCatch;
 import edu.csuci.appaca.graphics.entities.AbstractSpriteEntity;
 import edu.csuci.appaca.utils.ListUtils;
+
+import static edu.csuci.appaca.data.gameres.FruitCatchResources.maxSpawnSpeed;
+import static edu.csuci.appaca.data.gameres.FruitCatchResources.minSpawnSpeed;
+import static edu.csuci.appaca.data.gameres.FruitCatchResources.worldHeight;
+import static edu.csuci.appaca.data.gameres.FruitCatchResources.worldWidth;
 
 public class FruitEntity extends AbstractSpriteEntity implements Disposable {
 
@@ -24,11 +28,22 @@ public class FruitEntity extends AbstractSpriteEntity implements Disposable {
         texture = new Texture(food.path);
         setImage(texture);
         setSize(imageWidth, imageHeight);
-        setX(MathUtils.random(FruitCatchResources.worldWidth() - getWidth()));
-        setY(FruitCatchResources.worldHeight() + (getHeight() * 0.5f));
+        float x;
+        float y;
+        boolean topBottom = MathUtils.randomBoolean();
+        if (topBottom) {
+            x = MathUtils.random(worldWidth() - getWidth());
+            y = ListUtils.choose(-getHeight(), (float) worldHeight());
+        } else {
+            x = ListUtils.choose(-getWidth(), (float) worldWidth());
+            y = MathUtils.random(worldHeight() - getHeight());
+        }
+        float angle = MathUtils.atan2(worldHeight() * 0.5f - y, worldWidth() * 0.5f - x);
+        float speed = MathUtils.random(minSpawnSpeed(), maxSpawnSpeed());
+        setVelocityPolar(speed, angle);
+        setPosition(x, y);
         centerOrigin();
         imageAngle = MathUtils.random(360);
-        setVelocity(0, 0);
     }
 
     @Override
@@ -43,8 +58,8 @@ public class FruitEntity extends AbstractSpriteEntity implements Disposable {
     }
 
     public boolean isTouched(Viewport viewport) {
-        if(Gdx.input.isTouched()) {
-            Vector2 touchPoint =  viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        if (Gdx.input.isTouched()) {
+            Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
             return containsPoint(touchPoint);
         }
         return false;

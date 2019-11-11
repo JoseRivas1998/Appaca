@@ -151,11 +151,7 @@ public class AlpacaJump extends ApplicationAdapter {
         float bottom = mainView.getCamera().position.y - (worldHeight() * 0.5f);
         float playerTop = player.getY() + player.getHeight();
         if(Float.compare(playerTop, bottom) < 0) {
-            Intent intent = new Intent(parent, GameOverActivity.class);
-            intent.putExtra("score", score);
-            intent.putExtra("return", MiniGames.ALPACA_JUMP.ordinal());
-            parent.startActivity(intent);
-            parent.finish();
+            MiniGames.endGame(parent, MiniGames.ALPACA_JUMP, score);
         }
     }
 
