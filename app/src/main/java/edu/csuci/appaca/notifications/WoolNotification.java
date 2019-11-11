@@ -1,7 +1,9 @@
 package edu.csuci.appaca.notifications;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
@@ -33,5 +35,14 @@ public class WoolNotification {
         final int NOTIFY_ID = 1;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         NotificationManager manager = context.getSystemService(NotificationManager.class);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            CharSequence name = "wool";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            manager.createNotificationChannel(channel);
+        }
+
     }
 }
