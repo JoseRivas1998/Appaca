@@ -15,7 +15,9 @@
     <item name="gravity" type="dimen" format="float">-20</item>
     <item name="world_step_per_second" type="dimen" format="float">60.0</item>
     <item name="max_y_distance" type="dimen" format="float">2.0</item>
-    <item name="min_y_distance" type="dimen" format="float">1</item>
+    <item name="min_y_distance" type="dimen" format="float">1.0</item>
+    <item name="absolute_max_y_distance" type="dimen" format="float">6.0</item>
+    <item name="hardest_score" type="dimen" format="float">100.0</item>
     <item name="player_x_velocity" type="dimen" format="float">30.0</item>
     <item name="player_jump_force" type="dimen" format="float">1000.0</item>
     <item name="player_food_height_px" type="dimen" format="float">5.0</item>
