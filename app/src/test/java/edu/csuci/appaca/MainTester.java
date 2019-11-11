@@ -5,6 +5,7 @@ import org.junit.*;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.FoodDepletion;
 import edu.csuci.appaca.data.HappinessCalc;
+import edu.csuci.appaca.utils.MathFunctions;
 import edu.csuci.appaca.utils.TimeUtils;
 
 import static org.junit.Assert.*;
@@ -104,4 +105,19 @@ public class MainTester {
         // If clamping to min stat, should have exactly min stat at this point
         assertEquals(Alpaca.MIN_STAT, actual, 1e-9);
     }
+
+    @Test
+    public void testNormalizeWithMap() {
+        double actual = MathFunctions.map(36, 0, 100, 0, 1);
+        double expected = 0.36;
+        assertEquals(expected, actual, 1e-5);
+    }
+
+    @Test
+    public void testMap() {
+        double actual = MathFunctions.map(30, 20, 40, 50, 70);
+        double expected = 60;
+        assertEquals(expected, actual, 1e-5);
+    }
+
 }

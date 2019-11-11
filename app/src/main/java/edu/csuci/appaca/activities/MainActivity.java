@@ -20,6 +20,7 @@ import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
+import edu.csuci.appaca.notifications.NotificationChecker;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class MainActivity extends AndroidApplication {
@@ -49,6 +50,8 @@ public class MainActivity extends AndroidApplication {
         initStatBars();
         initCurrencyDisplays();
         MainScreenBackground.start(this);
+        NotificationChecker checker = NotificationChecker.getInstance(this.getApplicationContext());
+        checker.start();
     }
 
     private void initCurrencyDisplays() {

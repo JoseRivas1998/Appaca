@@ -1,10 +1,12 @@
 package edu.csuci.appaca.data;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.AlpacaJumpActivity;
 import edu.csuci.appaca.activities.FruitCatchActivity;
+import edu.csuci.appaca.activities.GameOverActivity;
 
 public enum MiniGames {
     ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpaca_icon, R.string.alpaca_jump_high_score_format) {
@@ -34,5 +36,13 @@ public enum MiniGames {
     }
 
     public abstract int coinsForScore(int score);
+
+    public static void endGame(Activity parent, MiniGames miniGame, int score) {
+        Intent intent = new Intent(parent, GameOverActivity.class);
+        intent.putExtra("score", score);
+        intent.putExtra("return", miniGame.ordinal());
+        parent.startActivity(intent);
+        parent.finish();
+    }
 
 }
