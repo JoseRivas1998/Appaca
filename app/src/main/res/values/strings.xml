@@ -24,4 +24,5 @@
     <string name="fruit_catch_score_format">Score: %03d</string>
     <string name="fruit_catch_high_score_format">High Score: %03d</string>
     <string name="fruit_catch_misses_format">Misses: %d / %d</string>
+    <string name="happiness_notification_name">Your alpaca is no longer happy!</string>
 </resources>
