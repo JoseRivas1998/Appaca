@@ -10,4 +10,8 @@ public enum UserData {
         return fixture != null && fixture.getUserData() != null && fixture.getUserData().equals(data);
     }
 
+    public static boolean areBothFixtureData(Fixture thisFixture, UserData thisData, Fixture otherFixture, UserData otherData) {
+        return isFixtureData(thisFixture, thisData) && isFixtureData(otherFixture, otherData);
+    }
+
 }

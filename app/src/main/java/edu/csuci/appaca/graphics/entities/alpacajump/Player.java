@@ -157,13 +157,13 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
 
     @Override
     public void beginContact(Contact contact, Fixture thisFixture, Fixture other) {
-        if (UserData.isFixtureData(thisFixture, UserData.PLAYER_FOOT) && UserData.isFixtureData(other, UserData.PLATFORM)) {
+        if (UserData.areBothFixtureData(thisFixture, UserData.PLAYER_FOOT, other, UserData.PLATFORM)) {
             // Only jump if we are falling
             if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
                 jump();
             }
         }
-        if (UserData.isFixtureData(thisFixture, UserData.PLAYER_FOOT) && UserData.isFixtureData(other, UserData.SPRING)) {
+        if (UserData.areBothFixtureData(thisFixture, UserData.PLAYER_FOOT, other, UserData.SPRING)) {
             // Only jump if we are falling
             if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
                 jump(AlpacaJump.getFloat(R.dimen.spring_multiplier));
