@@ -24,7 +24,7 @@
     <item name="player_turn_threshold" type="dimen" format="float">0.5</item>
     <integer name="accelerometer_frames">5</integer>
     <item name="spring_probability" type="dimen" format="float">0.05</item>
-    <item name="spring_multiplier" type="dimen" format="float">2.0</item>
+    <item name="spring_multiplier" type="dimen" format="float">1.5</item>
 
 <!--    24 hours in seconds-->
     <integer name="time_to_full_wool">86400</integer>
