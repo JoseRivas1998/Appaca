@@ -22,7 +22,7 @@ public class WoolNotification {
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
-                final int MAX_MONEY = 50;
+                final int MAX_MONEY = R.integer.money_for_full_shear;
                 int money = ShearUtils.getShearValue(alpaca, context);
                 if (money == MAX_MONEY)
                 {
