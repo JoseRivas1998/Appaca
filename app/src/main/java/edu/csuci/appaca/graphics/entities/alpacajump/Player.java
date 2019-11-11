@@ -90,7 +90,7 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = PhysicsLayers.ALPACA_FOOT;
-        fixtureDef.filter.maskBits = PhysicsLayers.PLATFORM;
+        fixtureDef.filter.maskBits = PhysicsLayers.PLATFORM | PhysicsLayers.SPRING;
         // A sensor detects collision, but does not stop motion. Think of a ghost
         fixtureDef.isSensor = true;
 
@@ -161,6 +161,12 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
             // Only jump if we are falling
             if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
                 jump();
+            }
+        }
+        if (UserData.isFixtureData(thisFixture, UserData.PLAYER_FOOT) && UserData.isFixtureData(other, UserData.SPRING)) {
+            // Only jump if we are falling
+            if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
+                jump(AlpacaJump.getFloat(R.dimen.spring_multiplier));
             }
         }
     }
