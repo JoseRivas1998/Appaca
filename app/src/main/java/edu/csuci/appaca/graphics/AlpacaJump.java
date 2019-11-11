@@ -39,6 +39,8 @@ import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
 import edu.csuci.appaca.graphics.entities.alpacajump.Player;
 import edu.csuci.appaca.utils.b2d.BasicContactListener;
 
+import static edu.csuci.appaca.utils.MathFunctions.map;
+
 public class AlpacaJump extends ApplicationAdapter {
 
     private static final boolean DEBUG = false;
@@ -179,7 +181,9 @@ public class AlpacaJump extends ApplicationAdapter {
     private void createPlatforms() {
         float targetY = b2dView.getCamera().position.y + (worldHeight() * metersPerPixel());
         while (maxPlatformY < targetY) {
-            maxPlatformY += MathUtils.random(getFloat(R.dimen.min_y_distance), getFloat(R.dimen.max_y_distance));
+            float maxY = (float) map(Math.min(score, getFloat(R.dimen.hardest_score)), 0, getFloat(R.dimen.hardest_score), getFloat(R.dimen.max_y_distance), getFloat(R.dimen.absolute_max_y_distance));
+            Gdx.app.log(getClass().getName(), String.format("%f", maxY));
+            maxPlatformY += MathUtils.random(getFloat(R.dimen.min_y_distance), maxY);
             platforms.add(new Platform(world, maxPlatformY));
         }
     }
