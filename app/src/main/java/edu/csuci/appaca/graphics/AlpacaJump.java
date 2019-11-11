@@ -37,13 +37,14 @@ import edu.csuci.appaca.graphics.entities.alpacajump.AJHUD;
 import edu.csuci.appaca.graphics.entities.alpacajump.AbstractB2DSpriteEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
 import edu.csuci.appaca.graphics.entities.alpacajump.Player;
+import edu.csuci.appaca.graphics.entities.alpacajump.Spring;
 import edu.csuci.appaca.utils.b2d.BasicContactListener;
 
 import static edu.csuci.appaca.utils.MathFunctions.map;
 
 public class AlpacaJump extends ApplicationAdapter {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private static Activity parent;
 
@@ -58,6 +59,7 @@ public class AlpacaJump extends ApplicationAdapter {
     private float accumulator;
 
     private List<Platform> platforms;
+    private List<Spring> springs;
     private float maxPlatformY;
     private Set<AbstractB2DSpriteEntity> toRemove;
 
@@ -84,12 +86,16 @@ public class AlpacaJump extends ApplicationAdapter {
         mainView = new FitViewport(worldWidth(), worldHeight());
         mainView.getCamera().position.set(worldWidth() * 0.5f, worldHeight() * 0.5f, 0f);
         StaticContentManager.load();
+
         initPhys();
+
         platforms = new ArrayList<>();
+        springs = new ArrayList<>();
         toRemove = new HashSet<>();
         maxPlatformY = 0;
         player = new Player(world);
         playing = false;
+
         bg = StaticContentManager.getTexture(StaticContentManager.Image.ALPACA_JUMP_BG);
         hud = new AJHUD();
         score = 0;
@@ -100,6 +106,9 @@ public class AlpacaJump extends ApplicationAdapter {
         tapToStart.setAlign(LabelEntity.MIDDLE_CENTER);
         tapToStart.setX(worldWidth() * 0.5f);
         tapToStart.setY(worldHeight() * 0.5f);
+
+
+
     }
 
     private void initPhys() {
@@ -184,7 +193,11 @@ public class AlpacaJump extends ApplicationAdapter {
             float maxY = (float) map(Math.min(score, getFloat(R.dimen.hardest_score)), 0, getFloat(R.dimen.hardest_score), getFloat(R.dimen.max_y_distance), getFloat(R.dimen.absolute_max_y_distance));
             Gdx.app.log(getClass().getName(), String.format("%f", maxY));
             maxPlatformY += MathUtils.random(getFloat(R.dimen.min_y_distance), maxY);
-            platforms.add(new Platform(world, maxPlatformY));
+            Platform platform = new Platform(world, maxPlatformY);
+            platforms.add(platform);
+            if(MathUtils.randomBoolean(getFloat(R.dimen.spring_probability))) {
+                springs.add(new Spring(world, platform));
+            }
         }
     }
 
@@ -193,7 +206,7 @@ public class AlpacaJump extends ApplicationAdapter {
         spriteBatch.setProjectionMatrix(mainView.getCamera().combined);
         float bgX = mainView.getCamera().position.x - (worldWidth() * 0.5f);
         float bgY = mainView.getCamera().position.y - (worldHeight() * 0.5f);
-        spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
+//        spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
         for (Platform platform : platforms) {
             platform.draw(dt, spriteBatch, shapeRenderer);
         }

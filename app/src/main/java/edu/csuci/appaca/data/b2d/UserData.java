@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 
 public enum UserData {
 
-    PLATFORM, PLAYER, PLAYER_FOOT;
+    PLATFORM, PLAYER, PLAYER_FOOT, SPRING;
 
     public static boolean isFixtureData(Fixture fixture, UserData data) {
         return fixture != null && fixture.getUserData() != null && fixture.getUserData().equals(data);

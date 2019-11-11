@@ -145,10 +145,14 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         }
     }
 
-    public void jump() {
+    private void jump(float multiplier) {
         float xVel = body.getLinearVelocity().x;
         body.setLinearVelocity(xVel, 0f);
-        body.applyForceToCenter(0, AlpacaJump.getFloat(R.dimen.player_jump_force), true);
+        body.applyForceToCenter(0, AlpacaJump.getFloat(R.dimen.player_jump_force) * multiplier, true);
+    }
+
+    public void jump() {
+        jump(1.0f);
     }
 
     @Override
