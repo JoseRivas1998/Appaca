@@ -7,6 +7,7 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.utils.ListUtils;
@@ -44,5 +45,12 @@ public class WoolNotification {
             manager.createNotificationChannel(channel);
         }
 
+        builder.setContentTitle("Appaca");
+        builder.setContentText(alpacaName + " is ready to be sheared!");
+        builder.setOnlyAlertOnce(true);
+        builder.setGroup(GROUP_ID);
+        builder.setSmallIcon(R.drawable.alpaca_icon);
+
+        manager.notify(NOTIFY_ID, builder.build());
     }
 }
