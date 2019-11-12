@@ -24,6 +24,7 @@ public class NotificationChecker extends Thread
             HygieneNotification.checkIfAnyAlpacasLowHygiene(context);
             WoolNotification.checkIfAnyAlpacasMaxWool(context);
             HappinessNotification.checkForLowHappiness(context);
+            StaminaNotification.checkIfStaminaIsFull(context);
         }
     }
 }
