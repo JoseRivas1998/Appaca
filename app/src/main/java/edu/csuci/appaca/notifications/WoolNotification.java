@@ -17,6 +17,8 @@ import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.ShearUtils;
 
 public class WoolNotification {
+    private static int previousWoolValue;
+    private static int NOTIFY_ID = 1;
 
     public static void checkIfAnyAlpacasMaxWool(final Context context){
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
@@ -24,10 +26,13 @@ public class WoolNotification {
             public void accept(Alpaca alpaca) {
                 final int MAX_MONEY = context.getResources().getInteger(R.integer.money_for_full_shear);
                 int money = ShearUtils.getShearValue(alpaca, context);
-                if (money == MAX_MONEY)
+                boolean maxMoney = money == MAX_MONEY;
+                boolean wasNotificationSent = money == previousWoolValue;
+                if (maxMoney && !wasNotificationSent)
                 {
                     sendNotification(context, alpaca.getName());
                 }
+                previousWoolValue = money;
             }
         });
     }
@@ -36,7 +41,6 @@ public class WoolNotification {
         //send notification saying that alpaca is ready to shear
         final String CHANNEL_ID = "wool_id";
         final String GROUP_ID = "stat_group";
-        final int NOTIFY_ID = 1;
         Intent toMainScreen = new Intent(context, MainActivity.class);
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
