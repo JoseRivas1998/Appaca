@@ -93,6 +93,7 @@ public class PlatformBreakable extends AbstractB2DSpriteEntity implements Collid
     public void beginContact(Contact contact, Fixture thisFixture, Fixture other) {
         if (UserData.areBothFixtureData(thisFixture, UserData.PLATFORM_BREAKABLE, other, UserData.PLAYER)) {
             if (!this.isFading && other.getBody().getLinearVelocity().y < 0) {
+                StaticContentManager.playSound(StaticContentManager.SoundEffect.PLATFORM_BREAK);
                 this.isFading = true;
                 this.alpha = 1.0f;
                 this.fadeTime = 0.0f;
