@@ -11,25 +11,28 @@ import androidx.core.app.NotificationCompat;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.MainActivity;
-import edu.csuci.appaca.activities.MinigameSelectActivity;
 import edu.csuci.appaca.data.StaminaManager;
 
 public class StaminaNotification {
+    private static int prevStamina;
+    private final static int NOTIFY_ID = 2;
 
     public static void checkIfStaminaIsFull(Context context){
         int currentStamina = StaminaManager.getCurrentStamina();
-        if (currentStamina == StaminaManager.MAX_STAMINA)
+        boolean isStaminaAtMax = currentStamina == StaminaManager.MAX_STAMINA;
+        boolean wasNotificationAlreadySent = currentStamina == prevStamina;
+        if (isStaminaAtMax && !wasNotificationAlreadySent)
         {
             sendNotification(context);
         }
+        prevStamina = currentStamina;
     }
 
     private static void sendNotification(Context context){
         final String CHANNEL_ID = "stamina_id";
         final String GROUP_ID = "stat_group";
-        final int NOTIFY_ID = 0;
         Intent toMainScreen = new Intent(context, MainActivity.class);
-        PendingIntent notificationIntnet = PendingIntent.getActivity(context, 0, toMainScreen, 0);
+        PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
@@ -46,7 +49,7 @@ public class StaminaNotification {
         builder.setGroup(GROUP_ID);
         builder.setSmallIcon(R.drawable.alpaca_icon); //placeholder
         builder.setOnlyAlertOnce(true);
-        builder.setContentIntent(notificationIntnet);
+        builder.setContentIntent(notificationIntent);
 
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
