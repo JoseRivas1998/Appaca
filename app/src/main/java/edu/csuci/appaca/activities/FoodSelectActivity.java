@@ -13,6 +13,7 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.Inventory;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.statics.ShopData;
 import edu.csuci.appaca.data.statics.StaticFoodItem;
 import edu.csuci.appaca.fragments.IconBadgeFragment;
