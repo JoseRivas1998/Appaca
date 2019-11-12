@@ -167,6 +167,7 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         if (UserData.areBothFixtureData(thisFixture, UserData.PLAYER_FOOT, other, UserData.SPRING)) {
             // Only jump if we are falling
             if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
+                StaticContentManager.playSound(StaticContentManager.SoundEffect.SPRING_BOUNCE);
                 jump(AlpacaJump.getFloat(R.dimen.spring_multiplier));
                 ((Spring) other.getBody().getUserData()).extend();
             }
