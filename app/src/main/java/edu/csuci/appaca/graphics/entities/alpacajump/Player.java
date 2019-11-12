@@ -73,7 +73,7 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = PhysicsLayers.ALPACA;
-        fixtureDef.filter.maskBits = 0;
+        fixtureDef.filter.maskBits = PhysicsLayers.PLATFORM_BREAKABLE;
 
         Fixture fixture = body.createFixture(fixtureDef);
         // User data will be used to identify fixtures

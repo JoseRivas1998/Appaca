@@ -32,6 +32,7 @@ import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.AJHUD;
 import edu.csuci.appaca.graphics.entities.alpacajump.AbstractB2DSpriteEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
+import edu.csuci.appaca.graphics.entities.alpacajump.PlatformBreakable;
 import edu.csuci.appaca.graphics.entities.alpacajump.Player;
 import edu.csuci.appaca.graphics.entities.alpacajump.Spring;
 import edu.csuci.appaca.utils.b2d.BasicContactListener;
@@ -40,7 +41,7 @@ import static edu.csuci.appaca.utils.MathFunctions.map;
 
 public class AlpacaJump extends ApplicationAdapter {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private static Activity parent;
 
@@ -56,6 +57,7 @@ public class AlpacaJump extends ApplicationAdapter {
 
     private List<Platform> platforms;
     private List<Spring> springs;
+    private List<PlatformBreakable> breakables;
     private float maxPlatformY;
     private Set<AbstractB2DSpriteEntity> toRemove;
 
@@ -87,7 +89,9 @@ public class AlpacaJump extends ApplicationAdapter {
 
         platforms = new ArrayList<>();
         springs = new ArrayList<>();
+        breakables = new ArrayList<>();
         toRemove = new HashSet<>();
+
         maxPlatformY = 0;
         player = new Player(world);
         playing = false;
@@ -182,6 +186,15 @@ public class AlpacaJump extends ApplicationAdapter {
                 iter.remove();
             }
         }
+        Iterator<PlatformBreakable> breakableIter = breakables.iterator();
+        while(breakableIter.hasNext()) {
+            PlatformBreakable platformBreakable = breakableIter.next();
+            if(platformBreakable.shouldRemove(getBottomOfMainView())) {
+                Gdx.app.log(getClass().getName(), "REMOVE: " + platformBreakable);
+                toRemove.add(platformBreakable);
+                breakableIter.remove();
+            }
+        }
     }
 
     private float getBottomOfMainView() {
@@ -192,12 +205,16 @@ public class AlpacaJump extends ApplicationAdapter {
         float targetY = b2dView.getCamera().position.y + (worldHeight() * metersPerPixel());
         while (maxPlatformY < targetY) {
             float maxY = (float) map(Math.min(score, getFloat(R.dimen.hardest_score)), 0, getFloat(R.dimen.hardest_score), getFloat(R.dimen.max_y_distance), getFloat(R.dimen.absolute_max_y_distance));
-            Gdx.app.log(getClass().getName(), String.format("%f", maxY));
             maxPlatformY += MathUtils.random(getFloat(R.dimen.min_y_distance), maxY);
-            Platform platform = new Platform(world, maxPlatformY);
-            platforms.add(platform);
-            if(MathUtils.randomBoolean(getFloat(R.dimen.spring_probability))) {
-                springs.add(new Spring(world, platform));
+            if(MathUtils.randomBoolean(getFloat(R.dimen.breakable_probability))) {
+                PlatformBreakable platform = new PlatformBreakable(world, maxPlatformY);
+                breakables.add(platform);
+            } else {
+                Platform platform = new Platform(world, maxPlatformY);
+                platforms.add(platform);
+                if(MathUtils.randomBoolean(getFloat(R.dimen.spring_probability))) {
+                    springs.add(new Spring(world, platform));
+                }
             }
         }
     }
@@ -231,6 +248,9 @@ public class AlpacaJump extends ApplicationAdapter {
         spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
         for (Platform platform : platforms) {
             platform.draw(dt, spriteBatch, shapeRenderer);
+        }
+        for (PlatformBreakable breakable : breakables) {
+            breakable.draw(dt, spriteBatch, shapeRenderer);
         }
         for (Spring spring : springs) {
             spring.draw(dt, spriteBatch, shapeRenderer);
