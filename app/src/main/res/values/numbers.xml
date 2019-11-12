@@ -15,12 +15,17 @@
     <item name="gravity" type="dimen" format="float">-20</item>
     <item name="world_step_per_second" type="dimen" format="float">60.0</item>
     <item name="max_y_distance" type="dimen" format="float">2.0</item>
-    <item name="min_y_distance" type="dimen" format="float">1</item>
+    <item name="min_y_distance" type="dimen" format="float">1.0</item>
+    <item name="absolute_max_y_distance" type="dimen" format="float">6.0</item>
+    <item name="hardest_score" type="dimen" format="float">100.0</item>
     <item name="player_x_velocity" type="dimen" format="float">30.0</item>
     <item name="player_jump_force" type="dimen" format="float">1000.0</item>
     <item name="player_food_height_px" type="dimen" format="float">5.0</item>
     <item name="player_turn_threshold" type="dimen" format="float">0.5</item>
     <integer name="accelerometer_frames">5</integer>
+    <item name="spring_probability" type="dimen" format="float">0.05</item>
+    <item name="spring_multiplier" type="dimen" format="float">1.5</item>
+    <item name="spring_extended_timer" type="dimen" format="float">0.5</item>
 
 <!--    24 hours in seconds-->
     <integer name="time_to_full_wool">86400</integer>
@@ -30,8 +35,11 @@
     <integer name="recovery_minutes">30</integer>
 
 <!--    FRUIT CATCH-->
-    <item name="fruit_catch_gravity" type="dimen" format="float">-500</item>
+    <item name="fruit_catch_gravity" type="dimen" format="float">-750</item>
     <item name="fruit_catch_min_spawn_time" type="dimen" format="float">0.25</item>
     <item name="fruit_catch_max_spawn_time" type="dimen" format="float">1.5</item>
+    <item name="fruit_catch_min_spawn_speed" type="dimen" format="float">1000</item>
+    <item name="fruit_catch_max_spawn_speed" type="dimen" format="float">2000</item>
+    <integer name="fruit_catch_max_misses">5</integer>
 
 </resources>
