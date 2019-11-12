@@ -18,6 +18,9 @@ import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class HygieneNotification{
+    private static int NOTIFY_ID = 0;
+    private static double previousHygiene;
+
     public static void checkIfAnyAlpacasLowHygiene(final Context context) {
         //use foreach to check hygiene for each alpaca, send notification if it is fully depleted
 
@@ -27,10 +30,13 @@ public class HygieneNotification{
                 long lastTime = SavedTime.lastSavedTime();
                 double predictedHygieneLoss = HygieneDepletion.hygieneDepletion(alpaca, lastTime);
                 final double DELTA = 0.001;
-                if (predictedHygieneLoss - Alpaca.MIN_STAT < DELTA)
+                boolean isHygieneDepleted = predictedHygieneLoss - Alpaca.MIN_STAT < DELTA;
+                boolean wasNotificationSent = previousHygiene - predictedHygieneLoss < DELTA;
+                if (isHygieneDepleted && !wasNotificationSent)
                 {
                     sendNotification(context, alpaca.getName());
                 }
+                previousHygiene = predictedHygieneLoss;
             }
         });
     }
@@ -40,7 +46,6 @@ public class HygieneNotification{
         //send notification saying that the alpaca is dirty
         final String CHANNEL_ID = "hygiene_id";
         final String GROUP_ID = "stat_group";
-        final int NOTIFY_ID = 0;
         Intent toMainScreen = new Intent(context, MainActivity.class);
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
