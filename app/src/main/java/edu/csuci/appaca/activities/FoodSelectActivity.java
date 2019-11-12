@@ -33,7 +33,6 @@ public class FoodSelectActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         SaveDataUtils.updateValuesAndSave(FoodSelectActivity.this);
-                        StaticContentManager.playSound(StaticContentManager.SoundEffect.FOOD_SELECT);
                         AlpacaFarm.getCurrentAlpaca().incrementHungerStat(foodItem.value);
                         Inventory.useFood(foodItem.id);
                         SaveDataUtils.save(FoodSelectActivity.this);
