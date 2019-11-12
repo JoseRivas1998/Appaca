@@ -160,6 +160,7 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         if (UserData.areBothFixtureData(thisFixture, UserData.PLAYER_FOOT, other, UserData.PLATFORM)) {
             // Only jump if we are falling
             if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
+                StaticContentManager.playSound(StaticContentManager.SoundEffect.NORMAL_BOUNCE);
                 jump();
             }
         }
