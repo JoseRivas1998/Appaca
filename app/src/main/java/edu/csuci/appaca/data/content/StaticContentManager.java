@@ -78,7 +78,8 @@ public class StaticContentManager {
     }
 
     public enum SoundEffect {
-        NORMAL_BOUNCE("alpaca-jump/sound/normalbounce.mp3");
+        NORMAL_BOUNCE("alpaca-jump/sound/normalbounce.mp3"),
+        SPRING_BOUNCE("alpaca-jump/sound/springbounce.mp3");
         final String path;
 
         SoundEffect(String path) {
