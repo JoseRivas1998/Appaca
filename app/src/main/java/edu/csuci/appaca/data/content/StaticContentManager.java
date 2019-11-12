@@ -82,7 +82,7 @@ public class StaticContentManager {
         NORMAL_BOUNCE("alpaca-jump/sound/normalbounce.mp3"),
         SPRING_BOUNCE("alpaca-jump/sound/springbounce.mp3"),
         PLATFORM_BREAK("alpaca-jump/sound/platformbreak.mp3"),
-        FOOD_SELECT("alpaca-jump/sound/platofrmbreak.mp3");
+        FOOD_SELECT("alpaca-jump/sound/foodsound.mp3");
         final String path;
 
         SoundEffect(String path) {
