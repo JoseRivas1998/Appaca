@@ -69,7 +69,8 @@ public class StaticContentManager {
         HEART("heart.png"),
         MAIN_SCREEN_BG("backgrounds/appacabackground.png"),
         SPRING_DOWN("alpaca-jump/img/spring_down.png"),
-        SPRING_EXTENDED("alpaca-jump/img/spring-extended.png");
+        SPRING_EXTENDED("alpaca-jump/img/spring-extended.png"),
+        PLATFORM_BREAKABLE("alpaca-jump/img/platform_breakable.png");
         final String path;
 
         Image(String path) {
