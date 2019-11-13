@@ -75,7 +75,39 @@ public class StaminaRecovery {
             if (timeDifference >= parent.getResources().getInteger(R.integer.recovery_minutes)) {
                 StaminaManager.increaseCurrentStaminaToMax();
                 SaveDataUtils.updateValuesAndSave(parent);
+                setMessage(StaminaManager.getCurrentStamina(),  "");
+                countDown = false;
             }
+        }
+
+        private void updateTime() {
+            long currentTime = TimeUtils.getCurrentTime();
+            long timeDiff = currentTime - StaminaManager.getFirstStaminaUsedTime();
+            double timeUntilRecovery = parent.getResources().getInteger(R.integer.recovery_minutes) - TimeUtils.secondsToMinutes(timeDiff);
+            int minutes = (int)Math.floor(timeUntilRecovery);
+            int seconds = (int)(60 - timeDiff % 60);
+
+            if (seconds == 60)
+                seconds = 0;
+
+            if (minutes == 0 && seconds == 0)
+                countDown = false;
+
+            final String message = "Time until refill: " + String.format("%02d",minutes) + ":" + String.format("%02d", seconds);
+
+            setMessage(StaminaManager.getCurrentStamina(), message);
+
+        }
+
+        private void setMessage(int stamina, String timeUntilRefill) {
+            final String message = "Stamina: " + stamina + "\n" + timeUntilRefill;
+
+            parent.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parent.setStaminaMessage(message);
+                }
+            });
         }
 
 
