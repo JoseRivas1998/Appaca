@@ -43,6 +43,8 @@ public class StaminaRecovery {
 
         private static final long UPDATES_PER_SECOND = 60;
 
+        boolean countDown = false;
+
         private boolean running;
         private MinigameSelectActivity parent;
 
@@ -59,8 +61,12 @@ public class StaminaRecovery {
                 return;
             }
             while(this.running) {
-                if (StaminaManager.getFirstStaminaUsedTime() != 0)
-                        updateStamina();
+                if (StaminaManager.getFirstStaminaUsedTime() != 0) {
+                    updateStamina();
+                    countDown = true;
+                }
+                if (countDown)
+                    updateTime();
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
