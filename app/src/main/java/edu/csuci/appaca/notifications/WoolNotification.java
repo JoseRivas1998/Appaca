@@ -9,6 +9,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import java.util.HashMap;
+
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.MainActivity;
 import edu.csuci.appaca.data.Alpaca;
@@ -17,27 +19,41 @@ import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.ShearUtils;
 
 public class WoolNotification {
-    private static int previousWoolValue;
-    private static int NOTIFY_ID = 1;
 
-    public static void checkIfAnyAlpacasMaxWool(final Context context){
+    private static HashMap<Alpaca, Boolean> notificationSent;
+
+    public static void checkIfAnyAlpacasMaxWool(final Context context) {
+        initMap();
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
                 final int MAX_MONEY = context.getResources().getInteger(R.integer.money_for_full_shear);
                 int money = ShearUtils.getShearValue(alpaca, context);
+                boolean wasNotificationSent = ListUtils.getOrDefault(notificationSent, alpaca, false);
                 boolean maxMoney = money == MAX_MONEY;
-                boolean wasNotificationSent = money == previousWoolValue;
-                if (maxMoney && !wasNotificationSent)
-                {
-                    sendNotification(context, alpaca.getName());
+                if (maxMoney) {
+                    if (!wasNotificationSent) {
+                        sendNotification(context, alpaca.getName());
+                        notificationSent.put(alpaca, true);
+                    }
+                } else {
+                    notificationSent.put(alpaca, false);
                 }
-                previousWoolValue = money;
             }
         });
     }
 
-    private static void sendNotification(Context context, String alpacaName){
+    private static void initMap() {
+        if (notificationSent == null) {
+            synchronized (WoolNotification.class) {
+                if (notificationSent == null) {
+                    notificationSent = new HashMap<>();
+                }
+            }
+        }
+    }
+
+    private static void sendNotification(Context context, String alpacaName) {
         //send notification saying that alpaca is ready to shear
         final String CHANNEL_ID = "wool_id";
         final String GROUP_ID = "stat_group";
@@ -46,8 +62,7 @@ public class WoolNotification {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         NotificationManager manager = context.getSystemService(NotificationManager.class);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "wool";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
@@ -61,6 +76,6 @@ public class WoolNotification {
         builder.setSmallIcon(R.drawable.alpaca_icon);
         builder.setContentIntent(notificationIntent);
 
-        manager.notify(NOTIFY_ID, builder.build());
+        manager.notify(NotificationId.WOOL, builder.build());
     }
 }

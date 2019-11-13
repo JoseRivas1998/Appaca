@@ -9,6 +9,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import java.util.HashMap;
+
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.MainActivity;
 import edu.csuci.appaca.data.Alpaca;
@@ -17,32 +19,43 @@ import edu.csuci.appaca.data.HygieneDepletion;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.utils.ListUtils;
 
-public class HygieneNotification{
-    private static int NOTIFY_ID = 0;
-    private static double previousHygiene;
+public class HygieneNotification {
+
+    private static HashMap<Alpaca, Boolean> notificationSentMap;
+
+    private static void initMap() {
+        if (notificationSentMap == null) {
+            synchronized (HygieneNotification.class) {
+                if (notificationSentMap == null) {
+                    notificationSentMap = new HashMap<>();
+                }
+            }
+        }
+    }
 
     public static void checkIfAnyAlpacasLowHygiene(final Context context) {
-        //use foreach to check hygiene for each alpaca, send notification if it is fully depleted
+        initMap();
 
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
                 long lastTime = SavedTime.lastSavedTime();
                 double predictedHygieneLoss = HygieneDepletion.hygieneDepletion(alpaca, lastTime);
-                final double DELTA = 0.001;
-                boolean isHygieneDepleted = predictedHygieneLoss - Alpaca.MIN_STAT < DELTA;
-                boolean wasNotificationSent = previousHygiene - predictedHygieneLoss < DELTA;
-                if (isHygieneDepleted && !wasNotificationSent)
-                {
-                    sendNotification(context, alpaca.getName());
+                boolean isHygieneDepleted = Double.compare(predictedHygieneLoss, Alpaca.MIN_STAT) == 0;
+                boolean wasNotificationSent = ListUtils.getOrDefault(notificationSentMap, alpaca, false);
+                if (isHygieneDepleted) {
+                    if (!wasNotificationSent) {
+                        sendNotification(context, alpaca.getName());
+                        notificationSentMap.put(alpaca, true);
+                    }
+                } else {
+                    notificationSentMap.put(alpaca, false);
                 }
-                previousHygiene = predictedHygieneLoss;
             }
         });
     }
 
-    private static void sendNotification(Context context, String alpacaName)
-    {
+    private static void sendNotification(Context context, String alpacaName) {
         //send notification saying that the alpaca is dirty
         final String CHANNEL_ID = "hygiene_id";
         final String GROUP_ID = "stat_group";
@@ -50,10 +63,9 @@ public class HygieneNotification{
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "hygiene";
-            int importance= NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             notificationManager.createNotificationChannel(channel);
         }
@@ -65,7 +77,7 @@ public class HygieneNotification{
         builder.setOnlyAlertOnce(true);
         builder.setContentIntent(notificationIntent);
 
-        notificationManager.notify(NOTIFY_ID, builder.build());
+        notificationManager.notify(NotificationId.HYGIENE, builder.build());
     }
 
 }

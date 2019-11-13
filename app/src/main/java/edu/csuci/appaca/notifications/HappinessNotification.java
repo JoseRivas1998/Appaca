@@ -8,10 +8,13 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import java.util.HashMap;
+
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.MainActivity;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.HappinessCalc;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.utils.ListUtils;
 
@@ -19,24 +22,42 @@ import static androidx.core.content.ContextCompat.getSystemService;
 
 public class HappinessNotification {
 
+    private static HashMap<Alpaca, Boolean> notificationSentMap;
+
     public static void checkForLowHappiness(final Context context) {
+        initMap();
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
-                double happinessStat = alpaca.getHappinessStat();
-                final double DELTA = 0.001;
-                if (happinessStat - Alpaca.MIN_STAT < DELTA) {
-                    sendNotification(context, alpaca.getName());
+                boolean sentNotification = ListUtils.getOrDefault(notificationSentMap, alpaca, false);
+                long lastTime = SavedTime.lastSavedTime();
+                double happinessStat = HappinessCalc.calcHappiness(alpaca, lastTime);
+                if (Double.compare(happinessStat, Alpaca.MIN_STAT) == 0) {
+                    if(!sentNotification) {
+                        notificationSentMap.put(alpaca, true);
+                        sendNotification(context, alpaca.getName());
+                    }
+                } else {
+                    notificationSentMap.put(alpaca, false);
                 }
             }
         });
+    }
+
+    private static void initMap() {
+        if(notificationSentMap == null) {
+            synchronized(HappinessNotification.class) {
+                if(notificationSentMap == null) {
+                    notificationSentMap = new HashMap<>();
+                }
+            }
+        }
     }
 
     private static void sendNotification(Context context, String alpacaName) {
         //send notification saying that the alpaca is dirty
         final String CHANNEL_ID = "happiness_id";
         final String GROUP_ID = "stat_group";
-        final int NOTIFY_ID = 0;
         Intent toMainScreen = new Intent(context, MainActivity.class);
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, toMainScreen, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
@@ -56,6 +77,6 @@ public class HappinessNotification {
         builder.setOnlyAlertOnce(true);
         builder.setContentIntent(notificationIntent);
 
-        notificationManager.notify(NOTIFY_ID, builder.build());
+        notificationManager.notify(NotificationId.HAPPINESS, builder.build());
     }
 }
