@@ -8,16 +8,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.StaminaManager;
+import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.utils.ScreenUtils;
 import edu.csuci.appaca.fragments.EmptyStamina;
 
 public class MinigameSelectActivity extends AppCompatActivity {
+
+    TextView staminaCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,16 @@ public class MinigameSelectActivity extends AppCompatActivity {
         int size = (int) ScreenUtils.dpToPixels(this, 150);
         int margin = (int) ScreenUtils.dpToPixels(this, 30);
         StaminaRecovery.start(this);
+
+        staminaCount = new TextView(this);
+        String staminaStart = "Stamina: " + StaminaManager.getCurrentStamina();
+        setStaminaMessage(staminaStart);
+        gridLayout.addView(staminaCount);
+        GridLayout.LayoutParams textParams = new GridLayout.LayoutParams();
+        textParams.height = GridLayout.LayoutParams.WRAP_CONTENT; 
+        textParams.width = GridLayout.LayoutParams.WRAP_CONTENT; 
+        textParams.columnSpec = GridLayout.spec(0, 2);
+        staminaCount.setLayoutParams(textParams);
 
         for (final MiniGames miniGame : MiniGames.values()) {
             ImageView gameView = new ImageView(this);
