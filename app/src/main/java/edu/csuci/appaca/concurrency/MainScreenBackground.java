@@ -120,7 +120,7 @@ public class MainScreenBackground {
             double currentFood = Math.max(Alpaca.MIN_STAT, FoodDepletion.foodDepletion(current, previousTime));
             currentValues.put(Stat.HUNGER, currentFood);
 
-            double currentHappiness = Math.max(Alpaca.MIN_STAT, HappinessCalc.calcHappiness(null, current, previousTime));
+            double currentHappiness = Math.max(Alpaca.MIN_STAT, HappinessCalc.calcHappiness(current, previousTime));
             currentValues.put(Stat.HAPPINESS, currentHappiness);
 
             double currentHygiene = Math.max(Alpaca.MIN_STAT, HygieneDepletion.hygieneDepletion(current, previousTime));

@@ -119,8 +119,7 @@ public class Alpaca implements JSONAble {
     public void updateValuesBasedOnTime() {
         long previousTime = SavedTime.lastSavedTime();
         double currentFood = FoodDepletion.foodDepletion(this, previousTime);
-        // TODO implement clothes
-        double currentHappiness = HappinessCalc.calcHappiness(null, this, previousTime);
+        double currentHappiness = HappinessCalc.calcHappiness(this, previousTime);
         double currentHygiene = HygieneDepletion.hygieneDepletion(this, previousTime);
         this.foodStat = MathFunctions.clamp(currentFood, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
         this.happinessStat = MathFunctions.clamp(currentHappiness, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
