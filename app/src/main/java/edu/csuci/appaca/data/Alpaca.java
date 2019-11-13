@@ -147,4 +147,24 @@ public class Alpaca implements JSONAble {
         jsonObject.put("clothing", this.clothing);
         return jsonObject;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        boolean result;
+        if(object == null || object.getClass() != this.getClass()) {
+            result = false;
+        } else if(object == this) {
+            result = true;
+        } else {
+            int id = ((Alpaca) object).id;
+            result = this.id == id;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
 }
