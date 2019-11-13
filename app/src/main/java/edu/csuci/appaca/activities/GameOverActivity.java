@@ -5,24 +5,18 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.badlogic.gdx.Game;
-
-import java.lang.reflect.GenericSignatureFormatError;
-
 import edu.csuci.appaca.R;
-import edu.csuci.appaca.concurrency.StaminaRecovery;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.StaminaManager;
-import edu.csuci.appaca.fragments.EmptyStamina;
+import edu.csuci.appaca.fragments.EmptyStaminaFragment;
 import edu.csuci.appaca.utils.TimeUtils;
 
 public class GameOverActivity extends AppCompatActivity {
@@ -101,7 +95,7 @@ public class GameOverActivity extends AppCompatActivity {
                     finish();
                 } else {
                     FragmentManager fm = getSupportFragmentManager();
-                    EmptyStamina emptyStamina = new EmptyStamina();
+                    EmptyStaminaFragment emptyStamina = new EmptyStaminaFragment();
                     emptyStamina.show(fm, "no_remaining_stamina");
                 }
             }
