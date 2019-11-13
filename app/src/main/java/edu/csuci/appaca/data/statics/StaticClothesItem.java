@@ -12,13 +12,18 @@ public final class StaticClothesItem {
     public final String path;
     public final int cost;
     public final double value;
+    public final float x;
+    public final float y;
 
-    public StaticClothesItem(int id, String name, String path, int cost, double value) {
+
+    public StaticClothesItem(int id, String name, String path, int cost, double value, float x, float y) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.cost = cost;
         this.value = value;
+        this.x = x;
+        this.y = y;
     }
 
     public static StaticClothesItem ofJSON(JSONObject json) throws JSONException {
@@ -27,12 +32,15 @@ public final class StaticClothesItem {
         if(!json.has("path")) throw new JSONException("int path id missing");
         if(!json.has("cost")) throw new JSONException("int cost id missing");
         if(!json.has("value")) throw new JSONException("double value id missing");
-        int id = json.getInt("id");
+                int id = json.getInt("id");
         String name = json.getString("name");
         String path = json.getString("path");
         int cost = json.getInt("cost");
         double value = json.getDouble("value");
-        return new StaticClothesItem(id, name, path, cost, value);
+        float x = (float)json.getDouble("x");
+        float y = (float)json.getDouble("y");
+        return new StaticClothesItem(id, name, path, cost, value, x, y);
+
     }
 
     @Override
