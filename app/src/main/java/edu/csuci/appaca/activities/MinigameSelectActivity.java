@@ -60,6 +60,10 @@ public class MinigameSelectActivity extends AppCompatActivity {
 
     }
 
+    public void setStaminaMessage(String message) {
+        staminaCount.setText(message);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
