@@ -20,11 +20,13 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.Alpaca;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
+import edu.csuci.appaca.data.FoodToEat;
 import edu.csuci.appaca.data.PendingCoins;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
+import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
@@ -51,6 +53,8 @@ public class MainLibGdxView extends ApplicationAdapter {
     private Stack<Integer> coinPopupsToAdd;
     private List<ZoomText> zoomTexts;
 
+    private EatingFood foodEating;
+
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
@@ -68,6 +72,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         StaticContentManager.load();
         coinPopupsToAdd = new Stack<>();
         zoomTexts = new ArrayList<>();
+        foodEating = null;
     }
 
     @Override
@@ -92,7 +97,21 @@ public class MainLibGdxView extends ApplicationAdapter {
         addHearts();
         updateHearts(dt);
         updateZoomTexts(dt);
+        updateFoodEating(dt);
         viewport.apply(true);
+    }
+
+    private void updateFoodEating(float dt) {
+        if(foodEating != null) {
+            foodEating.update(dt);
+            if(foodEating.done()) {
+                StaticContentManager.playSound(StaticContentManager.SoundEffect.FOOD_SELECT);
+                foodEating.dispose();
+                foodEating = null;
+            }
+        } else if(!FoodToEat.isEmpty()) {
+            foodEating = new EatingFood(FoodToEat.pop(), alpaca);
+        }
     }
 
     private void addPendingCoins() {
@@ -162,6 +181,7 @@ public class MainLibGdxView extends ApplicationAdapter {
                 0, 0, VIEWPORT_WIDTH, VIEW_HEIGHT
         );
         alpaca.draw(dt, spriteBatch, shapeRenderer);
+        if(foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
         for (Heart heart : hearts) {
             heart.draw(dt, spriteBatch, shapeRenderer);
         }
@@ -209,6 +229,10 @@ public class MainLibGdxView extends ApplicationAdapter {
     public void dispose() {
         spriteBatch.dispose();
         shapeRenderer.dispose();
+        if(foodEating != null) {
+            foodEating.dispose();
+            foodEating = null;
+        }
         StaticContentManager.dispose();
     }
 }
