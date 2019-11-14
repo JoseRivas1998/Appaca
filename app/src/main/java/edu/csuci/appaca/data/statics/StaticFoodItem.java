@@ -12,13 +12,19 @@ public final class StaticFoodItem {
     public final String path;
     public final int cost;
     public final double value;
+    public final String anim;
+    public final int frames;
+    public final float frameDuration;
 
-    public StaticFoodItem(int id, String name, String path, int cost, double value) {
+    public StaticFoodItem(int id, String name, String path, int cost, double value, String anim, int frames, float frameDuration) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.cost = cost;
         this.value = value;
+        this.anim = anim;
+        this.frames = frames;
+        this.frameDuration = frameDuration;
     }
 
     public static StaticFoodItem ofJSON(JSONObject json) throws JSONException {
@@ -27,12 +33,18 @@ public final class StaticFoodItem {
         if(!json.has("path")) throw new JSONException("int path id missing");
         if(!json.has("cost")) throw new JSONException("int cost id missing");
         if(!json.has("value")) throw new JSONException("double value id missing");
+        if(!json.has("anim")) throw new JSONException("String value anim missing");
+        if(!json.has("frames")) throw new JSONException("int value frames missing");
+        if(!json.has("frame_dur")) throw new JSONException("double value frame_dur missing");
         int id = json.getInt("id");
         String name = json.getString("name");
         String path = json.getString("path");
         int cost = json.getInt("cost");
         double value = json.getDouble("value");
-        return new StaticFoodItem(id, name, path, cost, value);
+        String anim = json.getString("anim");
+        int frames = json.getInt("frames");
+        float frameDuration = (float) json.getDouble("frame_dur");
+        return new StaticFoodItem(id, name, path, cost, value, anim, frames, frameDuration);
     }
 
     @Override
