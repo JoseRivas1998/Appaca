@@ -35,6 +35,7 @@ import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
 import edu.csuci.appaca.graphics.entities.alpacajump.PlatformBreakable;
 import edu.csuci.appaca.graphics.entities.alpacajump.Player;
 import edu.csuci.appaca.graphics.entities.alpacajump.Spring;
+import edu.csuci.appaca.utils.TimeUtils;
 import edu.csuci.appaca.utils.b2d.BasicContactListener;
 
 import static edu.csuci.appaca.utils.MathFunctions.map;
@@ -72,6 +73,8 @@ public class AlpacaJump extends ApplicationAdapter {
 
     private LabelEntity tapToStart;
 
+    private long timeStart;
+
     public AlpacaJump(Activity parent) {
         AlpacaJump.parent = parent;
     }
@@ -107,8 +110,6 @@ public class AlpacaJump extends ApplicationAdapter {
         tapToStart.setX(worldWidth() * 0.5f);
         tapToStart.setY(worldHeight() * 0.5f);
 
-
-
     }
 
     private void initPhys() {
@@ -142,6 +143,7 @@ public class AlpacaJump extends ApplicationAdapter {
         createPlatforms();
         tapToStart.update(dt);
         if(Gdx.input.justTouched()) {
+            timeStart = TimeUtils.getCurrentTime();
             playing = true;
             player.jump();
         }
@@ -163,7 +165,8 @@ public class AlpacaJump extends ApplicationAdapter {
         float bottom = getBottomOfMainView();
         float playerTop = player.getY() + player.getHeight();
         if(Float.compare(playerTop, bottom) < 0) {
-            MiniGames.endGame(parent, MiniGames.ALPACA_JUMP, score);
+            long timePlayed = TimeUtils.getCurrentTime() - timeStart;
+            MiniGames.endGame(parent, MiniGames.ALPACA_JUMP, score, timePlayed);
         }
     }
 
