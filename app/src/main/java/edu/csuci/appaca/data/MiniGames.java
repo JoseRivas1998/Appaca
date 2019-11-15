@@ -15,7 +15,7 @@ public enum MiniGames {
             return score / 100;
         }
     },
-    FRUIT_CATCH(R.string.fruit_catch, FruitCatchActivity.class, R.string.fruit_catch_score_format, R.drawable.smiling_strawberry, R.string.fruit_catch_high_score_format) {
+    FRUIT_CATCH(R.string.fruit_catch, FruitCatchActivity.class, R.string.fruit_catch_score_format, R.drawable.fruitcatch_icon, R.string.fruit_catch_high_score_format) {
         @Override
         public int coinsForScore(int score) {
             return score / 10;
