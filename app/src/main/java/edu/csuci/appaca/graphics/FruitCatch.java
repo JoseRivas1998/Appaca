@@ -24,6 +24,7 @@ import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.fruitcatch.FCHUD;
 import edu.csuci.appaca.graphics.entities.fruitcatch.FruitEntity;
 import edu.csuci.appaca.utils.ActionTimer;
+import edu.csuci.appaca.utils.TimeUtils;
 
 import static edu.csuci.appaca.data.gameres.FruitCatchResources.maxMisses;
 
@@ -46,6 +47,8 @@ public class FruitCatch extends ApplicationAdapter {
 
     private int misses;
     private Activity parent;
+
+    private long timeStart;
 
     public FruitCatch(Activity parent) {
         super();
@@ -133,7 +136,8 @@ public class FruitCatch extends ApplicationAdapter {
                 fruit.dispose();
                 fruitIter.remove();
                 if(++misses >= maxMisses()) {
-                    MiniGames.endGame(parent, MiniGames.FRUIT_CATCH, score);
+                    long timePlayed = TimeUtils.getCurrentTime() - timeStart;
+                    MiniGames.endGame(parent, MiniGames.FRUIT_CATCH, score, timePlayed);
                 }
             }
         }
@@ -141,6 +145,7 @@ public class FruitCatch extends ApplicationAdapter {
 
     private void updateStartingState(float dt) {
         if (Gdx.input.justTouched()) {
+            timeStart = TimeUtils.getCurrentTime();
             started = true;
         }
         tapToStart.setPosition(FruitCatchResources.worldWidth() * 0.5f, FruitCatchResources.worldHeight() * 0.5f);
