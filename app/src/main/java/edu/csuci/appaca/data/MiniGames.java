@@ -37,10 +37,11 @@ public enum MiniGames {
 
     public abstract int coinsForScore(int score);
 
-    public static void endGame(Activity parent, MiniGames miniGame, int score) {
+    public static void endGame(Activity parent, MiniGames miniGame, int score, long timePlayed) {
         Intent intent = new Intent(parent, GameOverActivity.class);
         intent.putExtra("score", score);
         intent.putExtra("return", miniGame.ordinal());
+        intent.putExtra("timePlayed", (int) timePlayed);
         parent.startActivity(intent);
         parent.finish();
     }
