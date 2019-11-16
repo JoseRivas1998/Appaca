@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AndroidApplication {
         initButtons();
         initStatBars();
         initCurrencyDisplays();
+        updateName();
         MainScreenBackground.start(this);
         NotificationChecker checker = NotificationChecker.getInstance(this.getApplicationContext());
         checker.start();
@@ -151,6 +153,12 @@ public class MainActivity extends AndroidApplication {
         for (Map.Entry<Stat, StatBarFragment> statBarEntry : statBars.entrySet()) {
             consumer.accept(statBarEntry.getKey(), statBarEntry.getValue());
         }
+    }
+
+    private void updateName() {
+        String name = AlpacaFarm.getCurrentAlpaca().getName();
+        TextView view = findViewById(R.id.main_alpaca_name_view);
+        view.setText(name);
     }
 
     @Override
