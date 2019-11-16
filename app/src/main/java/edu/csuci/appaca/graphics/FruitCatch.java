@@ -156,6 +156,10 @@ public class FruitCatch extends ApplicationAdapter {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
+        spriteBatch.draw(StaticContentManager.getTexture(StaticContentManager.Image.FRUIT_CATCH_BACKGROUND),
+                0, 0,
+                FruitCatchResources.worldWidth(), FruitCatchResources.worldHeight());
+
         if (!started) {
             tapToStart.draw(dt, spriteBatch, shapeRenderer);
         }
