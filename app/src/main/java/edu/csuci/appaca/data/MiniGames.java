@@ -9,7 +9,7 @@ import edu.csuci.appaca.activities.FruitCatchActivity;
 import edu.csuci.appaca.activities.GameOverActivity;
 
 public enum MiniGames {
-    ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpaca_icon, R.string.alpaca_jump_high_score_format) {
+    ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpacajump_icon, R.string.alpaca_jump_high_score_format) {
         @Override
         public int coinsForScore(int score) {
             return score / 100;
