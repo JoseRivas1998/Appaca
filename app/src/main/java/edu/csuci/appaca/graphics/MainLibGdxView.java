@@ -26,6 +26,7 @@ import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
+import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
@@ -46,6 +47,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private Viewport viewport;
 
     private AlpacaEntity alpaca;
+    private ClothingEntity clothingEntity;
     private PetDetector petDetector;
 
     private List<Heart> hearts;
@@ -72,6 +74,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         StaticContentManager.load();
         coinPopupsToAdd = new Stack<>();
         zoomTexts = new ArrayList<>();
+        clothingEntity = new ClothingEntity();
         foodEating = null;
     }
 
@@ -98,33 +101,41 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateHearts(dt);
         updateZoomTexts(dt);
         updateFoodEating(dt);
+        updateClothingEntity(dt);
         viewport.apply(true);
     }
 
+    private void updateClothingEntity(float dt) {
+        clothingEntity.update(dt);
+        if (clothingEntity.shouldChangeTexture()) {
+            clothingEntity.updateClothesTexture(alpaca);
+        }
+    }
+
     private void updateFoodEating(float dt) {
-        if(foodEating != null) {
+        if (foodEating != null) {
             foodEating.update(dt);
-            if(foodEating.done()) {
+            if (foodEating.done()) {
                 StaticContentManager.playSound(StaticContentManager.SoundEffect.FOOD_SELECT);
                 foodEating.dispose();
                 foodEating = null;
             }
-        } else if(!FoodToEat.isEmpty()) {
+        } else if (!FoodToEat.isEmpty()) {
             foodEating = new EatingFood(FoodToEat.pop(), alpaca);
         }
     }
 
     private void addPendingCoins() {
-        if(PendingCoins.hasPendingCoins()) {
+        if (PendingCoins.hasPendingCoins()) {
             coinPopupsToAdd.push(PendingCoins.getCoinsAndEmpty());
         }
     }
 
     private void updateHearts(float dt) {
         Iterator<Heart> iter = hearts.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Heart heart = iter.next();
-            if(heart.getY() > VIEW_HEIGHT) {
+            if (heart.getY() > VIEW_HEIGHT) {
                 iter.remove();
             } else {
                 heart.update(dt);
@@ -133,7 +144,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void addHearts() {
-        while(!petDetector.heartsEmpty()) {
+        while (!petDetector.heartsEmpty()) {
             hearts.add(new Heart(petDetector.popHeartsToAdd()));
         }
     }
@@ -141,16 +152,16 @@ public class MainLibGdxView extends ApplicationAdapter {
     private void updateZoomTexts(float dt) {
         addZoomTexts();
         Iterator<ZoomText> iter = zoomTexts.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             ZoomText zoomText = iter.next();
             zoomText.update(dt);
-            if(zoomText.isDone()) iter.remove();
+            if (zoomText.isDone()) iter.remove();
         }
     }
 
     private void addZoomTexts() {
-        if(zoomTexts.isEmpty()) {
-            if(!coinPopupsToAdd.isEmpty()) {
+        if (zoomTexts.isEmpty()) {
+            if (!coinPopupsToAdd.isEmpty()) {
                 int coins = coinPopupsToAdd.pop();
                 ZoomText zoomText = new ZoomText(VIEWPORT_WIDTH, VIEW_HEIGHT);
                 zoomText.setFont(StaticContentManager.Font.ALPACA_JUMP_START);
@@ -164,7 +175,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private void updatePetting(float dt) {
         this.petDetector.update(dt);
-        if(this.petDetector.isJustPet()) {
+        if (this.petDetector.isJustPet()) {
             double happiness = MainLibGdxView.HAPPINESS_PER_PET * this.petDetector.getNumPets();
             this.petDetector.notJustPet();
             SaveDataUtils.updateValuesAndSave(parent);
@@ -181,7 +192,8 @@ public class MainLibGdxView extends ApplicationAdapter {
                 0, 0, VIEWPORT_WIDTH, VIEW_HEIGHT
         );
         alpaca.draw(dt, spriteBatch, shapeRenderer);
-        if(foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
+        clothingEntity.draw(dt, spriteBatch, shapeRenderer);
+        if (foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
         for (Heart heart : hearts) {
             heart.draw(dt, spriteBatch, shapeRenderer);
         }
@@ -229,7 +241,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     public void dispose() {
         spriteBatch.dispose();
         shapeRenderer.dispose();
-        if(foodEating != null) {
+        if (foodEating != null) {
             foodEating.dispose();
             foodEating = null;
         }
