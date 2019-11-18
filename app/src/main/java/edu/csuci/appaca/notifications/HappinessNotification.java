@@ -73,7 +73,7 @@ public class HappinessNotification {
         builder.setContentText(alpacaName + " is no longer happy!");
 
         builder.setGroup(GROUP_ID);
-        builder.setSmallIcon(R.drawable.alpaca_icon); //placeholder
+        builder.setSmallIcon(R.drawable.alpaca_notification);
         builder.setOnlyAlertOnce(true);
         builder.setContentIntent(notificationIntent);
 
