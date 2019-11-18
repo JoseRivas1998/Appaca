@@ -80,4 +80,22 @@ public class VectorUtils {
         return angleBetweenRadians(p1, p2) * MathUtils.radDeg;
     }
 
+    public static Vector2 clampVector(Vector2 v, float left, float bottom, float right, float top) {
+        float x = (float) MathFunctions.clamp(v.x, left, right);
+        float y = (float) MathFunctions.clamp(v.y, bottom, top);
+        return new Vector2(x, y);
+    }
+
+    public static Vector2 clampVector(Vector2 v, Vector2 bottomLeft, Vector2 topRight) {
+        return clampVector(v, bottomLeft.x, bottomLeft.y, topRight.x, topRight.y);
+    }
+
+    public static Vector2 clampVector(Vector2 v, float left, float bottom, Vector2 topRight) {
+        return clampVector(v, left, bottom, topRight.x, topRight.y);
+    }
+
+    public static Vector2 clampVector(Vector2 v, Vector2 bottomLeft, float right, float top) {
+        return clampVector(v, bottomLeft.x, bottomLeft.y, right, top);
+    }
+
 }

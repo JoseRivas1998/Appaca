@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -29,8 +29,11 @@ import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
+import edu.csuci.appaca.graphics.entities.mainscreen.HoseHead;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
+import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ShearUtils;
 
 public class MainLibGdxView extends ApplicationAdapter {
@@ -57,6 +60,20 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private EatingFood foodEating;
 
+    private HoseHead hoseHead;
+
+    private static final float MIN_DROP_TIME = 0.05f;
+    private static final float MAX_DROP_TIME = 0.15f;
+    private List<WaterDrop> waterDrops;
+    private ActionTimer waterDropTimer;
+    private static final double HYGIENE_PER_DROP = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.01f;
+
+    private enum HeldItem {
+        NONE, HOSE
+    }
+
+    private HeldItem currentlyHeld = HeldItem.NONE;
+
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
@@ -76,6 +93,19 @@ public class MainLibGdxView extends ApplicationAdapter {
         zoomTexts = new ArrayList<>();
         clothingEntity = new ClothingEntity();
         foodEating = null;
+        hoseHead = new HoseHead(viewport, VIEWPORT_WIDTH, VIEW_HEIGHT);
+        waterDrops = new ArrayList<>();
+        waterDropTimer = new ActionTimer(getDropTime(), ActionTimer.ActionTimerMode.RUN_CONTINUOUSLY, new ActionTimer.ActionTimerEvent() {
+            @Override
+            public void action() {
+                waterDropTimer.setTimer(getDropTime());
+                waterDrops.add(new WaterDrop(hoseHead));
+            }
+        });
+    }
+
+    private float getDropTime() {
+        return MathUtils.random(MIN_DROP_TIME, MAX_DROP_TIME);
     }
 
     @Override
@@ -91,18 +121,67 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void handleInput(float dt) {
-        petDetector.handleInput(viewport);
+        if(currentlyHeld == HeldItem.NONE) petDetector.handleInput(viewport);
     }
 
     private void update(float dt) {
-        updatePetting(dt);
+        updateHoldingItem(dt);
         addPendingCoins();
         addHearts();
         updateHearts(dt);
         updateZoomTexts(dt);
         updateFoodEating(dt);
         updateClothingEntity(dt);
+        updateWaterDrops(dt);
         viewport.apply(true);
+    }
+
+    private void updateWaterDrops(float dt) {
+        Iterator<WaterDrop> iter = waterDrops.iterator();
+        while(iter.hasNext()) {
+            WaterDrop drop = iter.next();
+            drop.update(dt);
+            if(drop.collidingWith(alpaca) && !drop.isHasCounted()) {
+                drop.count();
+                SaveDataUtils.updateValuesAndSave(parent);
+                AlpacaFarm.getCurrentAlpaca().incrementHygieneStat(HYGIENE_PER_DROP);
+                SaveDataUtils.save(parent);
+            }
+            if(drop.getY() + drop.getHeight() < 0) {
+                iter.remove();
+            }
+        }
+    }
+
+    private void updateHoldingItem(float dt) {
+        switch (currentlyHeld) {
+            case NONE:
+                updatePetting(dt);
+                updateHoseHead(dt);
+                break;
+            case HOSE:
+                updateHoseHead(dt);
+                break;
+        }
+    }
+
+    private void updateHoseHead(float dt) {
+        hoseHead.update(dt);
+        switch (currentlyHeld) {
+            case HOSE:
+                if (!hoseHead.isHeld()) {
+                    currentlyHeld = HeldItem.NONE;
+                } else {
+                    waterDropTimer.update(dt);
+                }
+                break;
+            case NONE:
+                if (hoseHead.isHeld()) {
+                    currentlyHeld = HeldItem.HOSE;
+                    waterDropTimer.reset();
+                }
+                break;
+        }
     }
 
     private void updateClothingEntity(float dt) {
@@ -194,6 +273,10 @@ public class MainLibGdxView extends ApplicationAdapter {
         alpaca.draw(dt, spriteBatch, shapeRenderer);
         clothingEntity.draw(dt, spriteBatch, shapeRenderer);
         if (foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
+        hoseHead.draw(dt, spriteBatch, shapeRenderer);
+        for (WaterDrop waterDrop : waterDrops) {
+            waterDrop.draw(dt, spriteBatch, shapeRenderer);
+        }
         for (Heart heart : hearts) {
             heart.draw(dt, spriteBatch, shapeRenderer);
         }
