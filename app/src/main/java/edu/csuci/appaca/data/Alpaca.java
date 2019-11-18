@@ -134,6 +134,10 @@ public class Alpaca implements JSONAble {
         this.foodStat = MathFunctions.clamp(this.foodStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
     }
 
+    public void incrementHygieneStat(double increment) {
+        this.hygieneStat = MathFunctions.clamp(this.hygieneStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+    }
+
     @Override
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
