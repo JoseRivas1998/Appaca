@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.NoStaminaBackground;
 
-public class EmptyStamina extends DialogFragment {
+public class EmptyStaminaFragment extends DialogFragment {
     private TextView timeLeftRef;
 
     @Override
@@ -31,18 +31,11 @@ public class EmptyStamina extends DialogFragment {
         final ImageView icon = view.findViewById(R.id.paca_image);
         final TextView label = view.findViewById(R.id.no_stamina_message);
         final TextView timeLeft = view.findViewById(R.id.time_until_refill);
-        final Button close = view.findViewById(R.id.close_button);
 
         timeLeftRef = timeLeft;
 
         NoStaminaBackground.start(this);
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
 
     }
 

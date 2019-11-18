@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Appaca</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="alpaca_jump">Alpaca Jump</string>
@@ -21,4 +20,9 @@
     <string name="cancel">Cancel</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
+    <string name="fruit_catch">Fruit Catch</string>
+    <string name="fruit_catch_score_format">Score: %03d</string>
+    <string name="fruit_catch_high_score_format">High Score: %03d</string>
+    <string name="fruit_catch_misses_format">Misses: %d / %d</string>
+    <string name="happiness_notification_name">Your alpaca is no longer happy!</string>
 </resources>

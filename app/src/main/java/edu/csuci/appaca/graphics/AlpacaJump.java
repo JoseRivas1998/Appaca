@@ -1,9 +1,6 @@
 package edu.csuci.appaca.graphics;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.TypedValue;
 
 import com.badlogic.gdx.Application;
@@ -28,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 
 import edu.csuci.appaca.R;
-import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
@@ -36,8 +32,13 @@ import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.AJHUD;
 import edu.csuci.appaca.graphics.entities.alpacajump.AbstractB2DSpriteEntity;
 import edu.csuci.appaca.graphics.entities.alpacajump.Platform;
+import edu.csuci.appaca.graphics.entities.alpacajump.PlatformBreakable;
 import edu.csuci.appaca.graphics.entities.alpacajump.Player;
+import edu.csuci.appaca.graphics.entities.alpacajump.Spring;
+import edu.csuci.appaca.utils.TimeUtils;
 import edu.csuci.appaca.utils.b2d.BasicContactListener;
+
+import static edu.csuci.appaca.utils.MathFunctions.map;
 
 public class AlpacaJump extends ApplicationAdapter {
 
@@ -56,6 +57,8 @@ public class AlpacaJump extends ApplicationAdapter {
     private float accumulator;
 
     private List<Platform> platforms;
+    private List<Spring> springs;
+    private List<PlatformBreakable> breakables;
     private float maxPlatformY;
     private Set<AbstractB2DSpriteEntity> toRemove;
 
@@ -70,6 +73,8 @@ public class AlpacaJump extends ApplicationAdapter {
 
     private LabelEntity tapToStart;
 
+    private long timeStart;
+
     public AlpacaJump(Activity parent) {
         AlpacaJump.parent = parent;
     }
@@ -82,12 +87,18 @@ public class AlpacaJump extends ApplicationAdapter {
         mainView = new FitViewport(worldWidth(), worldHeight());
         mainView.getCamera().position.set(worldWidth() * 0.5f, worldHeight() * 0.5f, 0f);
         StaticContentManager.load();
+
         initPhys();
+
         platforms = new ArrayList<>();
+        springs = new ArrayList<>();
+        breakables = new ArrayList<>();
         toRemove = new HashSet<>();
+
         maxPlatformY = 0;
         player = new Player(world);
         playing = false;
+
         bg = StaticContentManager.getTexture(StaticContentManager.Image.ALPACA_JUMP_BG);
         hud = new AJHUD();
         score = 0;
@@ -98,6 +109,7 @@ public class AlpacaJump extends ApplicationAdapter {
         tapToStart.setAlign(LabelEntity.MIDDLE_CENTER);
         tapToStart.setX(worldWidth() * 0.5f);
         tapToStart.setY(worldHeight() * 0.5f);
+
     }
 
     private void initPhys() {
@@ -131,6 +143,7 @@ public class AlpacaJump extends ApplicationAdapter {
         createPlatforms();
         tapToStart.update(dt);
         if(Gdx.input.justTouched()) {
+            timeStart = TimeUtils.getCurrentTime();
             playing = true;
             player.jump();
         }
@@ -143,19 +156,17 @@ public class AlpacaJump extends ApplicationAdapter {
         updateView();
         createPlatforms();
         findPlatformsToRemove();
+        updateSprings(dt);
         removeEntities();
         checkDeath();
     }
 
     private void checkDeath() {
-        float bottom = mainView.getCamera().position.y - (worldHeight() * 0.5f);
+        float bottom = getBottomOfMainView();
         float playerTop = player.getY() + player.getHeight();
         if(Float.compare(playerTop, bottom) < 0) {
-            Intent intent = new Intent(parent, GameOverActivity.class);
-            intent.putExtra("score", score);
-            intent.putExtra("return", MiniGames.ALPACA_JUMP.ordinal());
-            parent.startActivity(intent);
-            parent.finish();
+            long timePlayed = TimeUtils.getCurrentTime() - timeStart;
+            MiniGames.endGame(parent, MiniGames.ALPACA_JUMP, score, timePlayed);
         }
     }
 
@@ -170,7 +181,7 @@ public class AlpacaJump extends ApplicationAdapter {
 
     private void findPlatformsToRemove() {
         Iterator<Platform> iter = platforms.iterator();
-        float bottom = mainView.getCamera().position.y - (worldHeight() * 0.5f);
+        float bottom = getBottomOfMainView();
         while(iter.hasNext()) {
             Platform platform = iter.next();
             if(platform.getY() + platform.getHeight() < bottom) {
@@ -178,32 +189,49 @@ public class AlpacaJump extends ApplicationAdapter {
                 iter.remove();
             }
         }
+        Iterator<PlatformBreakable> breakableIter = breakables.iterator();
+        while(breakableIter.hasNext()) {
+            PlatformBreakable platformBreakable = breakableIter.next();
+            if(platformBreakable.shouldRemove(getBottomOfMainView())) {
+                Gdx.app.log(getClass().getName(), "REMOVE: " + platformBreakable);
+                toRemove.add(platformBreakable);
+                breakableIter.remove();
+            }
+        }
+    }
+
+    private float getBottomOfMainView() {
+        return mainView.getCamera().position.y - (worldHeight() * 0.5f);
     }
 
     private void createPlatforms() {
         float targetY = b2dView.getCamera().position.y + (worldHeight() * metersPerPixel());
         while (maxPlatformY < targetY) {
-            maxPlatformY += MathUtils.random(getFloat(R.dimen.min_y_distance), getFloat(R.dimen.max_y_distance));
-            platforms.add(new Platform(world, maxPlatformY));
+            float maxY = (float) map(Math.min(score, getFloat(R.dimen.hardest_score)), 0, getFloat(R.dimen.hardest_score), getFloat(R.dimen.max_y_distance), getFloat(R.dimen.absolute_max_y_distance));
+            maxPlatformY += MathUtils.random(getFloat(R.dimen.min_y_distance), maxY);
+            if(MathUtils.randomBoolean(getFloat(R.dimen.breakable_probability))) {
+                PlatformBreakable platform = new PlatformBreakable(world, maxPlatformY);
+                breakables.add(platform);
+            } else {
+                Platform platform = new Platform(world, maxPlatformY);
+                platforms.add(platform);
+                if(MathUtils.randomBoolean(getFloat(R.dimen.spring_probability))) {
+                    springs.add(new Spring(world, platform));
+                }
+            }
         }
     }
 
-    private void draw(float dt) {
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(mainView.getCamera().combined);
-        float bgX = mainView.getCamera().position.x - (worldWidth() * 0.5f);
-        float bgY = mainView.getCamera().position.y - (worldHeight() * 0.5f);
-        spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
-        for (Platform platform : platforms) {
-            platform.draw(dt, spriteBatch, shapeRenderer);
+    private void updateSprings(float dt) {
+        Iterator<Spring> iter = springs.iterator();
+        while (iter.hasNext()) {
+            Spring spring = iter.next();
+            spring.update(dt);
+            if(spring.getY() + spring.getHeight() < getBottomOfMainView()) {
+                toRemove.add(spring);
+                iter.remove();
+            }
         }
-        player.draw(dt, spriteBatch, shapeRenderer);
-        hud.draw(dt, spriteBatch);
-        if(!playing) {
-            tapToStart.draw(dt, spriteBatch, shapeRenderer);
-        }
-        spriteBatch.end();
-        if(DEBUG) debugRenderer.render(world, b2dView.getCamera().combined);
     }
 
     private void updateView() {
@@ -213,6 +241,30 @@ public class AlpacaJump extends ApplicationAdapter {
         );
         mainView.apply();
         b2dView.apply();
+    }
+
+    private void draw(float dt) {
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(mainView.getCamera().combined);
+        float bgX = mainView.getCamera().position.x - (worldWidth() * 0.5f);
+        float bgY = getBottomOfMainView();
+        spriteBatch.draw(bg, bgX, bgY, worldWidth(), worldHeight());
+        for (Platform platform : platforms) {
+            platform.draw(dt, spriteBatch, shapeRenderer);
+        }
+        for (PlatformBreakable breakable : breakables) {
+            breakable.draw(dt, spriteBatch, shapeRenderer);
+        }
+        for (Spring spring : springs) {
+            spring.draw(dt, spriteBatch, shapeRenderer);
+        }
+        player.draw(dt, spriteBatch, shapeRenderer);
+        hud.draw(dt, spriteBatch);
+        if(!playing) {
+            tapToStart.draw(dt, spriteBatch, shapeRenderer);
+        }
+        spriteBatch.end();
+        if(DEBUG) debugRenderer.render(world, b2dView.getCamera().combined);
     }
 
     private void physicsStep(float dt) {
