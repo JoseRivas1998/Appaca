@@ -73,7 +73,7 @@ public class HygieneNotification {
         builder.setContentTitle("Appaca");
         builder.setContentText(alpacaName + " is dirty!");
         builder.setGroup(GROUP_ID);
-        builder.setSmallIcon(R.drawable.alpaca_icon); //placeholder
+        builder.setSmallIcon(R.drawable.alpaca_notification);
         builder.setOnlyAlertOnce(true);
         builder.setContentIntent(notificationIntent);
 

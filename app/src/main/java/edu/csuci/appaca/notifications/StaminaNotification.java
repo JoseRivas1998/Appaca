@@ -51,7 +51,7 @@ public class StaminaNotification {
         builder.setContentTitle("Appaca");
         builder.setContentText("Stamina is recharged!");
         builder.setGroup(GROUP_ID);
-        builder.setSmallIcon(R.drawable.alpaca_icon); //placeholder
+        builder.setSmallIcon(R.drawable.alpaca_notification);
         builder.setOnlyAlertOnce(true);
         builder.setContentIntent(notificationIntent);
 
