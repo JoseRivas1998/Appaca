@@ -5,10 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.gameres.ClothingPreviewResources;
+import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
+
+import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
+import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
 
 public class ClothingPreview extends ApplicationAdapter {
 
@@ -17,11 +23,23 @@ public class ClothingPreview extends ApplicationAdapter {
 
     private Viewport viewport;
 
+    private ClothingEntity clothingEntity;
+    private AlpacaEntity alpacaEntity;
+    private PetDetector petDetector;
+
+    private ShapeRenderer shapeRenderer;
+
     @Override
     public void create() {
         spriteBatch = new SpriteBatch();
-        texture = new Texture("fatalpaca.png");
+        texture = new Texture(AlpacaFarm.getCurrentAlpaca().getPath());
         viewport = new FitViewport(ClothingPreviewResources.worldWidth(), ClothingPreviewResources.worldHeight());
+
+        shapeRenderer = new ShapeRenderer();
+
+        clothingEntity = new ClothingEntity();
+        alpacaEntity = new AlpacaEntity(ClothingPreviewResources.worldWidth(), ClothingPreviewResources.worldHeight());
+
     }
 
     @Override
@@ -35,11 +53,31 @@ public class ClothingPreview extends ApplicationAdapter {
 
         viewport.apply(true);
 
+
+        float dt = Gdx.graphics.getDeltaTime();
+
+        updateClothingEntity(dt);
+
+        draw(dt);
+
+    }
+
+    private void draw(float dt) {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-        spriteBatch.draw(texture, 0, 0);
+        //spriteBatch.draw(texture, 0, 0);
+        alpacaEntity.draw(dt, spriteBatch, shapeRenderer);
+        clothingEntity.draw(dt, spriteBatch, shapeRenderer);
         spriteBatch.end();
+    }
 
+    private void updateClothingEntity(float dt) {
+        clothingEntity.update(dt);
+        if (clothingEntity.shouldChangeTexture()) {
+            clothingEntity.updateClothesTexture(alpacaEntity);
+        }
+
+        viewport.apply(true);
     }
 
     @Override
