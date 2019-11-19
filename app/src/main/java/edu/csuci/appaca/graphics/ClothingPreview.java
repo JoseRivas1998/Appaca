@@ -33,12 +33,12 @@ public class ClothingPreview extends ApplicationAdapter {
     public void create() {
         spriteBatch = new SpriteBatch();
         texture = new Texture(AlpacaFarm.getCurrentAlpaca().getPath());
-        viewport = new FitViewport(ClothingPreviewResources.worldWidth(), ClothingPreviewResources.worldHeight());
+        viewport = new FitViewport(ClothingPreviewResources.worldWidth()/2, ClothingPreviewResources.worldHeight()/2);
 
         shapeRenderer = new ShapeRenderer();
 
         clothingEntity = new ClothingEntity();
-        alpacaEntity = new AlpacaEntity(ClothingPreviewResources.worldWidth(), ClothingPreviewResources.worldHeight());
+        alpacaEntity = new AlpacaEntity(ClothingPreviewResources.worldWidth()/2, ClothingPreviewResources.worldHeight()/2);
 
     }
 
