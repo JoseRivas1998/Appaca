@@ -41,7 +41,7 @@ public class FoodSelectActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-                getSupportFragmentManager()
+                getFragmentManager()
                         .beginTransaction()
                         .add(R.id.food_select_inventory, iconBadge)
                         .commit();
