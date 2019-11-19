@@ -44,4 +44,7 @@
     <item name="fruit_catch_max_spawn_speed" type="dimen" format="float">2000</item>
     <integer name="fruit_catch_max_misses">5</integer>
 
+    <integer name="clothing_preview_width">1080</integer>
+    <integer name="clothing_preview_height">1484</integer>
+
 </resources>

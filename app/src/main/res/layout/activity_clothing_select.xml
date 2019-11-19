@@ -16,7 +16,8 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-    <View
+    <FrameLayout
+        android:id="@+id/clothing_select_preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
