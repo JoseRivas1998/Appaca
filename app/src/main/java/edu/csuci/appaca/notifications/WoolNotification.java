@@ -73,7 +73,7 @@ public class WoolNotification {
         builder.setContentText(alpacaName + " is ready to be sheared!");
         builder.setOnlyAlertOnce(true);
         builder.setGroup(GROUP_ID);
-        builder.setSmallIcon(R.drawable.alpaca_notification);
+        builder.setSmallIcon(R.mipmap.appaca_game_icon);
         builder.setContentIntent(notificationIntent);
 
         manager.notify(NotificationId.WOOL, builder.build());
