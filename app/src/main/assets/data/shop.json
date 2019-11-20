@@ -4,11 +4,47 @@
       "id": 1,
       "name": "Apple",
       "path": "food/full-apple-food.png",
+      "anim": "food/apple_sprite_sheet_9.png",
+      "frames": 9,
+      "frame_dur": 0.5,
       "cost": 5,
       "value": 0.2
     }
   ],
   "clothes": [
+    {
+      "id": 1,
+      "name": "Cute Pink Bow",
+      "path": "clothing/clothing_bow_pink.png",
+      "cost": 20,
+      "value": 0.8,
+      "x":165,
+      "y": 334,
+      "scl": 0.25
+    },
+
+    {
+      "id": 2,
+      "name": "Cute Blue Bow",
+      "path": "clothing/clothing_bow_blue.png",
+      "cost": 20,
+      "value": 0.8,
+      "x":159,
+      "y": 209,
+      "scl": 0.25
+    },
+
+    {
+      "id": 3,
+      "name": "Cute Green Bow",
+      "path": "clothing/clothing_bow_green.png",
+      "cost": 20,
+      "value": 0.8,
+      "x":132,
+      "y": 341,
+      "scl": 0.25
+    }
+
   ],
   "alpacas": [
     {

@@ -15,6 +15,10 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.statics.ShopData;
+import edu.csuci.appaca.data.statics.StaticClothesItem;
+import edu.csuci.appaca.data.statics.StaticFoodItem;
+import edu.csuci.appaca.utils.AssetsUtils;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 /**
@@ -40,23 +44,24 @@ public class ClothingShopFragment extends Fragment {
         final GridLayout gridLayout = view.findViewById(R.id.clothing_shop_grid);
         int size = (int) ScreenUtils.dpToPixels(view.getContext(), 100);
         int margin = (int) ScreenUtils.dpToPixels(view.getContext(), 20);
-        for (int i = 0; i < 9; i++) {
-            ImageView clothesView = new ImageView(this.getContext());
-            clothesView.setImageResource(R.drawable.armor_icon);
+        ShopData.load(getContext());
+        for (final StaticClothesItem clothesItem : ShopData.getAllClothes()) {
+            ImageView clothingView = new ImageView(this.getContext());
+            clothingView.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), clothesItem.path));
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
             params.setMargins(margin, margin, margin, margin);
-            clothesView.setLayoutParams(params);
-            clothesView.setOnClickListener(new View.OnClickListener() {
+            clothingView.setLayoutParams(params);
+            clothingView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    ClothingConfirmationPage clothingConfirmationPage = new ClothingConfirmationPage();
-                    clothingConfirmationPage.show(fm, "fragment_clothing_conf");
+                    ClothingConfirmationPage clothingConfirmationPage = ClothingConfirmationPage.newInstance(clothesItem);
+                    clothingConfirmationPage.show(fm, "fragment_food_conf");
                 }
             });
-            gridLayout.addView(clothesView);
+            gridLayout.addView(clothingView);
         }
     }
 }

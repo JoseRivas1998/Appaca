@@ -73,7 +73,7 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = PhysicsLayers.ALPACA;
-        fixtureDef.filter.maskBits = 0;
+        fixtureDef.filter.maskBits = PhysicsLayers.PLATFORM_BREAKABLE;
 
         Fixture fixture = body.createFixture(fixtureDef);
         // User data will be used to identify fixtures
@@ -90,7 +90,7 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = PhysicsLayers.ALPACA_FOOT;
-        fixtureDef.filter.maskBits = PhysicsLayers.PLATFORM;
+        fixtureDef.filter.maskBits = PhysicsLayers.PLATFORM | PhysicsLayers.SPRING;
         // A sensor detects collision, but does not stop motion. Think of a ghost
         fixtureDef.isSensor = true;
 
@@ -145,18 +145,31 @@ public class Player extends AbstractB2DSpriteEntity implements Collidable {
         }
     }
 
-    public void jump() {
+    private void jump(float multiplier) {
         float xVel = body.getLinearVelocity().x;
         body.setLinearVelocity(xVel, 0f);
-        body.applyForceToCenter(0, AlpacaJump.getFloat(R.dimen.player_jump_force), true);
+        body.applyForceToCenter(0, AlpacaJump.getFloat(R.dimen.player_jump_force) * multiplier, true);
+    }
+
+    public void jump() {
+        jump(1.0f);
     }
 
     @Override
     public void beginContact(Contact contact, Fixture thisFixture, Fixture other) {
-        if (UserData.isFixtureData(thisFixture, UserData.PLAYER_FOOT) && UserData.isFixtureData(other, UserData.PLATFORM)) {
+        if (UserData.areBothFixtureData(thisFixture, UserData.PLAYER_FOOT, other, UserData.PLATFORM)) {
             // Only jump if we are falling
             if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
+                StaticContentManager.playSound(StaticContentManager.SoundEffect.NORMAL_BOUNCE);
                 jump();
+            }
+        }
+        if (UserData.areBothFixtureData(thisFixture, UserData.PLAYER_FOOT, other, UserData.SPRING)) {
+            // Only jump if we are falling
+            if (Float.compare(body.getLinearVelocity().y, 0) < 0) {
+                StaticContentManager.playSound(StaticContentManager.SoundEffect.SPRING_BOUNCE);
+                jump(AlpacaJump.getFloat(R.dimen.spring_multiplier));
+                ((Spring) other.getBody().getUserData()).extend();
             }
         }
     }

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.data.statics.AlpacaShopItem;
 import edu.csuci.appaca.data.statics.ShopData;
 import edu.csuci.appaca.utils.AssetsUtils;
@@ -39,6 +40,7 @@ public class FirstAlpacaActivity extends AppCompatActivity {
                     return;
                 }
                 AlpacaFarm.addAlpaca(defaultSkin, name);
+                StaminaManager.increaseCurrentStaminaToMax();
                 SaveDataUtils.save(FirstAlpacaActivity.this);
                 Intent intent = new Intent(FirstAlpacaActivity.this, MainActivity.class);
                 startActivity(intent);

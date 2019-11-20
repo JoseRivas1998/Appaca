@@ -14,6 +14,8 @@ public class Alpaca implements JSONAble {
 
     private static final long INITIAL_SECONDS_SINCE_SHEAR = 12 * 60 * 60;
 
+    public static final int NO_CLOTHING = -1;
+
     private int id;
     private String name;
     private String path;
@@ -21,8 +23,9 @@ public class Alpaca implements JSONAble {
     private double hygieneStat;
     private double happinessStat;
     private long lastShearTime;
+    private int clothing;
 
-    private Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat, long lastShearTime) {
+    private Alpaca(int id, String name, String path, double foodStat, double hygieneStat, double happinessStat, long lastShearTime, int clothing) {
         this.id = id;
         this.name = name;
         this.path = path;
@@ -30,6 +33,7 @@ public class Alpaca implements JSONAble {
         this.hygieneStat = hygieneStat;
         this.happinessStat = happinessStat;
         this.lastShearTime = lastShearTime;
+        this.clothing = clothing;
     }
 
     public static Alpaca newAlpaca(int shopItemID, String name) {
@@ -41,7 +45,7 @@ public class Alpaca implements JSONAble {
             path = ShopData.getAlpaca(shopItemID).path;
         }
         long lastShearTime = TimeUtils.getCurrentTime() - INITIAL_SECONDS_SINCE_SHEAR;
-        return new Alpaca(id, name, path, MAX_STAT, MAX_STAT, MAX_STAT, lastShearTime);
+        return new Alpaca(id, name, path, MAX_STAT, MAX_STAT, MAX_STAT, lastShearTime, NO_CLOTHING);
     }
 
     public static Alpaca ofJSON(JSONObject json) throws JSONException {
@@ -51,6 +55,7 @@ public class Alpaca implements JSONAble {
         if(!json.has("foodStat")) throw new JSONException("double value foodStat missing");
         if(!json.has("hygieneStat")) throw new JSONException("double value hygieneStat missing");
         if(!json.has("happinessStat")) throw new JSONException("double value happinessStat missing");
+        if(!json.has("clothing")) throw new JSONException("int value clothing missing");
         int id = json.getInt("id");
         String name = json.getString("name");
         String path = json.getString("path");
@@ -63,7 +68,9 @@ public class Alpaca implements JSONAble {
         } else {
             lastShearTime = TimeUtils.getCurrentTime() - INITIAL_SECONDS_SINCE_SHEAR;
         }
-        return new Alpaca(id, name, path, foodStat, hygieneStat, happinessStat, lastShearTime);
+        int clothing = json.getInt("clothing");
+
+        return new Alpaca(id, name, path, foodStat, hygieneStat, happinessStat, lastShearTime, clothing);
     }
 
     public int getId() {
@@ -94,15 +101,25 @@ public class Alpaca implements JSONAble {
         return lastShearTime;
     }
 
+    public int getClothing() {
+        return clothing;
+    }
+
     public void setLastShearTimeToNow() {
         this.lastShearTime = TimeUtils.getCurrentTime();
+    }
+
+    public void setClothing(int clothingID) {
+        if (this.clothing != -1) {
+            Inventory.addClothes(this.clothing, 1);
+        }
+        this.clothing = clothingID;
     }
 
     public void updateValuesBasedOnTime() {
         long previousTime = SavedTime.lastSavedTime();
         double currentFood = FoodDepletion.foodDepletion(this, previousTime);
-        // TODO implement clothes
-        double currentHappiness = HappinessCalc.calcHappiness(null, this, previousTime);
+        double currentHappiness = HappinessCalc.calcHappiness(this, previousTime);
         double currentHygiene = HygieneDepletion.hygieneDepletion(this, previousTime);
         this.foodStat = MathFunctions.clamp(currentFood, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
         this.happinessStat = MathFunctions.clamp(currentHappiness, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
@@ -117,6 +134,10 @@ public class Alpaca implements JSONAble {
         this.foodStat = MathFunctions.clamp(this.foodStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
     }
 
+    public void incrementHygieneStat(double increment) {
+        this.hygieneStat = MathFunctions.clamp(this.hygieneStat + increment, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+    }
+
     @Override
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
@@ -127,6 +148,27 @@ public class Alpaca implements JSONAble {
         jsonObject.put("hygieneStat", this.hygieneStat);
         jsonObject.put("happinessStat", this.happinessStat);
         jsonObject.put("lastShearTime", this.lastShearTime);
+        jsonObject.put("clothing", this.clothing);
         return jsonObject;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        boolean result;
+        if(object == null || object.getClass() != this.getClass()) {
+            result = false;
+        } else if(object == this) {
+            result = true;
+        } else {
+            int id = ((Alpaca) object).id;
+            result = this.id == id;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
 }
