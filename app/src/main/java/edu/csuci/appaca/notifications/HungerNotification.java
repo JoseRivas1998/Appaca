@@ -71,7 +71,7 @@ public class HungerNotification {
         builder.setContentText(alpacaName + " is hungry!");
 
         builder.setGroup(GROUP_ID);
-        builder.setSmallIcon(R.drawable.alpaca_notification);
+        builder.setSmallIcon(R.mipmap.appaca_game_icon);
         builder.setOnlyAlertOnce(true);
         builder.setContentIntent(notificationIntent);
 
