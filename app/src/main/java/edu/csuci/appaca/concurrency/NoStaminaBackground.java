@@ -1,10 +1,9 @@
 package edu.csuci.appaca.concurrency;
 
 import android.util.Log;
-import android.app.Activity;
 
 import edu.csuci.appaca.R;
-import edu.csuci.appaca.fragments.EmptyStamina;
+import edu.csuci.appaca.fragments.EmptyStaminaFragment;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.TimeUtils;
@@ -15,7 +14,7 @@ public class NoStaminaBackground {
         INSTANCE;
         BackgroundThread thread;
 
-        void start(EmptyStamina fragment) {
+        void start(EmptyStaminaFragment fragment) {
             if(thread != null && thread.isRunning()) {
                 thread.stopRunning();
             }
@@ -31,7 +30,7 @@ public class NoStaminaBackground {
         }
     }
 
-    public static void start(EmptyStamina fragment) {
+    public static void start(EmptyStaminaFragment fragment) {
         ThreadInstance.INSTANCE.start(fragment);
     }
 
@@ -44,11 +43,11 @@ public class NoStaminaBackground {
         private static final long UPDATES_PER_SECOND = 60;
 
         private boolean running;
-        private EmptyStamina parent;
+        private EmptyStaminaFragment parent;
 
         boolean stopCountDown = false;
 
-        public BackgroundThread(EmptyStamina parent) {
+        public BackgroundThread(EmptyStaminaFragment parent) {
             super();
             this.running = false;
             this.parent = parent;

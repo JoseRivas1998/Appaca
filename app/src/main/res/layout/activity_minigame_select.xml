@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bkgd3_2"
+    android:background="@color/bluePastel"
+    android:orientation="vertical"
     tools:context=".activities.MinigameSelectActivity">
+
+    <TextView
+        android:id="@+id/minigame_select_stamina_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/minigame_select_stamina_text_size"
+        android:textAlignment="center"
+        android:text="TEMP\nTEST"/>
 
     <GridLayout
         android:id="@+id/game_select_grid"
@@ -14,5 +23,5 @@
         android:columnCount="2"/>
 
 
-</FrameLayout>
+</LinearLayout>
 
