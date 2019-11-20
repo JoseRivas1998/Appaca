@@ -16,6 +16,7 @@ import edu.csuci.appaca.data.HygieneDepletion;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
+import edu.csuci.appaca.notifications.HygieneNotification;
 import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.TimeUtils;
 
@@ -120,7 +121,7 @@ public class MainScreenBackground {
             double currentFood = Math.max(Alpaca.MIN_STAT, FoodDepletion.foodDepletion(current, previousTime));
             currentValues.put(Stat.HUNGER, currentFood);
 
-            double currentHappiness = Math.max(Alpaca.MIN_STAT, HappinessCalc.calcHappiness(null, current, previousTime));
+            double currentHappiness = Math.max(Alpaca.MIN_STAT, HappinessCalc.calcHappiness(current, previousTime));
             currentValues.put(Stat.HAPPINESS, currentHappiness);
 
             double currentHygiene = Math.max(Alpaca.MIN_STAT, HygieneDepletion.hygieneDepletion(current, previousTime));

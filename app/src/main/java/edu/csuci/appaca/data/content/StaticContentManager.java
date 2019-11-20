@@ -1,13 +1,13 @@
 package edu.csuci.appaca.data.content;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.utils.Disposable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,10 +67,28 @@ public class StaticContentManager {
         ALPACA_JUMP_BG("alpaca-jump/img/bkgd3_2.jpg"),
         ALPACA_JUMP_PLAYER("alpaca-jump/img/skin_01.png"),
         HEART("heart.png"),
-        MAIN_SCREEN_BG("backgrounds/appacabackground.png");
+        MAIN_SCREEN_BG("backgrounds/appacabackground.png"),
+        SPRING_DOWN("alpaca-jump/img/spring_down.png"),
+        SPRING_EXTENDED("alpaca-jump/img/spring-extended.png"),
+        PLATFORM_BREAKABLE("alpaca-jump/img/platform_breakable.png"),
+        FRUIT_CATCH_BACKGROUND("backgrounds/fruitcatch_background.png"),
+        SHOWER_HEAD("shower_head.png"),
+        WATER_DROP("water_drop.png");
         final String path;
 
         Image(String path) {
+            this.path = path;
+        }
+    }
+
+    public enum SoundEffect {
+        NORMAL_BOUNCE("alpaca-jump/sound/normalbounce.mp3"),
+        SPRING_BOUNCE("alpaca-jump/sound/springbounce.mp3"),
+        PLATFORM_BREAK("alpaca-jump/sound/platformbreak.mp3"),
+        FOOD_SELECT("sound/foodsound.mp3");
+        final String path;
+
+        SoundEffect(String path) {
             this.path = path;
         }
     }
@@ -80,6 +98,7 @@ public class StaticContentManager {
         boolean loaded;
         Map<Image, Texture> images;
         Map<Font, BitmapFont> fonts;
+        Map<SoundEffect, Sound> sounds;
         GlyphLayout gl;
 
         Content() {
@@ -87,6 +106,7 @@ public class StaticContentManager {
             images = new HashMap<>();
             fonts = new HashMap<>();
             gl = new GlyphLayout();
+            sounds = new HashMap<>();
         }
     }
 
@@ -94,16 +114,8 @@ public class StaticContentManager {
         if (Content.INSTANCE.loaded) return;
         loadImages();
         loadFonts();
+        loadSounds();
         Content.INSTANCE.loaded = true;
-    }
-
-    private static void loadFonts() {
-        for (Font font : Font.values()) {
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(font.path));
-            BitmapFont bmf = generator.generateFont(font.toParam());
-            Content.INSTANCE.fonts.put(font, bmf);
-            generator.dispose();
-        }
     }
 
     private static void loadImages() {
@@ -120,6 +132,15 @@ public class StaticContentManager {
 
     public static TextureRegion getTextureRegion(Image image) {
         return new TextureRegion(getTexture(image));
+    }
+
+    private static void loadFonts() {
+        for (Font font : Font.values()) {
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(font.path));
+            BitmapFont bmf = generator.generateFont(font.toParam());
+            Content.INSTANCE.fonts.put(font, bmf);
+            generator.dispose();
+        }
     }
 
     public static BitmapFont getFont(Font font) {
@@ -147,6 +168,20 @@ public class StaticContentManager {
         return Content.INSTANCE.gl.height;
     }
 
+    private static void loadSounds() {
+        for (SoundEffect soundEffect : SoundEffect.values()) {
+            Content.INSTANCE.sounds.put(soundEffect, Gdx.audio.newSound(Gdx.files.internal(soundEffect.path)));
+        }
+    }
+
+    public static Sound getSound(SoundEffect sound) {
+        load();
+        return Content.INSTANCE.sounds.get(sound);
+    }
+
+    public static void playSound(SoundEffect sound) {
+        getSound(sound).play();
+    }
 
     public static void dispose() {
         if (!Content.INSTANCE.loaded) return;
@@ -156,7 +191,12 @@ public class StaticContentManager {
         for (Font font : Font.values()) {
             Content.INSTANCE.fonts.get(font).dispose();
         }
+        for (SoundEffect sound : SoundEffect.values()) {
+            Content.INSTANCE.sounds.get(sound).dispose();
+        }
+        Content.INSTANCE.sounds.clear();
         Content.INSTANCE.images.clear();
+        Content.INSTANCE.fonts.clear();
         Content.INSTANCE.loaded = false;
     }
 

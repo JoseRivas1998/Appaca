@@ -5,22 +5,44 @@
     <application
         android:name=".Appaca"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/appaca_game_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/appaca_game_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.FirstAlpacaActivity"></activity>
-        <activity android:name=".activities.FoodSelectActivity" />
-        <activity android:name=".activities.GameOverActivity" />
-        <activity android:name=".activities.ClothingSelectActivity" />
-        <activity android:name=".activities.MinigameSelectActivity" />
-        <activity android:name=".activities.ShopActivity" />
-        <activity android:name=".activities.FruitCatchActivity" />
-        <activity android:name=".activities.MatchingActivity" />
-        <activity android:name=".activities.AlpacaJumpActivity" />
-        <activity android:name=".activities.MinesweeperActivity" />
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".activities.FirstAlpacaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FoodSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameOverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ClothingSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MinigameSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ShopActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FruitCatchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MatchingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.AlpacaJumpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MinesweeperActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

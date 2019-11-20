@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.StaminaRecovery;
@@ -15,9 +16,11 @@ import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.utils.ScreenUtils;
-import edu.csuci.appaca.fragments.EmptyStamina;
+import edu.csuci.appaca.fragments.EmptyStaminaFragment;
 
 public class MinigameSelectActivity extends AppCompatActivity {
+
+    TextView staminaCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +28,24 @@ public class MinigameSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_minigame_select);
         GridLayout gridLayout = findViewById(R.id.game_select_grid);
         getSupportActionBar().hide();
-        int size = (int) ScreenUtils.dpToPixels(this, 200);
-        int margin = (int) ScreenUtils.dpToPixels(this, 30);
         StaminaRecovery.start(this);
+
+        initStaminaCount(gridLayout);
+
+        loadMinigames(gridLayout);
+
+
+    }
+
+    private void initStaminaCount(GridLayout gridLayout) {
+        staminaCount = findViewById(R.id.minigame_select_stamina_text);
+        String staminaStart = "Stamina: " + StaminaManager.getCurrentStamina();
+        setStaminaMessage(staminaStart);
+    }
+
+    private void loadMinigames(GridLayout gridLayout) {
+        int size = (int) ScreenUtils.dpToPixels(this, 150);
+        int margin = (int) ScreenUtils.dpToPixels(this, 30);
 
         for (final MiniGames miniGame : MiniGames.values()) {
             ImageView gameView = new ImageView(this);
@@ -40,24 +58,30 @@ public class MinigameSelectActivity extends AppCompatActivity {
             gameView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (StaminaManager.getCurrentStamina() > 0) {
-                        Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
-                        StaminaManager.decreaseCurrentStamina();
-                        SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        FragmentManager fm = getSupportFragmentManager();
-                        EmptyStamina emptyStamina = new EmptyStamina();
-                        emptyStamina.show(fm, "no_remaining_stamina");
-                    }
+                    playGame(miniGame);
                 }
             });
 
             gridLayout.addView(gameView);
         }
+    }
 
+    private void playGame(MiniGames miniGame) {
+        if (StaminaManager.getCurrentStamina() > 0) {
+            Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
+            StaminaManager.decreaseCurrentStamina();
+            SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
+            startActivity(intent);
+            finish();
+        } else {
+            FragmentManager fm = getSupportFragmentManager();
+            EmptyStaminaFragment emptyStamina = new EmptyStaminaFragment();
+            emptyStamina.show(fm, "no_remaining_stamina");
+        }
+    }
 
+    public void setStaminaMessage(String message) {
+        staminaCount.setText(message);
     }
 
     @Override

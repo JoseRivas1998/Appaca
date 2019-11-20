@@ -1,5 +1,7 @@
 package edu.csuci.appaca.utils;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,16 @@ public final class ListUtils {
             return map.get(key);
         }
         return defaultValue;
+    }
+
+    public static <T> T choose(T... choices) {
+        if(choices.length == 0) return null;
+        return choices[MathUtils.random(choices.length - 1)];
+    }
+
+    public static <T> T choose(List<T> choices) {
+        if(choices.size() == 0) return null;
+        return choices.get(MathUtils.random(choices.size() - 1));
     }
 
     public interface MapToInt<T> {
