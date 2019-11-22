@@ -15,6 +15,10 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.statics.AlpacaShopItem;
+import edu.csuci.appaca.data.statics.ShopData;
+import edu.csuci.appaca.data.statics.StaticFoodItem;
+import edu.csuci.appaca.utils.AssetsUtils;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 /**
@@ -40,9 +44,10 @@ public class AlpacaShopFragment extends Fragment {
         final GridLayout gridLayout = view.findViewById(R.id.alpaca_shop_grid);
         int size = (int) ScreenUtils.dpToPixels(view.getContext(), 100);
         int margin = (int) ScreenUtils.dpToPixels(view.getContext(), 20);
-        for (int i = 0; i < 9; i++) {
+        ShopData.load(getContext());
+        for (final AlpacaShopItem alpaca : ShopData.getAllAlpacas()) {
             ImageView alpacaView = new ImageView(this.getContext());
-            alpacaView.setImageResource(R.drawable.alpaca_shop_item);
+            alpacaView.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), alpaca.path));
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
@@ -52,12 +57,13 @@ public class AlpacaShopFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    AlpacaConfirmationPage alpacaConfirmationPage = new AlpacaConfirmationPage();
-                    alpacaConfirmationPage.show(fm, "fragment_alpaca_conf");
+                    AlpacaConfirmationPage alpacaConfirmationPage = AlpacaConfirmationPage.newInstance(alpaca);
+                    alpacaConfirmationPage.show(fm, "fragment_food_conf");
                 }
             });
             gridLayout.addView(alpacaView);
         }
     }
-
 }
+
+
