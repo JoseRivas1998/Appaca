@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.AlpacaFarm;
@@ -35,18 +38,32 @@ public class FirstAlpacaActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = editText.getText().toString().trim();
-                if(name.isEmpty()) {
-                    return;
-                }
-                AlpacaFarm.addAlpaca(defaultSkin, name);
-                StaminaManager.increaseCurrentStaminaToMax();
-                SaveDataUtils.save(FirstAlpacaActivity.this);
-                Intent intent = new Intent(FirstAlpacaActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                confirm(editText, defaultSkin);
             }
         });
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_GO) {
+                    confirm(editText, defaultSkin);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void confirm(EditText editText, int defaultSkin) {
+        String name = editText.getText().toString().trim();
+        if(name.isEmpty()) {
+            return;
+        }
+        AlpacaFarm.addAlpaca(defaultSkin, name);
+        StaminaManager.increaseCurrentStaminaToMax();
+        SaveDataUtils.save(FirstAlpacaActivity.this);
+        Intent intent = new Intent(FirstAlpacaActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void loadImage() {
