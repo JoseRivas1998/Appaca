@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bluePastel"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".activities.GameOverActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/game_over_top_margin"
+        android:text="@string/game_over"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <TextView
+        android:id="@+id/highScoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/game_over_top_margin">
+        <Button
+            android:id="@+id/playAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/stat_bar_inner_full"
+            android:layout_marginRight="@dimen/game_over_button_margin"
+            android:text="@string/play_again" />
+
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/stat_bar_inner_full"
+            android:text="@string/ok" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="@dimen/game_over_paca_size"
+        android:layout_height="@dimen/game_over_paca_size"
+        android:layout_marginTop="@dimen/game_over_top_margin"
+        android:layout_marginLeft="@dimen/game_over_top_margin"
+        app:srcCompat="@drawable/paca" />
+</LinearLayout>

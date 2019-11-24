@@ -7,6 +7,7 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.activities.AlpacaJumpActivity;
 import edu.csuci.appaca.activities.FruitCatchActivity;
 import edu.csuci.appaca.activities.GameOverActivity;
+import edu.csuci.appaca.activities.AlpacaRunActivity;
 
 public enum MiniGames {
     ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpacajump_icon, R.string.alpaca_jump_high_score_format) {
@@ -19,6 +20,12 @@ public enum MiniGames {
         @Override
         public int coinsForScore(int score) {
             return score / 10;
+        }
+    },
+    ALPACA_RUN(R.string.alpaca_run, AlpacaRunActivity.class, R.string.alpaca_run_score_format, R.drawable.alpaca_run_icon, R.string.alpaca_run_high_score_format) {
+        @Override
+        public int coinsForScore(int score) {
+            return 0;
         }
     };
     public final int nameId;
