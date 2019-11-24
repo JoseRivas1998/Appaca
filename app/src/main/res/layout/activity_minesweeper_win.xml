@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bluePastel"
+    android:background="@color/yellowPastel"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".activities.GameOverActivity">
@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/game_over_top_margin"
-        android:text="@string/game_over"
+        android:text="@string/you_win"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
     <TextView
