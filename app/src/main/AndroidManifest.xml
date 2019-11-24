@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/appaca_game_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MinesweeperWinActivity"></activity>
+        <activity
+            android:name=".activities.MinesweeperWinActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.FirstAlpacaActivity"
             android:screenOrientation="portrait" />
@@ -33,7 +35,7 @@
             android:name=".activities.FruitCatchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MatchingActivity"
+            android:name=".activities.AlpacaRunActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.AlpacaJumpActivity"
