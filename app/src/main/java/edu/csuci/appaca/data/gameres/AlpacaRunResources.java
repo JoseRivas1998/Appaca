@@ -33,8 +33,8 @@ public class AlpacaRunResources {
     public static void load(Context context) {
         if (AlpacaRunRes.INSTANCE.loaded) return;
 
-        AlpacaRunRes.INSTANCE.worldWidth = getInt(context, R.integer.clothing_preview_width);
-        AlpacaRunRes.INSTANCE.worldHeight = getInt(context, R.integer.clothing_preview_height);
+        AlpacaRunRes.INSTANCE.worldWidth = getInt(context, R.integer.libgdx_fullscreen_width);
+        AlpacaRunRes.INSTANCE.worldHeight = getInt(context, R.integer.libgdx_fullscreen_height);
         AlpacaRunRes.INSTANCE.background = libGDXColor(context, R.color.bluePastel);
 
         AlpacaRunRes.INSTANCE.speed = getFloat(context, R.dimen.alpaca_run_speed);

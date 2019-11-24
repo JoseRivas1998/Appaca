@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.AlpacaRunResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
+import edu.csuci.appaca.graphics.entities.alpacarun.Ground;
+import edu.csuci.appaca.utils.ListUtils;
 
 import static edu.csuci.appaca.data.gameres.AlpacaRunResources.*;
 
@@ -28,6 +30,9 @@ public class AlpacaRun extends ApplicationAdapter {
     private LabelEntity tapToStart;
 
     private boolean started;
+
+    private Ground ground;
+
 
     public AlpacaRun(Activity parent) {
         this.parent = parent;
@@ -48,17 +53,23 @@ public class AlpacaRun extends ApplicationAdapter {
 
         started = false;
 
+        ground = new Ground();
+
+
     }
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(bgColor().r, bgColor().g, bgColor().b, bgColor().a);
+        Gdx.gl.glClearColor(bgColor().r, 1, bgColor().b, bgColor().a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         float dt = Gdx.graphics.getDeltaTime();
 
-        if(started) {
+        viewport.apply(true);
 
+        drawPlayingState(dt);
+        if(started) {
+            updatePlayingState(dt);
         } else {
             updateStartingState(dt);
             drawStartingState(dt);
@@ -75,6 +86,17 @@ public class AlpacaRun extends ApplicationAdapter {
     public void dispose() {
         sb.dispose();
         sr.dispose();
+    }
+
+    private void updatePlayingState(float dt) {
+        ground.update(dt);
+    }
+
+    private void drawPlayingState(float dt) {
+        sb.begin();
+        sb.setProjectionMatrix(viewport.getCamera().combined);
+        ground.draw(dt, sb, sr);
+        sb.end();
     }
 
     private void drawStartingState(float dt) {
