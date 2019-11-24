@@ -73,7 +73,8 @@ public class StaticContentManager {
         PLATFORM_BREAKABLE("alpaca-jump/img/platform_breakable.png"),
         FRUIT_CATCH_BACKGROUND("backgrounds/fruitcatch_background.png"),
         SHOWER_HEAD("shower_head.png"),
-        WATER_DROP("water_drop.png");
+        WATER_DROP("water_drop.png"),
+        GROUND_TILE("alpaca-run/ground_tile.png");
         final String path;
 
         Image(String path) {
