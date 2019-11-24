@@ -9,6 +9,7 @@
     <string name="play_again">Play Again</string>
     <string name="ok">OK</string>
     <string name="game_over">Game Over</string>
+    <string name="you_win">You win!</string>
     <string name="top_to_start">Tap to Start!</string>
     <string name="hunger">Hunger</string>
     <string name="happiness">Happiness</string>
