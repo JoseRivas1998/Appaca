@@ -45,7 +45,7 @@ public class HungerNotification {
 
     private static void initMap() {
         if(notificationSentMap == null) {
-            synchronized(HappinessNotification.class) {
+            synchronized(HungerNotification.class) {
                 if(notificationSentMap == null) {
                     notificationSentMap = new HashMap<>();
                 }
