@@ -31,13 +31,13 @@ public class HungerNotification {
                 boolean sentNotification = ListUtils.getOrDefault(notificationSentMap, alpaca, false);
                 long lastTime = SavedTime.lastSavedTime();
                 double hungerStat = FoodDepletion.foodDepletion(alpaca, lastTime);
-                if(Double.compare(hungerStat, Alpaca.MIN_STAT) == 0) {
-                    if(!sentNotification) {
+                if (Double.compare(hungerStat, Alpaca.MIN_STAT) == 0) {
+                    if (!sentNotification) {
                         notificationSentMap.put(alpaca, true);
                         sendNotification(context, alpaca.getName());
-                    } else {
-                        notificationSentMap.put(alpaca, false);
                     }
+                } else {
+                    notificationSentMap.put(alpaca, false);
                 }
             }
         });

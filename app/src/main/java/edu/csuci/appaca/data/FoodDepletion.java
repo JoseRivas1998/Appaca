@@ -11,7 +11,7 @@ public class FoodDepletion {
         @return the new food value for the alpaca
      */
     public static double foodDepletion(Alpaca alpaca, long previousTime) {
-        final double TIME_TIL_FULLY_DEPLETED = 8 * 60; //8 hours * 60 minutes over 4 stages
+        final double TIME_TIL_FULLY_DEPLETED = 0.1; //8 hours * 60 minutes over 4 stages
         final double MAXPERCENTAGE = 1.0; //100%
 
         double alpacaFood = alpaca.getFoodStat();
