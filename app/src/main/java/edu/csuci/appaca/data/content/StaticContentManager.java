@@ -74,7 +74,10 @@ public class StaticContentManager {
         FRUIT_CATCH_BACKGROUND("backgrounds/fruitcatch_background.png"),
         SHOWER_HEAD("shower_head.png"),
         WATER_DROP("water_drop.png"),
-        GROUND_TILE("alpaca-run/ground_tile.png");
+        GROUND_TILE("alpaca-run/ground_tile.png"),
+        OBSTACLE_SMALL("alpaca-run/obstacle_small.png"),
+        OBSTACLE_MEDIUM("alpaca-run/obstacle_medium.png"),
+        OBSTACLE_LARGE("alpaca-run/obstacle_large.png");
         final String path;
 
         Image(String path) {
