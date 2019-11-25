@@ -16,21 +16,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minesweeper);
-        initButton();
     }
 
-    public void initButton()
-    {
-
-        final ImageView poop = findViewById(R.id.imageView2);
-        poop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MinesweeperActivity.this, GameOverActivity.class);
-                startActivity(intent);
-            }
-        });
-
-    }
 }
 
