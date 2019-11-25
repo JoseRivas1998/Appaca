@@ -77,7 +77,8 @@ public class StaticContentManager {
         GROUND_TILE("alpaca-run/ground_tile.png"),
         OBSTACLE_SMALL("alpaca-run/obstacle_small.png"),
         OBSTACLE_MEDIUM("alpaca-run/obstacle_medium.png"),
-        OBSTACLE_LARGE("alpaca-run/obstacle_large.png");
+        OBSTACLE_LARGE("alpaca-run/obstacle_large.png"),
+        ALPACA_RUN_PLAYER("alpaca-run/player.png");
         final String path;
 
         Image(String path) {

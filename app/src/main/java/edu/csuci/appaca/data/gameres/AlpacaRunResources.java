@@ -23,6 +23,8 @@ public class AlpacaRunResources {
         private float minSpawnTime;
         private float maxSpawnTime;
 
+        private float playerRunAnimSpeed;
+
         private boolean loaded;
 
         AlpacaRunRes() {
@@ -40,6 +42,8 @@ public class AlpacaRunResources {
         AlpacaRunRes.INSTANCE.speed = getFloat(context, R.dimen.alpaca_run_speed);
         AlpacaRunRes.INSTANCE.minSpawnTime = getFloat(context, R.dimen.alpaca_run_min_spawn_time);
         AlpacaRunRes.INSTANCE.maxSpawnTime = getFloat(context, R.dimen.alpaca_run_max_spawn_time);
+
+        AlpacaRunRes.INSTANCE.playerRunAnimSpeed = getFloat(context, R.dimen.alpaca_run_player_anim_speed);
 
         AlpacaRunRes.INSTANCE.loaded = true;
     }
@@ -76,6 +80,11 @@ public class AlpacaRunResources {
     public static float maxSpawnTime() {
         verify();
         return AlpacaRunRes.INSTANCE.maxSpawnTime;
+    }
+
+    public static float playerRunAnimSpeed() {
+        verify();
+        return AlpacaRunRes.INSTANCE.playerRunAnimSpeed;
     }
 
 }
