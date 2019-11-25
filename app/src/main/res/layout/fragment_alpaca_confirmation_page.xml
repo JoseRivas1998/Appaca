@@ -5,15 +5,17 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/bluePastel"
     tools:context=".fragments.AlpacaConfirmationPage">
 
     <ImageView
-        android:id="@+id/imageView28"
+        android:id="@+id/alpaca_confirmation_preview_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/alpaca_shop_item" />
 
     <TextView
+        android:id="@+id/alpaca_confirmation_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Skin Name"
@@ -25,7 +27,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
+        android:maxLines="1"
+        android:lines="1"
+        android:imeOptions="actionGo"
         android:hint="Name your alpaca!" />
 
     <TextView
@@ -44,12 +49,18 @@
             android:layout_height="wrap_content"
             android:text="Buy"
             android:layout_marginRight="30dp"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:textSize="12pt"/>
         <Button
             android:id="@+id/alpaca_confirmation_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
+            android:background="@drawable/stat_bar_inner_full"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:textSize="12pt"/>
     </LinearLayout>
 
