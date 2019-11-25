@@ -21,6 +21,7 @@ import edu.csuci.appaca.data.gameres.AlpacaRunResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.alpacarun.Ground;
 import edu.csuci.appaca.graphics.entities.alpacarun.Obstacle;
+import edu.csuci.appaca.graphics.entities.alpacarun.Player;
 import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ListUtils;
 
@@ -43,6 +44,8 @@ public class AlpacaRun extends ApplicationAdapter {
     private ActionTimer obstacleSpawn;
     private List<Obstacle> obstacles;
 
+    private Player player;
+
     public AlpacaRun(Activity parent) {
         this.parent = parent;
         AlpacaRunResources.load(parent);
@@ -63,6 +66,8 @@ public class AlpacaRun extends ApplicationAdapter {
         started = false;
 
         ground = new Ground();
+
+        player = new Player(ground);
 
         obstacles = new ArrayList<>();
 
@@ -109,8 +114,19 @@ public class AlpacaRun extends ApplicationAdapter {
 
     private void updatePlayingState(float dt) {
         ground.update(dt);
+        player.update(dt);
         spawnObstacles(dt);
         updateObstacles(dt);
+        playerGroundCollisions();
+    }
+
+    private void playerGroundCollisions() {
+        if(player.collidingWith(ground)) {
+            if(!player.isOnGround()) {
+                player.setY(ground.getHeight());
+            }
+            player.setOnGround(true);
+        }
     }
 
     private void updateObstacles(float dt) {
@@ -135,6 +151,7 @@ public class AlpacaRun extends ApplicationAdapter {
         for (Obstacle obstacle : obstacles) {
             obstacle.draw(dt, sb, sr);
         }
+        player.draw(dt, sb, sr);
         sb.end();
     }
 
