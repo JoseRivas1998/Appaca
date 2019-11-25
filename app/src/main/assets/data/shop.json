@@ -49,9 +49,9 @@
   "alpacas": [
     {
       "id": 1,
-      "name": "TEMP DEFAULT",
+      "name": "Brownie",
       "path": "alpacas/skin_01.png",
-      "cost": 0
+      "cost": 100
     }
   ]
 }

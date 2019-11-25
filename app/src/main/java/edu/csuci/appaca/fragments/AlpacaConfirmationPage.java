@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.Inventory;
 import edu.csuci.appaca.data.SaveDataUtils;
@@ -28,9 +29,13 @@ import edu.csuci.appaca.data.statics.AlpacaShopItem;
 import edu.csuci.appaca.data.statics.StaticFoodItem;
 import edu.csuci.appaca.utils.AssetsUtils;
 
+import static edu.csuci.appaca.data.CurrencyManager.getCurrencyAlpaca;
+import static edu.csuci.appaca.data.CurrencyManager.spendCurrencyAlpaca;
+
 public class AlpacaConfirmationPage extends DialogFragment {
 
     private AlpacaShopItem alpacaItem;
+    private TextView costView;
 
 
     @Override
@@ -61,7 +66,7 @@ public class AlpacaConfirmationPage extends DialogFragment {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buy();
+                buy(view);
             }
         });
 
@@ -69,7 +74,7 @@ public class AlpacaConfirmationPage extends DialogFragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_GO) {
-                    buy();
+                    buy(view);
                     return true;
                 }
                 return false;
@@ -85,13 +90,33 @@ public class AlpacaConfirmationPage extends DialogFragment {
 
     }
 
-    private void buy() {
-        // TODO
+    private void buy(View view) {
+
+        final EditText nameInput = view.findViewById(R.id.alpaca_confirmation_name_field);
+
+        String name = nameInput.getText().toString().trim();
+        if(name.isEmpty()) {
+            cantToast("You need to give them a name!");
+        }
+
+        try {
+            CurrencyManager.spendCurrencyAlpaca(alpacaItem.cost);
+            AlpacaFarm.addAlpaca(alpacaItem.id, name);
+            SaveDataUtils.updateValuesAndSave(getContext());
+            dismiss();
+        } catch (CurrencyManager.CurrencyException e) {
+            cantToast("You can't afford that!");
+        }
+
     }
 
-    private void cantAffordThatMuchToast() {
+        //check if they cant afford it AND get the a
+        //check if theres a name for the one they inputted and trim it
+        // TODO
+
+
+    private void cantToast(String text) {
         Context context = getContext();
-        CharSequence text = "You cannot afford that!";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
