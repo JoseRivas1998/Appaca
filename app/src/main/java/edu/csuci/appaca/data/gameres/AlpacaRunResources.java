@@ -5,10 +5,13 @@ import android.content.Context;
 import com.badlogic.gdx.graphics.Color;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.graphics.AlpacaRun;
 
+import static edu.csuci.appaca.utils.ResourceUtils.getDimension;
 import static edu.csuci.appaca.utils.ResourceUtils.getFloat;
 import static edu.csuci.appaca.utils.ResourceUtils.getInt;
+import static edu.csuci.appaca.utils.ResourceUtils.getString;
 import static edu.csuci.appaca.utils.ResourceUtils.libGDXColor;
 
 public class AlpacaRunResources {
@@ -18,6 +21,7 @@ public class AlpacaRunResources {
         private int worldWidth;
         private int worldHeight;
         private Color background;
+        private float hudPadding;
 
         private float speed;
         private float minSpawnTime;
@@ -28,6 +32,9 @@ public class AlpacaRunResources {
         private float gravity;
 
         private float jumpVel;
+
+        private String scoreFormat;
+        private String highScoreFormat;
 
         private boolean loaded;
 
@@ -52,6 +59,11 @@ public class AlpacaRunResources {
         AlpacaRunRes.INSTANCE.gravity = getFloat(context, R.dimen.alpaca_run_gravity);
 
         AlpacaRunRes.INSTANCE.jumpVel = getFloat(context, R.dimen.alpaca_run_jump_vel);
+
+        AlpacaRunRes.INSTANCE.hudPadding = getDimension(context, R.dimen.hud_padding);
+
+        AlpacaRunRes.INSTANCE.scoreFormat = getString(context, MiniGames.ALPACA_RUN.scoreFormatId);
+        AlpacaRunRes.INSTANCE.highScoreFormat = getString(context, MiniGames.ALPACA_RUN.highScoreFormatId);
 
         AlpacaRunRes.INSTANCE.loaded = true;
     }
@@ -103,6 +115,21 @@ public class AlpacaRunResources {
     public static float jumpVel() {
         verify();
         return AlpacaRunRes.INSTANCE.jumpVel;
+    }
+
+    public static float hudPadding() {
+        verify();
+        return AlpacaRunRes.INSTANCE.hudPadding;
+    }
+
+    public static String scoreFormat() {
+        verify();
+        return AlpacaRunRes.INSTANCE.scoreFormat;
+    }
+
+    public static String highScoreFormat() {
+        verify();
+        return AlpacaRunRes.INSTANCE.highScoreFormat;
     }
 
 }

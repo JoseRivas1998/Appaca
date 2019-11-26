@@ -5,7 +5,6 @@ import android.app.Activity;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,10 +19,10 @@ import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.AlpacaRunResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.alpacarun.Ground;
+import edu.csuci.appaca.graphics.entities.alpacarun.AlpacaRunHUD;
 import edu.csuci.appaca.graphics.entities.alpacarun.Obstacle;
 import edu.csuci.appaca.graphics.entities.alpacarun.Player;
 import edu.csuci.appaca.utils.ActionTimer;
-import edu.csuci.appaca.utils.ListUtils;
 
 import static edu.csuci.appaca.data.gameres.AlpacaRunResources.*;
 
@@ -45,6 +44,9 @@ public class AlpacaRun extends ApplicationAdapter {
     private List<Obstacle> obstacles;
 
     private Player player;
+    private int score;
+
+    private AlpacaRunHUD hud;
 
     public AlpacaRun(Activity parent) {
         this.parent = parent;
@@ -80,6 +82,10 @@ public class AlpacaRun extends ApplicationAdapter {
             }
         });
 
+        score = 0;
+
+        hud = new AlpacaRunHUD();
+
     }
 
     @Override
@@ -99,6 +105,8 @@ public class AlpacaRun extends ApplicationAdapter {
             drawStartingState(dt);
         }
 
+        renderHud(dt);
+
     }
 
     @Override
@@ -110,6 +118,14 @@ public class AlpacaRun extends ApplicationAdapter {
     public void dispose() {
         sb.dispose();
         sr.dispose();
+    }
+
+    private void renderHud(float dt) {
+        hud.update(dt, score, 0);
+        sb.begin();
+        sb.setProjectionMatrix(viewport.getCamera().combined);
+        hud.draw(dt, sb, sr);
+        sb.end();
     }
 
     private void updatePlayingState(float dt) {
@@ -138,6 +154,11 @@ public class AlpacaRun extends ApplicationAdapter {
             obstacle.update(dt);
             if(obstacle.getX() + obstacle.getWidth() < 0) {
                 iter.remove();
+                continue;
+            }
+            if(obstacle.getCenterX() < player.getCenterX() && !obstacle.hasGotPoint()) {
+                obstacle.earnPoint();
+                score++;
             }
         }
     }
