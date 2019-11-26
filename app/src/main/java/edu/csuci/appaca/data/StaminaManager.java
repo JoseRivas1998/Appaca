@@ -49,6 +49,8 @@ public class StaminaManager {
         return StaminaInstance.INSTANCE.currentValue;
     }
 
+    public static int getMaxStamina() {return StaminaInstance.INSTANCE.maxValue;}
+
     public static long getFirstStaminaUsedTime() {
         return StaminaInstance.INSTANCE.firstStaminaUsedTime;
     }
