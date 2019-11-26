@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.AlpacaRunResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
@@ -23,6 +24,7 @@ import edu.csuci.appaca.graphics.entities.alpacarun.AlpacaRunHUD;
 import edu.csuci.appaca.graphics.entities.alpacarun.Obstacle;
 import edu.csuci.appaca.graphics.entities.alpacarun.Player;
 import edu.csuci.appaca.utils.ActionTimer;
+import edu.csuci.appaca.utils.TimeUtils;
 
 import static edu.csuci.appaca.data.gameres.AlpacaRunResources.*;
 
@@ -47,6 +49,10 @@ public class AlpacaRun extends ApplicationAdapter {
     private int score;
 
     private AlpacaRunHUD hud;
+
+    private long timeStart;
+
+    private boolean endGame;
 
     public AlpacaRun(Activity parent) {
         this.parent = parent;
@@ -86,6 +92,8 @@ public class AlpacaRun extends ApplicationAdapter {
 
         hud = new AlpacaRunHUD();
 
+        endGame = false;
+
     }
 
     @Override
@@ -95,10 +103,14 @@ public class AlpacaRun extends ApplicationAdapter {
 
         float dt = Gdx.graphics.getDeltaTime();
 
+        if (endGame) {
+            MiniGames.endGame(parent, MiniGames.ALPACA_RUN, score, TimeUtils.getCurrentTime() - timeStart);
+        }
+
         viewport.apply(true);
 
         drawPlayingState(dt);
-        if(started) {
+        if (started) {
             updatePlayingState(dt);
         } else {
             updateStartingState(dt);
@@ -118,6 +130,7 @@ public class AlpacaRun extends ApplicationAdapter {
     public void dispose() {
         sb.dispose();
         sr.dispose();
+        StaticContentManager.dispose();
     }
 
     private void renderHud(float dt) {
@@ -138,8 +151,8 @@ public class AlpacaRun extends ApplicationAdapter {
     }
 
     private void playerGroundCollisions() {
-        if(player.collidingWith(ground)) {
-            if(!player.isOnGround()) {
+        if (player.collidingWith(ground)) {
+            if (!player.isOnGround()) {
                 player.setY(ground.getHeight());
                 player.setVelocityY(0);
             }
@@ -149,16 +162,19 @@ public class AlpacaRun extends ApplicationAdapter {
 
     private void updateObstacles(float dt) {
         Iterator<Obstacle> iter = obstacles.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Obstacle obstacle = iter.next();
             obstacle.update(dt);
-            if(obstacle.getX() + obstacle.getWidth() < 0) {
+            if (obstacle.getX() + obstacle.getWidth() < 0) {
                 iter.remove();
                 continue;
             }
-            if(obstacle.getCenterX() < player.getCenterX() && !obstacle.hasGotPoint()) {
+            if (obstacle.getCenterX() < player.getCenterX() && !obstacle.hasGotPoint()) {
                 obstacle.earnPoint();
                 score++;
+            }
+            if (obstacle.collidingWith(player)) {
+                endGame = true;
             }
         }
     }
@@ -186,7 +202,10 @@ public class AlpacaRun extends ApplicationAdapter {
     }
 
     private void updateStartingState(float dt) {
-        if(Gdx.input.justTouched()) started = true;
+        if (Gdx.input.justTouched()) {
+            started = true;
+            timeStart = TimeUtils.getCurrentTime();
+        }
         tapToStart.update(dt);
     }
 
