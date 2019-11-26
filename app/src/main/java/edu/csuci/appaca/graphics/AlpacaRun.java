@@ -154,6 +154,11 @@ public class AlpacaRun extends ApplicationAdapter {
             obstacle.update(dt);
             if(obstacle.getX() + obstacle.getWidth() < 0) {
                 iter.remove();
+                continue;
+            }
+            if(obstacle.getCenterX() < player.getCenterX() && !obstacle.hasGotPoint()) {
+                obstacle.earnPoint();
+                score++;
             }
         }
     }
