@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bkgd3_2"
     tools:context=".activities.MinesweeperActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Score:  2,147,483,647"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:translationY="83dp"
-        android:translationX="96dp" />
+        android:id="@+id/minesweeper_grid"
+        android:layout_centerInParent="true"/>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="356dp"
-        android:layout_height="354dp"
-        android:src="@drawable/poosweeper_grid"
-        android:translationX="27dp"
-        android:translationY="153dp" />
+    </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="28dp"
-        android:layout_height="58dp"
-        android:src="@drawable/sparkle_poo"
-        android:translationX="301dp"
-        android:translationY="262dp" />
-
-</RelativeLayout>
+</LinearLayout>

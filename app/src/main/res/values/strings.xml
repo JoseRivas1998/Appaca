@@ -29,4 +29,7 @@
     <string name="alpaca_run">Alpaca Run</string>
     <string name="alpaca_run_score_format">Score: %03d</string>
     <string name="alpaca_run_high_score_format">High Score: %03d</string>
+    <string name="minesweeper">Minesweeper</string>
+    <string name="minesweeper_score_format">Score: %03d</string>
+    <string name="minesweeper_high_score_format">High Score: %03d</string>
 </resources>

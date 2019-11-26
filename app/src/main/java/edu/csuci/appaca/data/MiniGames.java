@@ -8,6 +8,7 @@ import edu.csuci.appaca.activities.AlpacaJumpActivity;
 import edu.csuci.appaca.activities.FruitCatchActivity;
 import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.activities.AlpacaRunActivity;
+import edu.csuci.appaca.activities.MinesweeperActivity;
 
 public enum MiniGames {
     ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpacajump_icon, R.string.alpaca_jump_high_score_format) {
@@ -23,6 +24,12 @@ public enum MiniGames {
         }
     },
     ALPACA_RUN(R.string.alpaca_run, AlpacaRunActivity.class, R.string.alpaca_run_score_format, R.drawable.alpaca_run_icon, R.string.alpaca_run_high_score_format) {
+        @Override
+        public int coinsForScore(int score) {
+            return 0;
+        }
+    },
+    MINESWEEPER(R.string.minesweeper, MinesweeperActivity.class, R.string.minesweeper_score_format, R.drawable.poosweeper_grid, R.string.minesweeper_high_score_format) {
         @Override
         public int coinsForScore(int score) {
             return 0;
