@@ -47,4 +47,6 @@ public class MinesweeperTile {
     public void unflag() {
         this.flagged = false;
     }
+
+    public void setBomb() { this.bomb = true; }
 }

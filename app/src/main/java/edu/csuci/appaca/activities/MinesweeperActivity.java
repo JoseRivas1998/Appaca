@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.GridLayout;
 
+import java.util.Random;
+
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.graphics.minesweeper.MinesweeperTile;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
+    private final int MAX_BOMBS = 100;
     private MinesweeperTile[][] grid;
 
     @Override
@@ -17,6 +20,7 @@ public class MinesweeperActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minesweeper);
         initMinesweeper();
+        placeBombs();
         getSupportActionBar().hide();
     }
 
@@ -30,6 +34,16 @@ public class MinesweeperActivity extends AppCompatActivity {
                 grid[i][j] = tile;
                 view.addView(tile.view);
             }
+        }
+    }
+
+    private void placeBombs() {
+        Random generator = new Random();
+        for (int i = 0; i < this.MAX_BOMBS; i++)
+        {
+            int x = generator.nextInt(GRID_SIZE - 1) + 1;
+            int y = generator.nextInt(GRID_SIZE - 1) + 1;
+            grid[x][y].setBomb();
         }
     }
 
