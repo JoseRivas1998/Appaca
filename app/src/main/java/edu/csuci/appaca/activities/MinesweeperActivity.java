@@ -2,7 +2,9 @@ package edu.csuci.appaca.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridLayout;
 
 import java.util.Random;
@@ -25,12 +27,19 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void initMinesweeper() {
+        final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
         GridLayout view = findViewById(R.id.minesweeper_grid);
         view.setColumnCount(GRID_SIZE);
         for(int i = 0; i < GRID_SIZE; i++) {
             for(int j = 0; j < GRID_SIZE; j++) {
-                MinesweeperTile tile = MinesweeperTile.createTile(i+1, j+1, GRID_SIZE, this.getApplicationContext());
+                final MinesweeperTile tile = MinesweeperTile.createTile(i+1, j+1, GRID_SIZE, this.getApplicationContext());
+                tile.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        tile.reveal(context);
+                    }
+                });
                 grid[i][j] = tile;
                 view.addView(tile.view);
             }

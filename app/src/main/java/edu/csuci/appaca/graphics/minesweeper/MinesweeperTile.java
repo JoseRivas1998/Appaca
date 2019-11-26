@@ -37,6 +37,10 @@ public class MinesweeperTile {
     }
 
     public void reveal(Context context) {
+        if(this.bomb) {
+            this.view.setBackgroundColor(context.getColor(R.color.pinkPastel)); }
+        else {
+            this.view.setBackgroundColor(context.getColor(R.color.greenPastel)); }
         this.revealed = true;
     }
 
