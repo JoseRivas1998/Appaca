@@ -48,9 +48,11 @@
     <integer name="clothing_preview_height">1484</integer>
 
 <!--    ALPACA RUN-->
-    <item name="alpaca_run_speed" type="dimen" format="float">500.0</item>
-    <item name="alpaca_run_min_spawn_time" type="dimen" format="float">0.75</item>
-    <item name="alpaca_run_max_spawn_time" type="dimen" format="float">2.0</item>
+    <item name="alpaca_run_speed" type="dimen" format="float">750.0</item>
+    <item name="alpaca_run_min_spawn_time" type="dimen" format="float">1.75</item>
+    <item name="alpaca_run_max_spawn_time" type="dimen" format="float">2.5</item>
     <item name="alpaca_run_player_anim_speed" type="dimen" format="float">0.15</item>
+    <item name="alpaca_run_gravity" type="dimen" format="float">-6800.0</item>
+    <item name="alpaca_run_jump_vel" type="dimen" format="float">3400.0</item>
 
 </resources>

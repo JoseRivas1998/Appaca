@@ -113,6 +113,7 @@ public class AlpacaRun extends ApplicationAdapter {
     }
 
     private void updatePlayingState(float dt) {
+        player.handleInput();
         ground.update(dt);
         player.update(dt);
         spawnObstacles(dt);
@@ -124,6 +125,7 @@ public class AlpacaRun extends ApplicationAdapter {
         if(player.collidingWith(ground)) {
             if(!player.isOnGround()) {
                 player.setY(ground.getHeight());
+                player.setVelocityY(0);
             }
             player.setOnGround(true);
         }
