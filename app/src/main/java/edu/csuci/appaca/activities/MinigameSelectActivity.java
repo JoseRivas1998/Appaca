@@ -67,7 +67,7 @@ public class MinigameSelectActivity extends AppCompatActivity {
     }
 
     private void playGame(MiniGames miniGame) {
-        if (StaminaManager.getCurrentStamina() > Integer.MIN_VALUE) {
+        if (StaminaManager.getCurrentStamina() > 0) {
             Intent intent = new Intent(MinigameSelectActivity.this, miniGame.activityClass);
             StaminaManager.decreaseCurrentStamina();
             SaveDataUtils.updateValuesAndSave(MinigameSelectActivity.this);
