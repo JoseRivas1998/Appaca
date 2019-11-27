@@ -93,7 +93,6 @@ public class AlpacaConfirmationPage extends DialogFragment {
 
     private void buy(View view) {
 
-        CurrencyManager.gainCurrencyAlpaca(99999);
 
         final EditText nameInput = view.findViewById(R.id.alpaca_confirmation_name_field);
 
@@ -106,13 +105,11 @@ public class AlpacaConfirmationPage extends DialogFragment {
             CurrencyManager.spendCurrencyAlpaca(alpacaItem.cost);
             AlpacaFarm.addAlpaca(alpacaItem.id, name);
             StaminaManager.increaseMaxStamina();
-            if (StaminaManager.getMaxStamina() != StaminaManager.getCurrentStamina()) {
-                StaminaManager.increaseCurrentStaminaToMax();
-            }
+            StaminaManager.increaseCurrentStaminaToMax();
             SaveDataUtils.updateValuesAndSave(getContext());
             dismiss();
         } catch (CurrencyManager.CurrencyException e) {
-            cantToast("You can't afford that!" + alpacaItem.cost);
+            cantToast("You can't afford that!");
         }
 
     }
