@@ -10,12 +10,15 @@ import android.widget.GridLayout;
 import java.util.Random;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.graphics.minesweeper.MinesweeperTile;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
     private final int MAX_BOMBS = 100;
     private MinesweeperTile[][] grid;
+    private int score = 0;
+    private long timePlayed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,10 @@ public class MinesweeperActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         tile.reveal(context);
+                        if (tile.bomb)
+                        {
+                            MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                        }
                     }
                 });
                 grid[i][j] = tile;
