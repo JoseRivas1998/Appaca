@@ -25,6 +25,7 @@ import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.Inventory;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.data.statics.AlpacaShopItem;
 import edu.csuci.appaca.data.statics.StaticFoodItem;
 import edu.csuci.appaca.utils.AssetsUtils;
@@ -95,6 +96,7 @@ public class AlpacaConfirmationPage extends DialogFragment {
 
     private void buy(View view) {
 
+
         final EditText nameInput = view.findViewById(R.id.alpaca_confirmation_name_field);
 
         String name = nameInput.getText().toString().trim();
@@ -105,6 +107,8 @@ public class AlpacaConfirmationPage extends DialogFragment {
         try {
             CurrencyManager.spendCurrencyAlpaca(alpacaItem.cost);
             AlpacaFarm.addAlpaca(alpacaItem.id, name);
+            StaminaManager.increaseMaxStamina();
+            StaminaManager.increaseCurrentStaminaToMax();
             SaveDataUtils.updateValuesAndSave(getContext());
             dismiss();
         } catch (CurrencyManager.CurrencyException e) {
