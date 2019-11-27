@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.AlpacaRunResources;
@@ -54,6 +55,8 @@ public class AlpacaRun extends ApplicationAdapter {
     private long timeStart;
 
     private boolean endGame;
+
+    private int highScore;
 
     private Background background;
 
@@ -97,6 +100,8 @@ public class AlpacaRun extends ApplicationAdapter {
 
         background = new Background();
 
+        highScore = HighScore.getHighScore(MiniGames.ALPACA_RUN);
+
         endGame = false;
 
     }
@@ -139,7 +144,7 @@ public class AlpacaRun extends ApplicationAdapter {
     }
 
     private void renderHud(float dt) {
-        hud.update(dt, score, 0);
+        hud.update(dt, score, highScore);
         sb.begin();
         sb.setProjectionMatrix(viewport.getCamera().combined);
         hud.draw(dt, sb, sr);
