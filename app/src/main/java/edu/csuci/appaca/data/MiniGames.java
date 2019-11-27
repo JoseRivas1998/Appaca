@@ -26,7 +26,7 @@ public enum MiniGames {
     ALPACA_RUN(R.string.alpaca_run, AlpacaRunActivity.class, R.string.alpaca_run_score_format, R.drawable.alpaca_run_icon, R.string.alpaca_run_high_score_format) {
         @Override
         public int coinsForScore(int score) {
-            return 0;
+            return score / 10;
         }
     },
     MINESWEEPER(R.string.minesweeper, MinesweeperActivity.class, R.string.minesweeper_score_format, R.drawable.poosweeper_grid, R.string.minesweeper_high_score_format) {

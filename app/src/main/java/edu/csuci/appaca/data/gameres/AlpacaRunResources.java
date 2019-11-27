@@ -36,6 +36,8 @@ public class AlpacaRunResources {
         private String scoreFormat;
         private String highScoreFormat;
 
+        private float parallaxMultiplier;
+
         private boolean loaded;
 
         AlpacaRunRes() {
@@ -64,6 +66,8 @@ public class AlpacaRunResources {
 
         AlpacaRunRes.INSTANCE.scoreFormat = getString(context, MiniGames.ALPACA_RUN.scoreFormatId);
         AlpacaRunRes.INSTANCE.highScoreFormat = getString(context, MiniGames.ALPACA_RUN.highScoreFormatId);
+
+        AlpacaRunRes.INSTANCE.parallaxMultiplier = getFloat(context, R.dimen.alpaca_run_parallax_multiplier);
 
         AlpacaRunRes.INSTANCE.loaded = true;
     }
@@ -130,6 +134,11 @@ public class AlpacaRunResources {
     public static String highScoreFormat() {
         verify();
         return AlpacaRunRes.INSTANCE.highScoreFormat;
+    }
+
+    public static float parallaxMultiplier() {
+        verify();
+        return AlpacaRunRes.INSTANCE.parallaxMultiplier;
     }
 
 }

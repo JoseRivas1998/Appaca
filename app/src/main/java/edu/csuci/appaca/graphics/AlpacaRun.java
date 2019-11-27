@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.csuci.appaca.data.HighScore;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.data.gameres.AlpacaRunResources;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
+import edu.csuci.appaca.graphics.entities.alpacarun.Background;
 import edu.csuci.appaca.graphics.entities.alpacarun.Ground;
 import edu.csuci.appaca.graphics.entities.alpacarun.AlpacaRunHUD;
 import edu.csuci.appaca.graphics.entities.alpacarun.Obstacle;
@@ -53,6 +55,10 @@ public class AlpacaRun extends ApplicationAdapter {
     private long timeStart;
 
     private boolean endGame;
+
+    private int highScore;
+
+    private Background background;
 
     public AlpacaRun(Activity parent) {
         this.parent = parent;
@@ -91,6 +97,10 @@ public class AlpacaRun extends ApplicationAdapter {
         score = 0;
 
         hud = new AlpacaRunHUD();
+
+        background = new Background();
+
+        highScore = HighScore.getHighScore(MiniGames.ALPACA_RUN);
 
         endGame = false;
 
@@ -134,7 +144,7 @@ public class AlpacaRun extends ApplicationAdapter {
     }
 
     private void renderHud(float dt) {
-        hud.update(dt, score, 0);
+        hud.update(dt, score, highScore);
         sb.begin();
         sb.setProjectionMatrix(viewport.getCamera().combined);
         hud.draw(dt, sb, sr);
@@ -145,6 +155,7 @@ public class AlpacaRun extends ApplicationAdapter {
         player.handleInput();
         ground.update(dt);
         player.update(dt);
+        background.update(dt);
         spawnObstacles(dt);
         updateObstacles(dt);
         playerGroundCollisions();
@@ -186,6 +197,7 @@ public class AlpacaRun extends ApplicationAdapter {
     private void drawPlayingState(float dt) {
         sb.begin();
         sb.setProjectionMatrix(viewport.getCamera().combined);
+        background.draw(dt, sb, sr);
         ground.draw(dt, sb, sr);
         for (Obstacle obstacle : obstacles) {
             obstacle.draw(dt, sb, sr);
