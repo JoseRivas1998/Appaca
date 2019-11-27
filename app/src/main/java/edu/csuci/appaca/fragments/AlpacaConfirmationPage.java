@@ -56,10 +56,13 @@ public class AlpacaConfirmationPage extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         final ImageView icon = view.findViewById(R.id.alpaca_confirmation_preview_image);
         final TextView label = view.findViewById(R.id.alpaca_confirmation_name);
+        final TextView cost = view.findViewById(R.id.alpaca_confirmation_cost);
         final Button buy = view.findViewById(R.id.alpaca_confirmation_buy);
         final Button cancel = view.findViewById(R.id.alpaca_confirmation_cancel);
         final EditText nameInput = view.findViewById(R.id.alpaca_confirmation_name_field);
 
+
+        cost.setText(String.valueOf(alpacaItem.cost));
         label.setText(alpacaItem.name);
         icon.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), alpacaItem.path));
 
@@ -109,11 +112,6 @@ public class AlpacaConfirmationPage extends DialogFragment {
         }
 
     }
-
-        //check if they cant afford it AND get the a
-        //check if theres a name for the one they inputted and trim it
-        // TODO
-
 
     private void cantToast(String text) {
         Context context = getContext();

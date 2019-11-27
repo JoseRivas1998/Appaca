@@ -34,9 +34,9 @@
         android:hint="Name your alpaca!" />
 
     <TextView
+        android:id="@+id/alpaca_confirmation_cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cost"
         android:textSize="18pt" />
 
     <LinearLayout
