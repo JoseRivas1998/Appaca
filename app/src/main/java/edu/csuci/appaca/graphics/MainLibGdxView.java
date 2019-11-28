@@ -26,6 +26,7 @@ import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
+import edu.csuci.appaca.graphics.entities.mainscreen.ButtonEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
@@ -42,6 +43,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private final int VIEWPORT_WIDTH;
     private final int VIEW_HEIGHT;
+    private final float HUD_PADDING;
     private static final double HAPPINESS_PER_PET = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.001f;
 
     private SpriteBatch spriteBatch;
@@ -72,12 +74,16 @@ public class MainLibGdxView extends ApplicationAdapter {
         NONE, HOSE
     }
 
+    private ButtonEntity prevButton;
+    private ButtonEntity nextButton;
+
     private HeldItem currentlyHeld = HeldItem.NONE;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
         VIEW_HEIGHT = parent.getResources().getInteger(R.integer.main_view_libgdx_height);
+        HUD_PADDING = parent.getResources().getDimension(R.dimen.hud_padding);
     }
 
     @Override
@@ -102,6 +108,32 @@ public class MainLibGdxView extends ApplicationAdapter {
                 waterDrops.add(new WaterDrop(hoseHead));
             }
         });
+
+        initButtons();
+
+    }
+
+    private void initButtons() {
+        prevButton = new ButtonEntity(StaticContentManager.Image.ARROW_LEFT);
+        prevButton.setX(HUD_PADDING);
+        prevButton.setCenterY(VIEW_HEIGHT * 0.5f);
+        prevButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                AlpacaFarm.prev();
+            }
+        });
+
+        nextButton = new ButtonEntity(StaticContentManager.Image.ARROW_RIGHT);
+        nextButton.setX(VIEWPORT_WIDTH - nextButton.getWidth() - HUD_PADDING);
+        nextButton.setCenterY(VIEW_HEIGHT * 0.5f);
+        nextButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                AlpacaFarm.next();
+            }
+        });
+
     }
 
     private float getDropTime() {
@@ -121,7 +153,15 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void handleInput(float dt) {
-        if(currentlyHeld == HeldItem.NONE) petDetector.handleInput(viewport);
+        if (currentlyHeld == HeldItem.NONE) {
+            petDetector.handleInput(viewport);
+            handleButtonInputs();
+        }
+    }
+
+    private void handleButtonInputs() {
+        prevButton.handleInput(viewport);
+        nextButton.handleInput(viewport);
     }
 
     private void update(float dt) {
@@ -138,16 +178,16 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private void updateWaterDrops(float dt) {
         Iterator<WaterDrop> iter = waterDrops.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             WaterDrop drop = iter.next();
             drop.update(dt);
-            if(drop.collidingWith(alpaca) && !drop.isHasCounted()) {
+            if (drop.collidingWith(alpaca) && !drop.isHasCounted()) {
                 drop.count();
                 SaveDataUtils.updateValuesAndSave(parent);
                 AlpacaFarm.getCurrentAlpaca().incrementHygieneStat(HYGIENE_PER_DROP);
                 SaveDataUtils.save(parent);
             }
-            if(drop.getY() + drop.getHeight() < 0) {
+            if (drop.getY() + drop.getHeight() < 0) {
                 iter.remove();
             }
         }
@@ -283,6 +323,8 @@ public class MainLibGdxView extends ApplicationAdapter {
         for (ZoomText zoomText : zoomTexts) {
             zoomText.draw(dt, spriteBatch, shapeRenderer);
         }
+        prevButton.draw(dt, spriteBatch, shapeRenderer);
+        nextButton.draw(dt, spriteBatch, shapeRenderer);
         spriteBatch.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -318,6 +360,8 @@ public class MainLibGdxView extends ApplicationAdapter {
     @Override
     public void resume() {
         StaticContentManager.load();
+        prevButton.onResume();
+        nextButton.onResume();
     }
 
     @Override

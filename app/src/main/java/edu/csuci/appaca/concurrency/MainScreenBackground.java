@@ -56,6 +56,7 @@ public class MainScreenBackground {
 
         private boolean running;
         private MainActivity parent;
+        private int currentAlpacaId;
 
         public BackgroundThread(MainActivity parent) {
             super();
@@ -73,15 +74,29 @@ public class MainScreenBackground {
             for (Stat stat : Stat.values()) {
                 currentValues.put(stat, Alpaca.MAX_STAT);
             }
+            currentAlpacaId = AlpacaFarm.getCurrentAlpaca().getId();
             while(this.running) {
                 Alpaca current = AlpacaFarm.getCurrentAlpaca();
                 updateStats(currentValues, current);
                 updateCurrencyDisplays();
+                updateName(current);
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
                     Log.e(getClass().getSimpleName() + ":" + getId(), e.getMessage(), e);
                 }
+            }
+        }
+
+        private void updateName(Alpaca alpaca) {
+            if(currentAlpacaId != alpaca.getId()) {
+                currentAlpacaId = alpaca.getId();
+                parent.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        parent.updateName();
+                    }
+                });
             }
         }
 
