@@ -15,7 +15,7 @@ import edu.csuci.appaca.graphics.minesweeper.MinesweeperTile;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
-    private final int MAX_BOMBS = 100;
+    private final int MAX_BOMBS = 40;
     private MinesweeperTile[][] grid;
     private int score = 0;
     private long timePlayed = 0;
@@ -45,6 +45,10 @@ public class MinesweeperActivity extends AppCompatActivity {
                         {
                             MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
                         }
+                        else
+                        {
+                            revealNeighboringTiles(tile.row, tile.column);
+                        }
                     }
                 });
                 grid[i][j] = tile;
@@ -63,5 +67,38 @@ public class MinesweeperActivity extends AppCompatActivity {
         }
     }
 
+    private void revealNeighboringTiles(int x, int y) {
+        boolean northExists = y < GRID_SIZE - 1;
+        boolean eastExists = x < GRID_SIZE - 1;
+        boolean southExists = y > 0;
+        boolean westExists = x > 0;
+
+        for (int i = 0; i < GRID_SIZE; i++) {
+            if (northExists) {
+
+            }
+            if (eastExists) {
+            }
+            if (southExists) {
+            }
+            if (westExists) {
+            }
+
+            //diagonals
+            if (northExists && eastExists) {
+            }
+            if (southExists && eastExists) {
+            }
+            if (northExists && westExists) {
+            }
+            if (southExists && westExists) {
+            }
+
+            northExists = (y + i) < GRID_SIZE - 1;
+            eastExists = (x + i) < GRID_SIZE - 1;
+            southExists = (y - i) > 0;
+            westExists = (x - i) > 0;
+        }
+    }
 }
 
