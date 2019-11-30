@@ -10,8 +10,8 @@ import edu.csuci.appaca.utils.ScreenUtils;
 public class MinesweeperTile {
     private boolean revealed;
     private boolean flagged;
-    private int row;
-    private int column;
+    public int row;
+    public int column;
     public boolean bomb;
     public View view;
 
@@ -37,10 +37,14 @@ public class MinesweeperTile {
     }
 
     public void reveal(Context context) {
-        if(this.bomb) { this.view.setBackgroundColor(context.getColor(R.color.pinkPastel)); }
-        else {
-            this.view.setBackgroundColor(context.getColor(R.color.greenPastel)); }
-        this.revealed = true;
+        if (!revealed) {
+            if (this.bomb) {
+                this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
+            } else {
+                this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+            }
+            this.revealed = true;
+        }
     }
 
     public void flag() {
