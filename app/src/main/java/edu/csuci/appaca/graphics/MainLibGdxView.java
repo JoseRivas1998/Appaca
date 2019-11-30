@@ -117,7 +117,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             }
         });
 
-        this.foodDrawer = new FoodDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, FOOD_DRAWER_HEIGHT);
+        this.foodDrawer = new FoodDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, FOOD_DRAWER_HEIGHT, HUD_PADDING, R.color.pinkPastel, parent);
         this.shouldToggleFoodDrawer = false;
         initButtons();
 
@@ -166,6 +166,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         if (currentlyHeld == HeldItem.NONE) {
             petDetector.handleInput(viewport);
             handleButtonInputs();
+            foodDrawer.handleInput();
         }
     }
 
@@ -398,6 +399,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             foodEating.dispose();
             foodEating = null;
         }
+        foodDrawer.dispose();
         StaticContentManager.dispose();
     }
 }
