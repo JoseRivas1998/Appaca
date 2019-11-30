@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
 
-import edu.csuci.appaca.activities.FoodSelectActivity;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.FoodToEat;
 import edu.csuci.appaca.data.Inventory;
