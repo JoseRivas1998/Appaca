@@ -26,7 +26,7 @@ import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
-import edu.csuci.appaca.graphics.entities.mainscreen.ButtonEntity;
+import edu.csuci.appaca.graphics.ui.ButtonEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
@@ -34,6 +34,7 @@ import edu.csuci.appaca.graphics.entities.mainscreen.HoseHead;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
 import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.graphics.ui.NinepatchButtonEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ShearUtils;
 
@@ -114,7 +115,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void initButtons() {
-        prevButton = new ButtonEntity(StaticContentManager.Image.ARROW_LEFT);
+        prevButton = new NinepatchButtonEntity(StaticContentManager.Image.ARROW_LEFT);
         prevButton.setX(HUD_PADDING);
         prevButton.setCenterY(VIEW_HEIGHT * 0.5f);
         prevButton.setClickListener(new ButtonEntity.ClickListener() {
@@ -124,7 +125,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             }
         });
 
-        nextButton = new ButtonEntity(StaticContentManager.Image.ARROW_RIGHT);
+        nextButton = new NinepatchButtonEntity(StaticContentManager.Image.ARROW_RIGHT);
         nextButton.setX(VIEWPORT_WIDTH - nextButton.getWidth() - HUD_PADDING);
         nextButton.setCenterY(VIEW_HEIGHT * 0.5f);
         nextButton.setClickListener(new ButtonEntity.ClickListener() {
