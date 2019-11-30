@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_view_dock_margin">10dp</dimen>
+    <dimen name="main_view_food_drawer_height">120dp</dimen>
 <!--    ALPACA JUMP-->
     <dimen name="hud_padding">10dp</dimen>
 <!--    Game Over Screen-->

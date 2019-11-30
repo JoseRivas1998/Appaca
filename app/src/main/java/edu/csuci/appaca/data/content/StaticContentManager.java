@@ -82,7 +82,8 @@ public class StaticContentManager {
         BACKGROUND_TILE("alpaca-run/background_tile.png"),
         BUTTON_BACKGROUND_NINEPATCH("ui/button_background_ninepatch.png"),
         ARROW_RIGHT("ui/arrow_right.png"),
-        ARROW_LEFT("ui/arrow_left.png");
+        ARROW_LEFT("ui/arrow_left.png"),
+        FOOD_DRAWER_BG("ui/food_drawer_bg.png");
         final String path;
 
         Image(String path) {

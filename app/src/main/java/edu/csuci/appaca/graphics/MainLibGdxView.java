@@ -26,14 +26,16 @@ import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
-import edu.csuci.appaca.graphics.entities.mainscreen.ButtonEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
+import edu.csuci.appaca.graphics.entities.mainscreen.FoodDrawer;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.HoseHead;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
 import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.graphics.ui.ButtonEntity;
+import edu.csuci.appaca.graphics.ui.NinepatchButtonEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ShearUtils;
 
@@ -44,6 +46,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private final int VIEWPORT_WIDTH;
     private final int VIEW_HEIGHT;
     private final float HUD_PADDING;
+    private final float FOOD_DRAWER_HEIGHT;
     private static final double HAPPINESS_PER_PET = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.001f;
 
     private SpriteBatch spriteBatch;
@@ -79,11 +82,16 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private HeldItem currentlyHeld = HeldItem.NONE;
 
+    private FoodDrawer foodDrawer;
+
+    private boolean shouldToggleFoodDrawer;
+
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
         VIEW_HEIGHT = parent.getResources().getInteger(R.integer.main_view_libgdx_height);
         HUD_PADDING = parent.getResources().getDimension(R.dimen.hud_padding);
+        FOOD_DRAWER_HEIGHT = parent.getResources().getDimension(R.dimen.main_view_food_drawer_height);
     }
 
     @Override
@@ -109,12 +117,14 @@ public class MainLibGdxView extends ApplicationAdapter {
             }
         });
 
+        this.foodDrawer = new FoodDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, FOOD_DRAWER_HEIGHT, HUD_PADDING, R.color.pinkPastel, parent);
+        this.shouldToggleFoodDrawer = false;
         initButtons();
 
     }
 
     private void initButtons() {
-        prevButton = new ButtonEntity(StaticContentManager.Image.ARROW_LEFT);
+        prevButton = new NinepatchButtonEntity(StaticContentManager.Image.ARROW_LEFT);
         prevButton.setX(HUD_PADDING);
         prevButton.setCenterY(VIEW_HEIGHT * 0.5f);
         prevButton.setClickListener(new ButtonEntity.ClickListener() {
@@ -124,7 +134,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             }
         });
 
-        nextButton = new ButtonEntity(StaticContentManager.Image.ARROW_RIGHT);
+        nextButton = new NinepatchButtonEntity(StaticContentManager.Image.ARROW_RIGHT);
         nextButton.setX(VIEWPORT_WIDTH - nextButton.getWidth() - HUD_PADDING);
         nextButton.setCenterY(VIEW_HEIGHT * 0.5f);
         nextButton.setClickListener(new ButtonEntity.ClickListener() {
@@ -156,6 +166,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         if (currentlyHeld == HeldItem.NONE) {
             petDetector.handleInput(viewport);
             handleButtonInputs();
+            foodDrawer.handleInput();
         }
     }
 
@@ -174,6 +185,15 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateClothingEntity(dt);
         updateWaterDrops(dt);
         viewport.apply(true);
+        updateFoodDrawer(dt);
+    }
+
+    private void updateFoodDrawer(float dt) {
+        if(this.shouldToggleFoodDrawer) {
+            this.shouldToggleFoodDrawer = false;
+            foodDrawer.toggle();
+        }
+        foodDrawer.update(dt);
     }
 
     private void updateWaterDrops(float dt) {
@@ -332,6 +352,8 @@ public class MainLibGdxView extends ApplicationAdapter {
 //        petDetector.draw(dt, spriteBatch, shapeRenderer);
         shapeRenderer.end();
 
+        foodDrawer.draw(dt, spriteBatch, shapeRenderer);
+
     }
 
     public void shear() {
@@ -343,6 +365,10 @@ public class MainLibGdxView extends ApplicationAdapter {
         SaveDataUtils.updateValuesAndSave(parent);
     }
 
+    public void toggleFoodDrawer() {
+        this.shouldToggleFoodDrawer = true;
+    }
+
     @Override
     public void resize(int width, int height) {
         Gdx.app.log("MainLibGdxView", String.format("%d, %d", width, height));
@@ -350,6 +376,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         for (ZoomText zoomText : zoomTexts) {
             zoomText.resize(width, height);
         }
+        foodDrawer.resize(width, height);
     }
 
     @Override
@@ -372,6 +399,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             foodEating.dispose();
             foodEating = null;
         }
+        foodDrawer.dispose();
         StaticContentManager.dispose();
     }
 }

@@ -126,8 +126,7 @@ public class MainActivity extends AndroidApplication {
         feedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FoodSelectActivity.class);
-                startActivity(intent);
+                libGDXView.toggleFoodDrawer();
             }
         });
 
