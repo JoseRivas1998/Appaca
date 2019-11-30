@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.GridLayout;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.activities.MinesweeperActivity;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 public class MinesweeperTile {
@@ -42,6 +43,7 @@ public class MinesweeperTile {
                 this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
             } else {
                 this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+                MinesweeperActivity.tilesRevealed++;
             }
             this.revealed = true;
         }

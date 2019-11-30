@@ -20,6 +20,9 @@ public class MinesweeperActivity extends AppCompatActivity {
     private int score = 0;
     private long timePlayed = 0;
 
+    private final int numSafeTiles = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
+    public static int tilesRevealed = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,10 @@ public class MinesweeperActivity extends AppCompatActivity {
                 view.addView(tile.view);
             }
         }
+    }
+
+    private void checkWin(){
+
     }
 
     private void placeBombs() {
