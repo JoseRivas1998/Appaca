@@ -20,7 +20,6 @@ public class MinesweeperActivity extends AppCompatActivity {
     private int score = 0;
     private long timePlayed = 0;
 
-    private final int NUM_SAFE_TILES = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
     public static int tilesRevealed = 0;
 
     @Override
@@ -52,7 +51,6 @@ public class MinesweeperActivity extends AppCompatActivity {
                         {
                             revealNeighboringTiles(tile.row, tile.column);
                         }
-                        checkWin();
                     }
                 });
                 grid[i][j] = tile;
@@ -62,6 +60,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void checkWin(){
+        final int NUM_SAFE_TILES = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
         if(tilesRevealed == NUM_SAFE_TILES) {
             MiniGames.winGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
         }
@@ -116,6 +115,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                 checkNeighboringTiles(y+1,x-1);
             }
         }
+        checkWin();
     }
 
     private void checkNeighboringTiles(int y, int x){
