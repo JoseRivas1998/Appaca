@@ -88,31 +88,31 @@ public class MinesweeperActivity extends AppCompatActivity {
             northExists = (y - i) > 0;
             westExists = (x - i) > 0;
             
-            if (northExists && !grid[y-1][x].bomb) {
-                checkNeighboringTiles(y-1, x);
+            if (northExists && !grid[y-i][x].bomb) {
+                checkNeighboringTiles(y-i, x);
             }
-            if (eastExists && !grid[y][x+1].bomb) {
-                checkNeighboringTiles( y, x+1);
+            if (eastExists && !grid[y][x+i].bomb) {
+                checkNeighboringTiles( y, x+i);
             }
-            if (southExists && !grid[y+1][x].bomb) {
-                checkNeighboringTiles(y+1, x);
+            if (southExists && !grid[y+i][x].bomb) {
+                checkNeighboringTiles(y+i, x);
             }
-            if (westExists && !grid[y][x-1].bomb) {
-                checkNeighboringTiles(y, x-1);
+            if (westExists && !grid[y][x-i].bomb) {
+                checkNeighboringTiles(y, x-i);
             }
 
             //diagonals
-            if (northExists && eastExists && !grid[y-1][x+1].bomb) {
-                checkNeighboringTiles(y-1,x+1);
+            if (northExists && eastExists && !grid[y-i][x+i].bomb) {
+                checkNeighboringTiles(y-i,x+i);
             }
-            if (southExists && eastExists && !grid[y+1][x+1].bomb) {
-                checkNeighboringTiles(y+1,x+1);
+            if (southExists && eastExists && !grid[y+i][x+i].bomb) {
+                checkNeighboringTiles(y+i,x+i);
             }
-            if (northExists && westExists && !grid[y-1][x-1].bomb) {
-                checkNeighboringTiles(y-1,x-1);
+            if (northExists && westExists && !grid[y-i][x-i].bomb) {
+                checkNeighboringTiles(y-i,x-i);
             }
-            if (southExists && westExists && !grid[y+1][x-1].bomb) {
-                checkNeighboringTiles(y+1,x-1);
+            if (southExists && westExists && !grid[y+i][x-i].bomb) {
+                checkNeighboringTiles(y+i,x-i);
             }
         }
         checkWin();
