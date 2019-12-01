@@ -9,6 +9,7 @@ import edu.csuci.appaca.activities.FruitCatchActivity;
 import edu.csuci.appaca.activities.GameOverActivity;
 import edu.csuci.appaca.activities.AlpacaRunActivity;
 import edu.csuci.appaca.activities.MinesweeperActivity;
+import edu.csuci.appaca.activities.MinesweeperWinActivity;
 
 public enum MiniGames {
     ALPACA_JUMP(R.string.alpaca_jump, AlpacaJumpActivity.class, R.string.alpaca_jump_score_format, R.drawable.alpacajump_icon, R.string.alpaca_jump_high_score_format) {
@@ -55,6 +56,15 @@ public enum MiniGames {
         Intent intent = new Intent(parent, GameOverActivity.class);
         intent.putExtra("score", score);
         intent.putExtra("return", miniGame.ordinal());
+        intent.putExtra("timePlayed", (int) timePlayed);
+        parent.startActivity(intent);
+        parent.finish();
+    }
+
+    public static void winGame(Activity parent, MiniGames minigame, int score, long timePlayed) {
+        Intent intent = new Intent(parent, MinesweeperWinActivity.class);
+        intent.putExtra("score", score);
+        intent.putExtra("return", minigame.ordinal());
         intent.putExtra("timePlayed", (int) timePlayed);
         parent.startActivity(intent);
         parent.finish();
