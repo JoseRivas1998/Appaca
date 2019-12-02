@@ -28,11 +28,14 @@ import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
+import edu.csuci.appaca.graphics.entities.mainscreen.FoodDrawer;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.HoseHead;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
 import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.graphics.ui.ButtonEntity;
+import edu.csuci.appaca.graphics.ui.NinepatchButtonEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ShearUtils;
 
@@ -42,6 +45,8 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private final int VIEWPORT_WIDTH;
     private final int VIEW_HEIGHT;
+    private final float HUD_PADDING;
+    private final float FOOD_DRAWER_HEIGHT;
     private static final double HAPPINESS_PER_PET = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.001f;
 
     private SpriteBatch spriteBatch;
@@ -72,12 +77,21 @@ public class MainLibGdxView extends ApplicationAdapter {
         NONE, HOSE
     }
 
+    private ButtonEntity prevButton;
+    private ButtonEntity nextButton;
+
     private HeldItem currentlyHeld = HeldItem.NONE;
+
+    private FoodDrawer foodDrawer;
+
+    private boolean shouldToggleFoodDrawer;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
         VIEW_HEIGHT = parent.getResources().getInteger(R.integer.main_view_libgdx_height);
+        HUD_PADDING = parent.getResources().getDimension(R.dimen.hud_padding);
+        FOOD_DRAWER_HEIGHT = parent.getResources().getDimension(R.dimen.main_view_food_drawer_height);
     }
 
     @Override
@@ -102,6 +116,34 @@ public class MainLibGdxView extends ApplicationAdapter {
                 waterDrops.add(new WaterDrop(hoseHead));
             }
         });
+
+        this.foodDrawer = new FoodDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, FOOD_DRAWER_HEIGHT, HUD_PADDING, R.color.pinkPastel, parent);
+        this.shouldToggleFoodDrawer = false;
+        initButtons();
+
+    }
+
+    private void initButtons() {
+        prevButton = new NinepatchButtonEntity(StaticContentManager.Image.ARROW_LEFT);
+        prevButton.setX(HUD_PADDING);
+        prevButton.setCenterY(VIEW_HEIGHT * 0.5f);
+        prevButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                AlpacaFarm.prev();
+            }
+        });
+
+        nextButton = new NinepatchButtonEntity(StaticContentManager.Image.ARROW_RIGHT);
+        nextButton.setX(VIEWPORT_WIDTH - nextButton.getWidth() - HUD_PADDING);
+        nextButton.setCenterY(VIEW_HEIGHT * 0.5f);
+        nextButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                AlpacaFarm.next();
+            }
+        });
+
     }
 
     private float getDropTime() {
@@ -121,7 +163,16 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void handleInput(float dt) {
-        if(currentlyHeld == HeldItem.NONE) petDetector.handleInput(viewport);
+        if (currentlyHeld == HeldItem.NONE) {
+            petDetector.handleInput(viewport);
+            handleButtonInputs();
+            foodDrawer.handleInput();
+        }
+    }
+
+    private void handleButtonInputs() {
+        prevButton.handleInput(viewport);
+        nextButton.handleInput(viewport);
     }
 
     private void update(float dt) {
@@ -134,20 +185,29 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateClothingEntity(dt);
         updateWaterDrops(dt);
         viewport.apply(true);
+        updateFoodDrawer(dt);
+    }
+
+    private void updateFoodDrawer(float dt) {
+        if(this.shouldToggleFoodDrawer) {
+            this.shouldToggleFoodDrawer = false;
+            foodDrawer.toggle();
+        }
+        foodDrawer.update(dt);
     }
 
     private void updateWaterDrops(float dt) {
         Iterator<WaterDrop> iter = waterDrops.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             WaterDrop drop = iter.next();
             drop.update(dt);
-            if(drop.collidingWith(alpaca) && !drop.isHasCounted()) {
+            if (drop.collidingWith(alpaca) && !drop.isHasCounted()) {
                 drop.count();
                 SaveDataUtils.updateValuesAndSave(parent);
                 AlpacaFarm.getCurrentAlpaca().incrementHygieneStat(HYGIENE_PER_DROP);
                 SaveDataUtils.save(parent);
             }
-            if(drop.getY() + drop.getHeight() < 0) {
+            if (drop.getY() + drop.getHeight() < 0) {
                 iter.remove();
             }
         }
@@ -283,12 +343,16 @@ public class MainLibGdxView extends ApplicationAdapter {
         for (ZoomText zoomText : zoomTexts) {
             zoomText.draw(dt, spriteBatch, shapeRenderer);
         }
+        prevButton.draw(dt, spriteBatch, shapeRenderer);
+        nextButton.draw(dt, spriteBatch, shapeRenderer);
         spriteBatch.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
 //        petDetector.draw(dt, spriteBatch, shapeRenderer);
         shapeRenderer.end();
+
+        foodDrawer.draw(dt, spriteBatch, shapeRenderer);
 
     }
 
@@ -301,6 +365,10 @@ public class MainLibGdxView extends ApplicationAdapter {
         SaveDataUtils.updateValuesAndSave(parent);
     }
 
+    public void toggleFoodDrawer() {
+        this.shouldToggleFoodDrawer = true;
+    }
+
     @Override
     public void resize(int width, int height) {
         Gdx.app.log("MainLibGdxView", String.format("%d, %d", width, height));
@@ -308,6 +376,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         for (ZoomText zoomText : zoomTexts) {
             zoomText.resize(width, height);
         }
+        foodDrawer.resize(width, height);
     }
 
     @Override
@@ -318,6 +387,8 @@ public class MainLibGdxView extends ApplicationAdapter {
     @Override
     public void resume() {
         StaticContentManager.load();
+        prevButton.onResume();
+        nextButton.onResume();
     }
 
     @Override
@@ -328,6 +399,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             foodEating.dispose();
             foodEating = null;
         }
+        foodDrawer.dispose();
         StaticContentManager.dispose();
     }
 }

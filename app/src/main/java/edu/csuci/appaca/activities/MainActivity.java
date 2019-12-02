@@ -126,8 +126,7 @@ public class MainActivity extends AndroidApplication {
         feedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FoodSelectActivity.class);
-                startActivity(intent);
+                libGDXView.toggleFoodDrawer();
             }
         });
 
@@ -155,7 +154,7 @@ public class MainActivity extends AndroidApplication {
         }
     }
 
-    private void updateName() {
+    public void updateName() {
         String name = AlpacaFarm.getCurrentAlpaca().getName();
         TextView view = findViewById(R.id.main_alpaca_name_view);
         view.setText(name);
