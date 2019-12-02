@@ -33,7 +33,7 @@ public enum MiniGames {
     MINESWEEPER(R.string.minesweeper, MinesweeperActivity.class, R.string.minesweeper_score_format, R.drawable.poosweeper_grid, R.string.minesweeper_high_score_format) {
         @Override
         public int coinsForScore(int score) {
-            return 0;
+            return score / 100;
         }
     };
     public final int nameId;
