@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -20,7 +21,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     private long timePlayed = 0;
 
     public static int tilesRevealed = 0;
-    public static int score = 0;
+    public static int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +33,13 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void initMinesweeper() {
+        this.score = 0;
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
+        TextView scoreText = findViewById(R.id.minesweeper_score_text);
+        String format = context.getText(MiniGames.MINESWEEPER.scoreFormatId).toString();
+        String text = String.format(format, score);
+        scoreText.setText(text);
         GridLayout view = findViewById(R.id.minesweeper_grid);
         view.setColumnCount(GRID_SIZE);
         for(int i = 0; i < GRID_SIZE; i++) {
@@ -51,6 +57,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                         {
                             revealNeighboringTiles(tile.row, tile.column);
                         }
+                        updateScore();
                     }
                 });
                 grid[i][j] = tile;
@@ -64,6 +71,14 @@ public class MinesweeperActivity extends AppCompatActivity {
         if(tilesRevealed == NUM_SAFE_TILES) {
             MiniGames.winGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
         }
+    }
+
+    private void updateScore(){
+        Context context = this.getApplicationContext();
+        TextView scoreText = findViewById(R.id.minesweeper_score_text);
+        String format = context.getText(MiniGames.MINESWEEPER.scoreFormatId).toString();
+        String text = String.format(format, score);
+        scoreText.setText(text);
     }
 
     private void placeBombs() {
