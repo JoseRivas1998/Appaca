@@ -17,10 +17,10 @@ public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
     private final int MAX_BOMBS = 40;
     private MinesweeperTile[][] grid;
-    private int score = 0;
     private long timePlayed = 0;
 
     public static int tilesRevealed = 0;
+    public static int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

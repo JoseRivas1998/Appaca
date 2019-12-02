@@ -44,6 +44,7 @@ public class MinesweeperTile {
             } else {
                 this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
                 MinesweeperActivity.tilesRevealed++;
+                MinesweeperActivity.score++;
             }
             this.revealed = true;
         }
