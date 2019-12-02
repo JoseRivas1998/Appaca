@@ -8,13 +8,14 @@ import android.widget.GridLayout;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.utils.AssetsUtils;
+import edu.csuci.appaca.activities.MinesweeperActivity;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 public class MinesweeperTile {
     private boolean revealed;
     private boolean flagged;
-    private int row;
-    private int column;
+    public int row;
+    public int column;
     public boolean bomb;
     public View view;
 
@@ -40,12 +41,16 @@ public class MinesweeperTile {
     }
 
     public void reveal(Context context) {
-        if (this.bomb) {
-            this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
-        } else {
-            this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+        if (!revealed) {
+            if (this.bomb) {
+                this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
+            } else {
+                this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+                MinesweeperActivity.tilesRevealed++;
+                MinesweeperActivity.score++;
+            }
+            this.revealed = true;
         }
-        this.revealed = true;
     }
 
     private void flag(Context context) {
