@@ -70,14 +70,17 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        tile.reveal(context);
-                        if (tile.bomb)
-                        {
-                            MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
-                        }
-                        else
-                        {
-                            revealNeighboringTiles(tile.row, tile.column);
+                        if (flagToggle) {
+                            tile.flipFlag(context);
+                        } else {
+                            boolean revealed = tile.reveal(context);
+                            if (revealed) {
+                                if (tile.bomb) {
+                                    MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                                } else {
+                                    revealNeighboringTiles(tile.row, tile.column);
+                                }
+                            }
                         }
                         updateScore();
                     }

@@ -40,17 +40,20 @@ public class MinesweeperTile {
         return ret;
     }
 
-    public void reveal(Context context) {
-        if (!revealed) {
-            if (this.bomb) {
-                this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
-            } else {
-                this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
-                MinesweeperActivity.tilesRevealed++;
-                MinesweeperActivity.score++;
+    public boolean reveal(Context context) {
+        if(!flagged) {
+            if (!revealed) {
+                if (this.bomb) {
+                    this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
+                } else {
+                    this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+                    MinesweeperActivity.tilesRevealed++;
+                    MinesweeperActivity.score++;
+                }
+                this.revealed = true;
             }
-            this.revealed = true;
         }
+        return this.revealed;
     }
 
     private void flag(Context context) {
