@@ -59,7 +59,7 @@ public class MinesweeperTile {
     private void flag(Context context) {
         if (!revealed) {
             this.flagged = true;
-            this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/orangeFlagTile.png"));
+            this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/orange_flag_tile.png"));
         }
     }
 
