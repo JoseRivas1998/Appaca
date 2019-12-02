@@ -1,10 +1,13 @@
 package edu.csuci.appaca.graphics.minesweeper;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.GridLayout;
 
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.content.StaticContentManager;
+import edu.csuci.appaca.utils.AssetsUtils;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 public class MinesweeperTile {
@@ -37,18 +40,34 @@ public class MinesweeperTile {
     }
 
     public void reveal(Context context) {
-        if(this.bomb) { this.view.setBackgroundColor(context.getColor(R.color.pinkPastel)); }
-        else {
-            this.view.setBackgroundColor(context.getColor(R.color.greenPastel)); }
+        if (this.bomb) {
+            this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
+        } else {
+            this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+        }
         this.revealed = true;
     }
 
-    public void flag() {
-        this.flagged = true;
+    private void flag(Context context) {
+        if (!revealed) {
+            this.flagged = true;
+            this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/orangeFlagTile.png"));
+        }
     }
 
-    public void unflag() {
-        this.flagged = false;
+    private void unflag(Context context) {
+        if (!revealed) {
+            this.flagged = false;
+            this.view.setBackgroundColor(context.getColor(R.color.bluePastel));
+        }
+    }
+
+    public void flipFlag(Context context) {
+        if (this.flagged) {
+            unflag(context);
+        } else {
+            flag(context);
+        }
     }
 
     public void setBomb() { this.bomb = true; }
