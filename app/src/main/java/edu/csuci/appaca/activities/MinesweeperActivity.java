@@ -3,9 +3,11 @@ package edu.csuci.appaca.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -13,12 +15,14 @@ import java.util.Random;
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.graphics.minesweeper.MinesweeperTile;
+import edu.csuci.appaca.utils.AssetsUtils;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
     private final int MAX_BOMBS = 40;
     private MinesweeperTile[][] grid;
     private long timePlayed = 0;
+    private boolean flagToggle = false;
 
     public static int tilesRevealed = 0;
     public static int score;
@@ -41,6 +45,24 @@ public class MinesweeperActivity extends AppCompatActivity {
         String text = String.format(format, score);
         scoreText.setText(text);
         GridLayout view = findViewById(R.id.minesweeper_grid);
+        final ImageButton flagButton = findViewById(R.id.flag_toggle);
+        flagButton.setImageDrawable(AssetsUtils.drawableFromAsset(this, "minesweeper/orange_flag.png"));
+        flagButton.setBackgroundColor(Color.TRANSPARENT);
+
+        flagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (flagToggle) {
+                    flagButton.setBackgroundColor(Color.TRANSPARENT);
+                    flagToggle = false;
+                } else {
+                    flagButton.setBackgroundColor(getColor(R.color.yellowPastel));
+                    flagToggle = true;
+                }
+
+            }
+        });
+
         view.setColumnCount(GRID_SIZE);
         for(int i = 0; i < GRID_SIZE; i++) {
             for(int j = 0; j < GRID_SIZE; j++) {
@@ -48,14 +70,17 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        tile.reveal(context);
-                        if (tile.bomb)
-                        {
-                            MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
-                        }
-                        else
-                        {
-                            revealNeighboringTiles(tile.row, tile.column);
+                        if (flagToggle) {
+                            tile.flipFlag(context);
+                        } else {
+                            boolean revealed = tile.reveal(context);
+                            if (revealed) {
+                                if (tile.bomb) {
+                                    MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                                } else {
+                                    revealNeighboringTiles(tile.row, tile.column);
+                                }
+                            }
                         }
                         updateScore();
                     }

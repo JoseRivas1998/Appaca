@@ -7,15 +7,25 @@
     tools:context=".activities.MinesweeperActivity"
     android:orientation="vertical">
     <TextView
+        android:id="@+id/minesweeper_score_text"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:id="@+id/minesweeper_score_text"/>
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/flag_toggle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_above="@+id/minesweeper_grid"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="30dp"
+            android:scaleType="centerCrop" />
 
         <GridLayout
             android:layout_width="wrap_content"
