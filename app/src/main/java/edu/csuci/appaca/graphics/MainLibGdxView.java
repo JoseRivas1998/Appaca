@@ -26,6 +26,7 @@ import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
+import edu.csuci.appaca.graphics.entities.mainscreen.ClothingDrawer;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.FoodDrawer;
@@ -83,8 +84,10 @@ public class MainLibGdxView extends ApplicationAdapter {
     private HeldItem currentlyHeld = HeldItem.NONE;
 
     private FoodDrawer foodDrawer;
+    private ClothingDrawer clothingDrawer;
 
     private boolean shouldToggleFoodDrawer;
+    private boolean shouldToggleClothingDrawer;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
@@ -119,6 +122,8 @@ public class MainLibGdxView extends ApplicationAdapter {
 
         this.foodDrawer = new FoodDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, FOOD_DRAWER_HEIGHT, HUD_PADDING, R.color.pinkPastel, parent);
         this.shouldToggleFoodDrawer = false;
+        this.clothingDrawer = new ClothingDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, parent);
+        this.shouldToggleClothingDrawer = false;
         initButtons();
 
     }
@@ -167,6 +172,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             petDetector.handleInput(viewport);
             handleButtonInputs();
             foodDrawer.handleInput();
+            clothingDrawer.handleInput();
         }
     }
 
@@ -186,6 +192,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateWaterDrops(dt);
         viewport.apply(true);
         updateFoodDrawer(dt);
+        updateClothingDrawer(dt);
     }
 
     private void updateFoodDrawer(float dt) {
@@ -194,6 +201,14 @@ public class MainLibGdxView extends ApplicationAdapter {
             foodDrawer.toggle();
         }
         foodDrawer.update(dt);
+    }
+
+    private void updateClothingDrawer(float dt) {
+        if(this.shouldToggleClothingDrawer) {
+            this.shouldToggleClothingDrawer = false;
+            this.clothingDrawer.toggle();
+        }
+        clothingDrawer.update(dt);
     }
 
     private void updateWaterDrops(float dt) {
@@ -353,6 +368,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         shapeRenderer.end();
 
         foodDrawer.draw(dt, spriteBatch, shapeRenderer);
+        clothingDrawer.draw(dt, spriteBatch, shapeRenderer);
 
     }
 
@@ -369,6 +385,10 @@ public class MainLibGdxView extends ApplicationAdapter {
         this.shouldToggleFoodDrawer = true;
     }
 
+    public void toggleClothingDrawer() {
+        this.shouldToggleClothingDrawer = true;
+    }
+
     @Override
     public void resize(int width, int height) {
         Gdx.app.log("MainLibGdxView", String.format("%d, %d", width, height));
@@ -377,6 +397,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             zoomText.resize(width, height);
         }
         foodDrawer.resize(width, height);
+        clothingDrawer.resize(width, height);
     }
 
     @Override
@@ -400,6 +421,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             foodEating = null;
         }
         foodDrawer.dispose();
+        clothingDrawer.dispose();
         StaticContentManager.dispose();
     }
 }
