@@ -22,9 +22,10 @@
             android:id="@+id/flag_toggle"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:scaleType="centerCrop"
+            android:layout_above="@+id/minesweeper_grid"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp" />
+            android:layout_marginBottom="30dp"
+            android:scaleType="centerCrop" />
 
         <GridLayout
             android:layout_width="wrap_content"
