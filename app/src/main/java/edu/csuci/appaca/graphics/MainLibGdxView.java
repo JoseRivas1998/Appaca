@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -88,6 +89,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private boolean shouldToggleFoodDrawer;
     private boolean shouldToggleClothingDrawer;
+    private boolean hideDown;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
@@ -125,6 +127,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         this.clothingDrawer = new ClothingDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, parent);
         this.shouldToggleClothingDrawer = false;
         initButtons();
+        hideDown = false;
 
     }
 
@@ -193,6 +196,31 @@ public class MainLibGdxView extends ApplicationAdapter {
         viewport.apply(true);
         updateFoodDrawer(dt);
         updateClothingDrawer(dt);
+        updateHideDrawers();
+    }
+
+    private void updateHideDrawers() {
+        if(foodDrawer.isShowing() || clothingDrawer.isShowing()) {
+            if(!hideDown) {
+                if(Gdx.input.justTouched()) {
+                    Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+                    if(touchPoint.y > FOOD_DRAWER_HEIGHT) {
+                        hideDown = true;
+                    }
+                }
+            } else {
+                if(!Gdx.input.isTouched()) {
+                    Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+                    if(touchPoint.y > FOOD_DRAWER_HEIGHT) {
+                        if(foodDrawer.isShowing()) foodDrawer.toggle();
+                        if(clothingDrawer.isShowing()) clothingDrawer.toggle();
+                    }
+                    hideDown = false;
+                }
+            }
+        } else {
+            hideDown = false;
+        }
     }
 
     private void updateFoodDrawer(float dt) {
