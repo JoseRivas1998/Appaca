@@ -23,6 +23,8 @@ public class MinesweeperActivity extends AppCompatActivity {
     public static int tilesRevealed = 0;
     public static int score;
 
+    private String buffer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +50,16 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        tile.reveal(context);
-                        if (tile.bomb)
-                        {
-                            MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
-                        }
-                        else
-                        {
-                            revealNeighboringTiles(tile.row, tile.column);
+                        if (!tile.isRevealed()) {
+                            tile.reveal(context);
+                            if (tile.bomb) {
+                                MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                            } else {
+                                revealNeighboringTiles(tile.row, tile.column);
+                            }
                         }
                         updateScore();
+                        checkWin();
                     }
                 });
                 grid[i][j] = tile;
@@ -139,6 +141,8 @@ public class MinesweeperActivity extends AppCompatActivity {
         boolean northExists = y > 0;
         boolean westExists = x > 0;
 
+        int bombsNear = 0;
+
         boolean nBomb = false;
         boolean eBomb = false;
         boolean sBomb = false;
@@ -151,32 +155,60 @@ public class MinesweeperActivity extends AppCompatActivity {
         
         if (northExists) {
             nBomb = grid[y - 1][x].bomb;
+            if (nBomb) {
+                bombsNear++;
+            }
         } if (eastExists) {
              eBomb = grid[y][x + 1].bomb;
+            if (eBomb) {
+                bombsNear++;
+            }
         } if (southExists) {
              sBomb = grid[y + 1][x].bomb;
+            if (sBomb) {
+                bombsNear++;
+            }
         } if (westExists) {
              wBomb = grid[y][x - 1].bomb;
+            if (wBomb) {
+                bombsNear++;
+            }
         }
         
         if (northExists && eastExists) {
              neBomb = grid[y - 1][x + 1].bomb;
+            if (neBomb) {
+                bombsNear++;
+            }
         } if (southExists && eastExists) {
              seBomb = grid[y + 1][x + 1].bomb;
+            if (seBomb) {
+                bombsNear++;
+            }
         } if (northExists && westExists) {
             nwBomb = grid[y - 1][x - 1].bomb;
+            if (nwBomb) {
+                bombsNear++;
+            }
         } if (southExists && westExists) {
             swBomb = grid[y + 1][x - 1].bomb;
+            if (swBomb) {
+                bombsNear++;
+            }
         }
+
         
         boolean adj = nBomb || eBomb || sBomb || wBomb;
         boolean diag = neBomb || seBomb || nwBomb || swBomb;
-        
+
         boolean bombExists = adj || diag;
-        
+
         Context context = this.getApplicationContext();
-        
+
         grid[y][x].reveal(context);
+        setNumOfNearMinesString(bombsNear);
+        grid[y][x].view.setText(buffer);
+
         if (!bombExists){
             if (northExists) {
                 grid[y-1][x].reveal(context);
@@ -204,6 +236,14 @@ public class MinesweeperActivity extends AppCompatActivity {
             if (southExists && westExists) {
                 grid[y+1][x-1].reveal(context);
             }
+        }
+
+    }
+
+    private void setNumOfNearMinesString(int number) {
+        this.buffer = "";
+        if (number > 0) {
+            this.buffer += number;
         }
     }
 }
