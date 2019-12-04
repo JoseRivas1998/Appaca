@@ -123,17 +123,60 @@ public class MinesweeperActivity extends AppCompatActivity {
             return;
         }
         else {
+            boolean bombExists = doNeighborsHaveBombs(y,x);
             grid[y][x].reveal(this.getApplicationContext());
-            for (int i = y-1; i <= y+1; i++){
-                for(int j = x-1; j <= x+1; j++) {
-                    revealNeighboringTiles(i, j);
+            if (!bombExists) {
+                for (int i = y - 1; i <= y + 1; i++) {
+                    for (int j = x - 1; j <= x + 1; j++) {
+                        revealNeighboringTiles(i, j);
+                    }
                 }
             }
         }
     }
 
-    boolean doNeighborsHaveBombs(){
-        return false;
+    boolean doNeighborsHaveBombs(int y, int x){
+        boolean southExists = (y + 1) < GRID_SIZE - 1;
+        boolean eastExists = (x + 1) < GRID_SIZE - 1;
+        boolean northExists = (y - 1) > 0;
+        boolean westExists = (x - 1) > 0;
+
+        boolean nBomb = false;
+        boolean eBomb = false;
+        boolean sBomb = false;
+        boolean wBomb = false;
+
+        boolean neBomb = false;
+        boolean seBomb = false;
+        boolean nwBomb = false;
+        boolean swBomb = false;
+
+        if (northExists) {
+            nBomb = grid[y - 1][x].bomb;
+        } if (eastExists) {
+            eBomb = grid[y][x + 1].bomb;
+        } if (southExists) {
+            sBomb = grid[y + 1][x].bomb;
+        } if (westExists) {
+            wBomb = grid[y][x - 1].bomb;
+        }
+
+        if (northExists && eastExists) {
+            neBomb = grid[y - 1][x + 1].bomb;
+        } if (southExists && eastExists) {
+            seBomb = grid[y + 1][x + 1].bomb;
+        } if (northExists && westExists) {
+            nwBomb = grid[y - 1][x - 1].bomb;
+        } if (southExists && westExists) {
+            swBomb = grid[y + 1][x - 1].bomb;
+        }
+
+        boolean adj = nBomb || eBomb || sBomb || wBomb;
+        boolean diag = neBomb || seBomb || nwBomb || swBomb;
+
+        boolean bombExists = adj || diag;
+
+        return bombExists;
     }
 
 
