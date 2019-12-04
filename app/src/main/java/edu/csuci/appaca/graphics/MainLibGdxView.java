@@ -38,8 +38,10 @@ import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
 import edu.csuci.appaca.graphics.ui.ButtonEntity;
 import edu.csuci.appaca.graphics.ui.NinepatchButtonEntity;
+import edu.csuci.appaca.graphics.ui.SpriteButtonEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ShearUtils;
+import edu.csuci.appaca.utils.VectorUtils;
 
 public class MainLibGdxView extends ApplicationAdapter {
 
@@ -71,6 +73,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private static final float MIN_DROP_TIME = 0.05f;
     private static final float MAX_DROP_TIME = 0.15f;
+    private static final float TOOLBOX_ITEM_SMOOTHING = 15f;
     private List<WaterDrop> waterDrops;
     private ActionTimer waterDropTimer;
     private static final double HYGIENE_PER_DROP = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.01f;
@@ -90,6 +93,11 @@ public class MainLibGdxView extends ApplicationAdapter {
     private boolean shouldToggleFoodDrawer;
     private boolean shouldToggleClothingDrawer;
     private boolean hideDown;
+
+    private SpriteButtonEntity toolboxButton;
+    private boolean toolboxOpen;
+    private boolean toolboxOpening;
+    private Vector2 hoseHeadTarget;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
@@ -128,6 +136,8 @@ public class MainLibGdxView extends ApplicationAdapter {
         this.shouldToggleClothingDrawer = false;
         initButtons();
         hideDown = false;
+        toolboxOpen = false;
+        hoseHeadTarget = new Vector2();
 
     }
 
@@ -152,6 +162,17 @@ public class MainLibGdxView extends ApplicationAdapter {
             }
         });
 
+        toolboxButton = new SpriteButtonEntity(StaticContentManager.Image.TOOLBOX_CLOSED);
+        toolboxButton.setPosition(HUD_PADDING, HUD_PADDING);
+        toolboxButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                if(foodDrawer.isShowing() || clothingDrawer.isShowing()) return;
+                if(!toolboxOpen) {
+                    openToolbox();
+                }
+            }
+        });
     }
 
     private float getDropTime() {
@@ -182,6 +203,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private void handleButtonInputs() {
         prevButton.handleInput(viewport);
         nextButton.handleInput(viewport);
+        toolboxButton.handleInput(viewport);
     }
 
     private void update(float dt) {
@@ -197,23 +219,24 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateFoodDrawer(dt);
         updateClothingDrawer(dt);
         updateHideDrawers();
+        toolboxButton.update(dt);
     }
 
     private void updateHideDrawers() {
-        if(foodDrawer.isShowing() || clothingDrawer.isShowing()) {
-            if(!hideDown) {
-                if(Gdx.input.justTouched()) {
+        if (foodDrawer.isShowing() || clothingDrawer.isShowing()) {
+            if (!hideDown) {
+                if (Gdx.input.justTouched()) {
                     Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-                    if(touchPoint.y > FOOD_DRAWER_HEIGHT) {
+                    if (touchPoint.y > FOOD_DRAWER_HEIGHT) {
                         hideDown = true;
                     }
                 }
             } else {
-                if(!Gdx.input.isTouched()) {
+                if (!Gdx.input.isTouched()) {
                     Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-                    if(touchPoint.y > FOOD_DRAWER_HEIGHT) {
-                        if(foodDrawer.isShowing()) foodDrawer.toggle();
-                        if(clothingDrawer.isShowing()) clothingDrawer.toggle();
+                    if (touchPoint.y > FOOD_DRAWER_HEIGHT) {
+                        if (foodDrawer.isShowing()) foodDrawer.toggle();
+                        if (clothingDrawer.isShowing()) clothingDrawer.toggle();
                     }
                     hideDown = false;
                 }
@@ -224,18 +247,18 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updateFoodDrawer(float dt) {
-        if(this.shouldToggleFoodDrawer) {
+        if (this.shouldToggleFoodDrawer) {
             this.shouldToggleFoodDrawer = false;
-            if(clothingDrawer.isShowing()) clothingDrawer.toggle();
+            if (clothingDrawer.isShowing()) clothingDrawer.toggle();
             foodDrawer.toggle();
         }
         foodDrawer.update(dt);
     }
 
     private void updateClothingDrawer(float dt) {
-        if(this.shouldToggleClothingDrawer) {
+        if (this.shouldToggleClothingDrawer) {
             this.shouldToggleClothingDrawer = false;
-            if(foodDrawer.isShowing()) foodDrawer.toggle();
+            if (foodDrawer.isShowing()) foodDrawer.toggle();
             this.clothingDrawer.toggle();
         }
         clothingDrawer.update(dt);
@@ -271,6 +294,15 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updateHoseHead(float dt) {
+        if (!toolboxOpen) return;
+        if(toolboxOpening) {
+            hoseHead.setX(hoseHead.getX() + ((hoseHeadTarget.x - hoseHead.getX()) / TOOLBOX_ITEM_SMOOTHING));
+            hoseHead.setY(hoseHead.getY() + ((hoseHeadTarget.y - hoseHead.getY()) / TOOLBOX_ITEM_SMOOTHING));
+            if(VectorUtils.dist(hoseHead.getPosition(), hoseHeadTarget) < 1) {
+                toolboxOpening = false;
+            }
+            return;
+        }
         hoseHead.update(dt);
         switch (currentlyHeld) {
             case HOSE:
@@ -378,7 +410,8 @@ public class MainLibGdxView extends ApplicationAdapter {
         alpaca.draw(dt, spriteBatch, shapeRenderer);
         clothingEntity.draw(dt, spriteBatch, shapeRenderer);
         if (foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
-        hoseHead.draw(dt, spriteBatch, shapeRenderer);
+        if(toolboxOpen) hoseHead.draw(dt, spriteBatch, shapeRenderer);
+        toolboxButton.draw(dt, spriteBatch, shapeRenderer);
         for (WaterDrop waterDrop : waterDrops) {
             waterDrop.draw(dt, spriteBatch, shapeRenderer);
         }
@@ -417,6 +450,15 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     public void toggleClothingDrawer() {
         this.shouldToggleClothingDrawer = true;
+    }
+
+    private void openToolbox() {
+        toolboxOpen = true;
+        toolboxOpening = true;
+        hoseHead.setPosition(toolboxButton.getPosition());
+        hoseHeadTarget.x = MathUtils.random(0, VIEWPORT_WIDTH - hoseHead.getWidth());
+        hoseHeadTarget.y = MathUtils.random(0, VIEW_HEIGHT - hoseHead.getHeight());
+        toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_OPEN);
     }
 
     @Override
