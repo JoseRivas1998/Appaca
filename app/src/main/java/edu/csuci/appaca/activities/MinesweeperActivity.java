@@ -3,22 +3,29 @@ package edu.csuci.appaca.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.Random;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.MiniGames;
 import edu.csuci.appaca.graphics.minesweeper.MinesweeperTile;
+import edu.csuci.appaca.utils.AssetsUtils;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
     private final int MAX_BOMBS = 40;
     private MinesweeperTile[][] grid;
-    private int score = 0;
     private long timePlayed = 0;
+    private boolean flagToggle = false;
+
+    public static int tilesRevealed = 0;
+    public static int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +37,32 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void initMinesweeper() {
+        this.score = 0;
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
+        TextView scoreText = findViewById(R.id.minesweeper_score_text);
+        String format = context.getText(MiniGames.MINESWEEPER.scoreFormatId).toString();
+        String text = String.format(format, score);
+        scoreText.setText(text);
         GridLayout view = findViewById(R.id.minesweeper_grid);
+        final ImageButton flagButton = findViewById(R.id.flag_toggle);
+        flagButton.setImageDrawable(AssetsUtils.drawableFromAsset(this, "minesweeper/orange_flag.png"));
+        flagButton.setBackgroundColor(Color.TRANSPARENT);
+
+        flagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (flagToggle) {
+                    flagButton.setBackgroundColor(Color.TRANSPARENT);
+                    flagToggle = false;
+                } else {
+                    flagButton.setBackgroundColor(getColor(R.color.yellowPastel));
+                    flagToggle = true;
+                }
+
+            }
+        });
+
         view.setColumnCount(GRID_SIZE);
         for(int i = 0; i < GRID_SIZE; i++) {
             for(int j = 0; j < GRID_SIZE; j++) {
@@ -40,21 +70,40 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        tile.reveal(context);
-                        if (tile.bomb)
-                        {
-                            MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                        if (flagToggle) {
+                            tile.flipFlag(context);
+                        } else {
+                            boolean revealed = tile.reveal(context);
+                            if (revealed) {
+                                if (tile.bomb) {
+                                    MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                                } else {
+                                    revealNeighboringTiles(tile.row, tile.column);
+                                }
+                            }
                         }
-                        else
-                        {
-                            revealNeighboringTiles(tile.row, tile.column);
-                        }
+                        updateScore();
                     }
                 });
                 grid[i][j] = tile;
                 view.addView(tile.view);
             }
         }
+    }
+
+    private void checkWin(){
+        final int NUM_SAFE_TILES = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
+        if(tilesRevealed == NUM_SAFE_TILES) {
+            MiniGames.winGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+        }
+    }
+
+    private void updateScore(){
+        Context context = this.getApplicationContext();
+        TextView scoreText = findViewById(R.id.minesweeper_score_text);
+        String format = context.getText(MiniGames.MINESWEEPER.scoreFormatId).toString();
+        String text = String.format(format, score);
+        scoreText.setText(text);
     }
 
     private void placeBombs() {
@@ -79,33 +128,34 @@ public class MinesweeperActivity extends AppCompatActivity {
             northExists = (y - i) > 0;
             westExists = (x - i) > 0;
             
-            if (northExists && !grid[y-1][x].bomb) {
-                checkNeighboringTiles(y-1, x);
+            if (northExists && !grid[y-i][x].bomb) {
+                checkNeighboringTiles(y-i, x);
             }
-            if (eastExists && !grid[y][x+1].bomb) {
-                checkNeighboringTiles( y, x+1);
+            if (eastExists && !grid[y][x+i].bomb) {
+                checkNeighboringTiles( y, x+i);
             }
-            if (southExists && !grid[y+1][x].bomb) {
-                checkNeighboringTiles(y+1, x);
+            if (southExists && !grid[y+i][x].bomb) {
+                checkNeighboringTiles(y+i, x);
             }
-            if (westExists && !grid[y][x-1].bomb) {
-                checkNeighboringTiles(y, x-1);
+            if (westExists && !grid[y][x-i].bomb) {
+                checkNeighboringTiles(y, x-i);
             }
 
             //diagonals
-            if (northExists && eastExists && !grid[y-1][x+1].bomb) {
-                checkNeighboringTiles(y-1,x+1);
+            if (northExists && eastExists && !grid[y-i][x+i].bomb) {
+                checkNeighboringTiles(y-i,x+i);
             }
-            if (southExists && eastExists && !grid[y+1][x+1].bomb) {
-                checkNeighboringTiles(y+1,x+1);
+            if (southExists && eastExists && !grid[y+i][x+i].bomb) {
+                checkNeighboringTiles(y+i,x+i);
             }
-            if (northExists && westExists && !grid[y-1][x-1].bomb) {
-                checkNeighboringTiles(y-1,x-1);
+            if (northExists && westExists && !grid[y-i][x-i].bomb) {
+                checkNeighboringTiles(y-i,x-i);
             }
-            if (southExists && westExists && !grid[y+1][x-1].bomb) {
-                checkNeighboringTiles(y+1,x-1);
+            if (southExists && westExists && !grid[y+i][x-i].bomb) {
+                checkNeighboringTiles(y+i,x-i);
             }
         }
+        checkWin();
     }
 
     private void checkNeighboringTiles(int y, int x){

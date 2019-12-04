@@ -25,6 +25,7 @@ import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.Inventory;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.StaminaManager;
 import edu.csuci.appaca.data.statics.AlpacaShopItem;
 import edu.csuci.appaca.data.statics.StaticFoodItem;
 import edu.csuci.appaca.utils.AssetsUtils;
@@ -56,10 +57,13 @@ public class AlpacaConfirmationPage extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         final ImageView icon = view.findViewById(R.id.alpaca_confirmation_preview_image);
         final TextView label = view.findViewById(R.id.alpaca_confirmation_name);
+        final TextView cost = view.findViewById(R.id.alpaca_confirmation_cost);
         final Button buy = view.findViewById(R.id.alpaca_confirmation_buy);
         final Button cancel = view.findViewById(R.id.alpaca_confirmation_cancel);
         final EditText nameInput = view.findViewById(R.id.alpaca_confirmation_name_field);
 
+
+        cost.setText(String.valueOf(alpacaItem.cost));
         label.setText(alpacaItem.name);
         icon.setImageDrawable(AssetsUtils.drawableFromAsset(getContext(), alpacaItem.path));
 
@@ -92,6 +96,7 @@ public class AlpacaConfirmationPage extends DialogFragment {
 
     private void buy(View view) {
 
+
         final EditText nameInput = view.findViewById(R.id.alpaca_confirmation_name_field);
 
         String name = nameInput.getText().toString().trim();
@@ -102,6 +107,8 @@ public class AlpacaConfirmationPage extends DialogFragment {
         try {
             CurrencyManager.spendCurrencyAlpaca(alpacaItem.cost);
             AlpacaFarm.addAlpaca(alpacaItem.id, name);
+            StaminaManager.increaseMaxStamina();
+            StaminaManager.increaseCurrentStaminaToMax();
             SaveDataUtils.updateValuesAndSave(getContext());
             dismiss();
         } catch (CurrencyManager.CurrencyException e) {
@@ -109,11 +116,6 @@ public class AlpacaConfirmationPage extends DialogFragment {
         }
 
     }
-
-        //check if they cant afford it AND get the a
-        //check if theres a name for the one they inputted and trim it
-        // TODO
-
 
     private void cantToast(String text) {
         Context context = getContext();

@@ -34,7 +34,6 @@ public class MainActivity extends AndroidApplication {
     private ImageView playBtn;
     private ImageView feedBtn;
     private ImageView clothesBtn;
-    private ImageView shearBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +104,6 @@ public class MainActivity extends AndroidApplication {
         playBtn = findViewById(R.id.playBtn);
         feedBtn = findViewById(R.id.feedBtn);
         clothesBtn = findViewById(R.id.clothesBtn);
-        shearBtn = findViewById(R.id.shearBtn);
 
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,23 +124,14 @@ public class MainActivity extends AndroidApplication {
         feedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FoodSelectActivity.class);
-                startActivity(intent);
+                libGDXView.toggleFoodDrawer();
             }
         });
 
         clothesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ClothingSelectActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        shearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                libGDXView.shear();
+                libGDXView.toggleClothingDrawer();
             }
         });
 
@@ -155,7 +144,7 @@ public class MainActivity extends AndroidApplication {
         }
     }
 
-    private void updateName() {
+    public void updateName() {
         String name = AlpacaFarm.getCurrentAlpaca().getName();
         TextView view = findViewById(R.id.main_alpaca_name_view);
         view.setText(name);

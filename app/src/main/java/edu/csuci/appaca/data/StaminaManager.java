@@ -28,7 +28,7 @@ public class StaminaManager {
     public static final int MAX_STAMINA = 4;
 
     public static void increaseMaxStamina() {
-        StaminaInstance.INSTANCE.currentValue++;
+        StaminaInstance.INSTANCE.maxValue++;
     }
 
     public static void decreaseCurrentStamina() {

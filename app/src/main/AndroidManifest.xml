@@ -17,13 +17,7 @@
             android:name=".activities.FirstAlpacaActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.FoodSelectActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.GameOverActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.ClothingSelectActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MinigameSelectActivity"
