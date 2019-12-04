@@ -108,10 +108,13 @@ public class MinesweeperActivity extends AppCompatActivity {
 
     private void placeBombs() {
         Random generator = new Random();
+        int x,y;
         for (int i = 0; i < this.MAX_BOMBS; i++)
         {
-            int x = generator.nextInt(GRID_SIZE - 1) + 1;
-            int y = generator.nextInt(GRID_SIZE - 1) + 1;
+            do {
+                x = generator.nextInt(GRID_SIZE - 1);
+                y = generator.nextInt(GRID_SIZE - 1);
+            }while (grid[x][y].bomb);
             grid[x][y].setBomb();
         }
     }
