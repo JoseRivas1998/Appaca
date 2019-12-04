@@ -19,7 +19,7 @@ import edu.csuci.appaca.utils.AssetsUtils;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
-    private final int MAX_BOMBS = 40;
+    private final int MAX_BOMBS = 0;
     private MinesweeperTile[][] grid;
     private long timePlayed = 0;
     private boolean flagToggle = false;
@@ -80,6 +80,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                                 revealNeighboringTiles(tile.row, tile.column);
                             }
                         }
+                        checkWin();
                         updateScore();
                     }
                 });
