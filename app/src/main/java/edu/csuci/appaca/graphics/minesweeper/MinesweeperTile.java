@@ -12,12 +12,13 @@ import edu.csuci.appaca.activities.MinesweeperActivity;
 import edu.csuci.appaca.utils.ScreenUtils;
 
 public class MinesweeperTile {
-    private boolean revealed;
     private boolean flagged;
     public int row;
     public int column;
     public boolean bomb;
     public View view;
+    public boolean revealed;
+
 
     public  static MinesweeperTile createTile(int row, int column, int count, final Context context) {
         int size = (int) ScreenUtils.dpToPixels(context, (float)(2100/(count + 5 *(count - 1))));

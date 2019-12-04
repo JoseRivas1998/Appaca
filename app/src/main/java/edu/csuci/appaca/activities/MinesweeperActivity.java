@@ -73,13 +73,11 @@ public class MinesweeperActivity extends AppCompatActivity {
                         if (flagToggle) {
                             tile.flipFlag(context);
                         } else {
-                            boolean revealed = tile.reveal(context);
-                            if (revealed) {
-                                if (tile.bomb) {
-                                    MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
-                                } else {
-                                    revealNeighboringTiles(tile.row, tile.column);
-                                }
+                            if (tile.bomb){
+                                tile.reveal(context.getApplicationContext());
+                                MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                            } else {
+                                revealNeighboringTiles(tile.row, tile.column);
                             }
                         }
                         updateScore();
@@ -117,145 +115,27 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void revealNeighboringTiles(int y, int x) {
-        boolean southExists;
-        boolean eastExists;
-        boolean northExists;
-        boolean westExists;
-
-        boolean southContinue = true;
-        boolean eastContinue = true;
-        boolean northContinue = true;
-        boolean westContinue = true;
-
-        boolean NEContinue = true;
-        boolean SEContinue = true;
-        boolean NWContinue = true;
-        boolean SWContinue = true;
-        for (int i = 0; i < GRID_SIZE; i++) {
-            southExists = (y + i) < GRID_SIZE - 1;
-            eastExists = (x + i) < GRID_SIZE - 1;
-            northExists = (y - i) > 0;
-            westExists = (x - i) > 0;
-            
-            if (northExists && !grid[y-i][x].bomb && northContinue) {
-                checkNeighboringTiles(y-i, x);
-            } else {
-                northContinue = false;
-            }
-            if (eastExists && !grid[y][x+i].bomb && eastContinue) {
-                checkNeighboringTiles( y, x+i);
-            } else {
-                eastContinue = false;
-            }
-            if (southExists && !grid[y+i][x].bomb && southContinue) {
-                checkNeighboringTiles(y+i, x);
-            } else {
-                southContinue = false;
-            }
-            if (westExists && !grid[y][x-i].bomb && westContinue) {
-                checkNeighboringTiles(y, x-i);
-            } else {
-                westContinue = false;
-            }
-
-            //diagonals
-
-            if (northExists && eastExists && !grid[y-i][x+i].bomb && NEContinue) {
-                checkNeighboringTiles(y-i,x+i);
-            } else {
-                NEContinue = false;
-            }
-            if (southExists && eastExists && !grid[y+i][x+i].bomb && SEContinue) {
-                checkNeighboringTiles(y+i,x+i);
-            } else {
-                SEContinue = false;
-            }
-            if (northExists && westExists && !grid[y-i][x-i].bomb && NWContinue) {
-                checkNeighboringTiles(y-i,x-i);
-            } else {
-                NWContinue = false;
-            }
-            if (southExists && westExists && !grid[y+i][x-i].bomb && SWContinue) {
-                checkNeighboringTiles(y+i,x-i);
-            } else {
-                SWContinue = false;
-            }
+        boolean xOutOfBounds = x < 0 || x > (GRID_SIZE - 1);
+        boolean yOutOfBounds = y < 0 || y > (GRID_SIZE - 1);
+        if (yOutOfBounds || xOutOfBounds || grid[y][x].revealed){
+            return;
+        } else if (grid[y][x].bomb) {
+            return;
         }
-        checkWin();
-    }
-
-    private void checkNeighboringTiles(int y, int x){
-        boolean southExists = y < GRID_SIZE - 1;
-        boolean eastExists = x < GRID_SIZE - 1;
-        boolean northExists = y > 0;
-        boolean westExists = x > 0;
-
-        boolean nBomb = false;
-        boolean eBomb = false;
-        boolean sBomb = false;
-        boolean wBomb = false;
-
-        boolean neBomb = false;
-        boolean seBomb = false;
-        boolean nwBomb = false;
-        boolean swBomb = false;
-        
-        if (northExists) {
-            nBomb = grid[y - 1][x].bomb;
-        } if (eastExists) {
-             eBomb = grid[y][x + 1].bomb;
-        } if (southExists) {
-             sBomb = grid[y + 1][x].bomb;
-        } if (westExists) {
-             wBomb = grid[y][x - 1].bomb;
-        }
-        
-        if (northExists && eastExists) {
-             neBomb = grid[y - 1][x + 1].bomb;
-        } if (southExists && eastExists) {
-             seBomb = grid[y + 1][x + 1].bomb;
-        } if (northExists && westExists) {
-            nwBomb = grid[y - 1][x - 1].bomb;
-        } if (southExists && westExists) {
-            swBomb = grid[y + 1][x - 1].bomb;
-        }
-        
-        boolean adj = nBomb || eBomb || sBomb || wBomb;
-        boolean diag = neBomb || seBomb || nwBomb || swBomb;
-        
-        boolean bombExists = adj || diag;
-        
-        Context context = this.getApplicationContext();
-        
-        grid[y][x].reveal(context);
-        if (!bombExists){
-            if (northExists) {
-                grid[y-1][x].reveal(context);
-            }
-            if (eastExists) {
-                grid[y][x+1].reveal(context);
-            }
-            if (southExists) {
-                grid[y+1][x].reveal(context);
-            }
-            if (westExists) {
-                grid[y][x-1].reveal(context);
-            }
-
-            //diagonals
-            if (northExists && eastExists) {
-                grid[y-1][x+1].reveal(context);
-            }
-            if (southExists && eastExists) {
-                grid[y+1][x+1].reveal(context);
-            }
-            if (northExists && westExists) {
-                grid[y-1][x-1].reveal(context);
-            }
-            if (southExists && westExists) {
-                grid[y+1][x-1].reveal(context);
+        else {
+            grid[y][x].reveal(this.getApplicationContext());
+            for (int i = y-1; i <= y+1; i++){
+                for(int j = x-1; j <= x+1; j++) {
+                    revealNeighboringTiles(i, j);
+                }
             }
         }
     }
+
+    boolean doNeighborsHaveBombs(){
+        return false;
+    }
+
+
 }
 
