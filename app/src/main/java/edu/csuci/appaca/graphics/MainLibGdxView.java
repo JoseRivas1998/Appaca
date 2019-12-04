@@ -35,6 +35,7 @@ import edu.csuci.appaca.graphics.entities.mainscreen.FoodDrawer;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.HoseHead;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
+import edu.csuci.appaca.graphics.entities.mainscreen.Shears;
 import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
 import edu.csuci.appaca.graphics.ui.ButtonEntity;
@@ -71,6 +72,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private EatingFood foodEating;
 
     private HoseHead hoseHead;
+    private Shears shears;
 
     private static final float MIN_DROP_TIME = 0.05f;
     private static final float MAX_DROP_TIME = 0.15f;
@@ -80,7 +82,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private static final double HYGIENE_PER_DROP = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.01f;
 
     private enum HeldItem {
-        NONE, HOSE
+        NONE, HOSE, SHEARS
     }
 
     private ButtonEntity prevButton;
@@ -99,6 +101,8 @@ public class MainLibGdxView extends ApplicationAdapter {
     private boolean toolboxOpen;
     private boolean toolboxOpening;
     private Vector2 hoseHeadTarget;
+    private Vector2 shearsTarget;
+    private boolean prevShearCollide;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
@@ -139,7 +143,10 @@ public class MainLibGdxView extends ApplicationAdapter {
         hideDown = false;
         toolboxOpen = false;
         hoseHeadTarget = new Vector2();
+        shearsTarget = new Vector2();
 
+        shears = new Shears(viewport, VIEWPORT_WIDTH, VIEW_HEIGHT);
+        prevShearCollide = false;
     }
 
     private void initButtons() {
@@ -168,8 +175,8 @@ public class MainLibGdxView extends ApplicationAdapter {
         toolboxButton.setClickListener(new ButtonEntity.ClickListener() {
             @Override
             public void onClick() {
-                if(foodDrawer.isShowing() || clothingDrawer.isShowing()) return;
-                if(!toolboxOpen) {
+                if (foodDrawer.isShowing() || clothingDrawer.isShowing()) return;
+                if (!toolboxOpen) {
                     openToolbox();
                 }
             }
@@ -208,6 +215,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void update(float dt) {
+        updateToolboxOpeningClosing();
         updateHoldingItem(dt);
         addPendingCoins();
         addHearts();
@@ -221,6 +229,19 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateClothingDrawer(dt);
         updateHideDrawers();
         toolboxButton.update(dt);
+    }
+
+    private void updateToolboxOpeningClosing() {
+        if (toolboxOpening) {
+            shears.setX(shears.getX() + ((shearsTarget.x - shears.getX()) / TOOLBOX_ITEM_SMOOTHING));
+            shears.setY(shears.getY() + ((shearsTarget.y - shears.getY()) / TOOLBOX_ITEM_SMOOTHING));
+            hoseHead.setX(hoseHead.getX() + ((hoseHeadTarget.x - hoseHead.getX()) / TOOLBOX_ITEM_SMOOTHING));
+            hoseHead.setY(hoseHead.getY() + ((hoseHeadTarget.y - hoseHead.getY()) / TOOLBOX_ITEM_SMOOTHING));
+            if (VectorUtils.dist(shears.getPosition(), shearsTarget) < 1 &&
+                    VectorUtils.dist(hoseHead.getPosition(), hoseHeadTarget) < 1) {
+                if(toolboxOpening) toolboxOpening = false;
+            }
+        }
     }
 
     private void updateHideDrawers() {
@@ -287,23 +308,46 @@ public class MainLibGdxView extends ApplicationAdapter {
             case NONE:
                 updatePetting(dt);
                 updateHoseHead(dt);
+                updateShears(dt);
                 break;
             case HOSE:
                 updateHoseHead(dt);
                 break;
+            case SHEARS:
+                updateShears(dt);
+                break;
         }
     }
 
-    private void updateHoseHead(float dt) {
-        if (!toolboxOpen) return;
-        if(toolboxOpening) {
-            hoseHead.setX(hoseHead.getX() + ((hoseHeadTarget.x - hoseHead.getX()) / TOOLBOX_ITEM_SMOOTHING));
-            hoseHead.setY(hoseHead.getY() + ((hoseHeadTarget.y - hoseHead.getY()) / TOOLBOX_ITEM_SMOOTHING));
-            if(VectorUtils.dist(hoseHead.getPosition(), hoseHeadTarget) < 1) {
-                toolboxOpening = false;
-            }
-            return;
+    private void updateShears(float dt) {
+        if (!toolboxOpen || toolboxOpening) return;
+        shears.update(dt);
+        switch (currentlyHeld) {
+            case SHEARS:
+                if(!shears.isHeld()) {
+                    currentlyHeld = HeldItem.NONE;
+                } else {
+                    shearsCollisions();
+                }
+                break;
+            case NONE:
+                if(shears.isHeld()) {
+                    currentlyHeld = HeldItem.SHEARS;
+                    prevShearCollide = shears.collidingWith(alpaca);
+                }
         }
+    }
+
+    private void shearsCollisions() {
+        boolean colliding = shears.collidingWith(alpaca);
+        if(colliding && !prevShearCollide) {
+            shear();
+        }
+        prevShearCollide = colliding;
+    }
+
+    private void updateHoseHead(float dt) {
+        if (!toolboxOpen || toolboxOpening) return;
         hoseHead.update(dt);
         switch (currentlyHeld) {
             case HOSE:
@@ -411,7 +455,10 @@ public class MainLibGdxView extends ApplicationAdapter {
         alpaca.draw(dt, spriteBatch, shapeRenderer);
         clothingEntity.draw(dt, spriteBatch, shapeRenderer);
         if (foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
-        if(toolboxOpen) hoseHead.draw(dt, spriteBatch, shapeRenderer);
+        if (toolboxOpen){
+            hoseHead.draw(dt, spriteBatch, shapeRenderer);
+            shears.draw(dt, spriteBatch, shapeRenderer);
+        }
         toolboxButton.draw(dt, spriteBatch, shapeRenderer);
         for (WaterDrop waterDrop : waterDrops) {
             waterDrop.draw(dt, spriteBatch, shapeRenderer);
@@ -458,6 +505,8 @@ public class MainLibGdxView extends ApplicationAdapter {
         toolboxOpening = true;
         hoseHead.setPosition(toolboxButton.getPosition());
         hoseHeadTarget.set(randomVectorNotColliding(hoseHead.getWidth(), hoseHead.getHeight()));
+        shears.setPosition(toolboxButton.getPosition());
+        shearsTarget.set(randomVectorNotColliding(shears.getWidth(), shears.getHeight()));
         toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_OPEN);
     }
 
@@ -473,9 +522,9 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private boolean rectangleCollidingWithAlpacaOrButtons(Rectangle r) {
-        if(alpaca.collidingWith(r)) return true;
-        if(prevButton.collidingWith(r)) return true;
-        if(nextButton.collidingWith(r)) return true;
+        if (alpaca.collidingWith(r)) return true;
+        if (prevButton.collidingWith(r)) return true;
+        if (nextButton.collidingWith(r)) return true;
         return toolboxButton.collidingWith(r);
     }
 

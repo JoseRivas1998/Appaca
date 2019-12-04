@@ -86,7 +86,8 @@ public class StaticContentManager {
         FOOD_DRAWER_BG("ui/food_drawer_bg.png"),
         X_2("ui/x_2.png"),
         TOOLBOX_OPEN("toolbox_open.png"),
-        TOOLBOX_CLOSED("toolbox_closed.png");
+        TOOLBOX_CLOSED("toolbox_closed.png"),
+        SHEARS("shears.png");
         final String path;
 
         Image(String path) {
