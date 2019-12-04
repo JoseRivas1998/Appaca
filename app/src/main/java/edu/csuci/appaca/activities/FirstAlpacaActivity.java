@@ -28,6 +28,7 @@ public class FirstAlpacaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_alpaca);
         loadImage();
+        this.getSupportActionBar().hide();
         initButtons();
     }
 
