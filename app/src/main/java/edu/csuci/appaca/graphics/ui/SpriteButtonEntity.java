@@ -10,12 +10,21 @@ public class SpriteButtonEntity extends ButtonEntity {
 
     private Texture texture;
     private StaticContentManager.Image image;
+    private boolean useTextureSize;
 
     public SpriteButtonEntity(StaticContentManager.Image image, float size) {
         super();
         this.image = image;
         update(0);
         setSize(size, size);
+        useTextureSize = false;
+    }
+
+    public SpriteButtonEntity(StaticContentManager.Image image) {
+        super();
+        this.image = image;
+        update(0);
+        useTextureSize = true;
     }
 
     @Override
@@ -31,5 +40,14 @@ public class SpriteButtonEntity extends ButtonEntity {
     @Override
     public void draw(float dt, SpriteBatch sb, ShapeRenderer sr) {
         sb.draw(this.texture, getX(), getY(), getWidth(), getHeight());
+        if (useTextureSize) setSize(this.texture.getWidth(), this.texture.getHeight());
+    }
+
+    public StaticContentManager.Image getImage() {
+        return image;
+    }
+
+    public void setImage(StaticContentManager.Image image) {
+        this.image = image;
     }
 }

@@ -92,8 +92,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="71dp"
         android:background="@color/pinkPastel"
+        android:padding="5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -114,16 +115,6 @@
             android:layout_marginRight="@dimen/main_view_dock_margin"
             android:layout_weight="1"
             android:src="@drawable/closet" />
-
-        <ImageView
-            android:id="@+id/shearBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/main_view_dock_margin"
-            android:layout_marginRight="@dimen/main_view_dock_margin"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:src="@drawable/shears" />
 
         <ImageView
             android:id="@+id/shopBtn"
