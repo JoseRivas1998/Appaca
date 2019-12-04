@@ -133,8 +133,7 @@ public class MainActivity extends AndroidApplication {
         clothesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ClothingSelectActivity.class);
-                startActivity(intent);
+                libGDXView.toggleClothingDrawer();
             }
         });
 

@@ -20,9 +20,6 @@
             android:name=".activities.GameOverActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ClothingSelectActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.MinigameSelectActivity"
             android:screenOrientation="portrait" />
         <activity
