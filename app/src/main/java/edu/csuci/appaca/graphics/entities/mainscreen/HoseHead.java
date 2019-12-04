@@ -1,6 +1,8 @@
 package edu.csuci.appaca.graphics.entities.mainscreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -29,7 +31,6 @@ public class HoseHead extends AbstractSpriteEntity {
 
     @Override
     public void update(float dt) {
-        setImage(StaticContentManager.getTexture(StaticContentManager.Image.SHOWER_HEAD));
         if (!isHeld) {
             if (Gdx.input.justTouched()) {
                 Vector2 touchPoint = new Vector2(Gdx.input.getX(), Gdx.input.getY());
@@ -46,6 +47,12 @@ public class HoseHead extends AbstractSpriteEntity {
         setPosition(VectorUtils.clampVector(getPosition(),
                 0, 0,
                 WORLD_WIDTH - getWidth(), WORLD_HEIGHT - getHeight()));
+    }
+
+    @Override
+    public void draw(float dt, SpriteBatch sb, ShapeRenderer sr) {
+        setImage(StaticContentManager.getTexture(StaticContentManager.Image.SHOWER_HEAD));
+        super.draw(dt, sb, sr);
     }
 
     public boolean isHeld() {
