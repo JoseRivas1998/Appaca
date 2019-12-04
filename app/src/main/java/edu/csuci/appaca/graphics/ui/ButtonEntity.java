@@ -51,7 +51,7 @@ public abstract class ButtonEntity extends AbstractEntity {
     public abstract void onResume();
 
     private void updateAwaitingTouch(Viewport viewport) {
-        if(Gdx.input.isTouched()) {
+        if(Gdx.input.justTouched()) {
             Vector2 touchPoint = getTouchPoint(viewport);
             if(containsPoint(touchPoint)) {
                 touchDown = true;
