@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -456,9 +457,26 @@ public class MainLibGdxView extends ApplicationAdapter {
         toolboxOpen = true;
         toolboxOpening = true;
         hoseHead.setPosition(toolboxButton.getPosition());
-        hoseHeadTarget.x = MathUtils.random(0, VIEWPORT_WIDTH - hoseHead.getWidth());
-        hoseHeadTarget.y = MathUtils.random(0, VIEW_HEIGHT - hoseHead.getHeight());
+        hoseHeadTarget.set(randomVectorNotColliding(hoseHead.getWidth(), hoseHead.getHeight()));
         toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_OPEN);
+    }
+
+    private Vector2 randomVectorNotColliding(float width, float height) {
+        Rectangle rectangle = new Rectangle();
+        rectangle.width = width;
+        rectangle.height = height;
+        do {
+            rectangle.x = MathUtils.random(0, VIEWPORT_WIDTH - rectangle.width);
+            rectangle.y = MathUtils.random(0, VIEW_HEIGHT - rectangle.height);
+        } while (rectangleCollidingWithAlpacaOrButtons(rectangle));
+        return new Vector2(rectangle.x, rectangle.y);
+    }
+
+    private boolean rectangleCollidingWithAlpacaOrButtons(Rectangle r) {
+        if(alpaca.collidingWith(r)) return true;
+        if(prevButton.collidingWith(r)) return true;
+        if(nextButton.collidingWith(r)) return true;
+        return toolboxButton.collidingWith(r);
     }
 
     @Override
