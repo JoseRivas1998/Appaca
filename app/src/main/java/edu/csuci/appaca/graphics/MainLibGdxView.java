@@ -76,7 +76,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
     private static final float MIN_DROP_TIME = 0.05f;
     private static final float MAX_DROP_TIME = 0.15f;
-    private static final float TOOLBOX_ITEM_SMOOTHING = 15f;
+    private static final float TOOLBOX_ITEM_SMOOTHING = 10f;
     private List<WaterDrop> waterDrops;
     private ActionTimer waterDropTimer;
     private static final double HYGIENE_PER_DROP = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.01f;
@@ -100,6 +100,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private SpriteButtonEntity toolboxButton;
     private boolean toolboxOpen;
     private boolean toolboxOpening;
+    private boolean toolboxClosing;
     private Vector2 hoseHeadTarget;
     private Vector2 shearsTarget;
     private boolean prevShearCollide;
@@ -147,6 +148,7 @@ public class MainLibGdxView extends ApplicationAdapter {
 
         shears = new Shears(viewport, VIEWPORT_WIDTH, VIEW_HEIGHT);
         prevShearCollide = false;
+        toolboxClosing = false;
     }
 
     private void initButtons() {
@@ -178,6 +180,8 @@ public class MainLibGdxView extends ApplicationAdapter {
                 if (foodDrawer.isShowing() || clothingDrawer.isShowing()) return;
                 if (!toolboxOpen) {
                     openToolbox();
+                } else {
+                    closeToolbox();
                 }
             }
         });
@@ -232,14 +236,19 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updateToolboxOpeningClosing() {
-        if (toolboxOpening) {
+        if (toolboxOpening || toolboxClosing) {
             shears.setX(shears.getX() + ((shearsTarget.x - shears.getX()) / TOOLBOX_ITEM_SMOOTHING));
             shears.setY(shears.getY() + ((shearsTarget.y - shears.getY()) / TOOLBOX_ITEM_SMOOTHING));
             hoseHead.setX(hoseHead.getX() + ((hoseHeadTarget.x - hoseHead.getX()) / TOOLBOX_ITEM_SMOOTHING));
             hoseHead.setY(hoseHead.getY() + ((hoseHeadTarget.y - hoseHead.getY()) / TOOLBOX_ITEM_SMOOTHING));
-            if (VectorUtils.dist(shears.getPosition(), shearsTarget) < 1 &&
-                    VectorUtils.dist(hoseHead.getPosition(), hoseHeadTarget) < 1) {
+            if (VectorUtils.dist(shears.getPosition(), shearsTarget) < 5 &&
+                    VectorUtils.dist(hoseHead.getPosition(), hoseHeadTarget) < 5) {
                 if(toolboxOpening) toolboxOpening = false;
+                if(toolboxClosing) {
+                    toolboxClosing = false;
+                    toolboxOpen = false;
+                    toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_CLOSED);
+                }
             }
         }
     }
@@ -320,7 +329,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updateShears(float dt) {
-        if (!toolboxOpen || toolboxOpening) return;
+        if (!toolboxOpen || toolboxOpening || toolboxClosing) return;
         shears.update(dt);
         switch (currentlyHeld) {
             case SHEARS:
@@ -347,7 +356,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updateHoseHead(float dt) {
-        if (!toolboxOpen || toolboxOpening) return;
+        if (!toolboxOpen || toolboxOpening || toolboxClosing) return;
         hoseHead.update(dt);
         switch (currentlyHeld) {
             case HOSE:
@@ -508,6 +517,12 @@ public class MainLibGdxView extends ApplicationAdapter {
         shears.setPosition(toolboxButton.getPosition());
         shearsTarget.set(randomVectorNotColliding(shears.getWidth(), shears.getHeight()));
         toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_OPEN);
+    }
+
+    private void closeToolbox() {
+        toolboxClosing = true;
+        hoseHeadTarget.set(toolboxButton.getCenterX() - (hoseHead.getWidth() * 0.5f), toolboxButton.getCenterY() - (hoseHead.getHeight() * 0.5f));
+        shearsTarget.set(toolboxButton.getCenterY() - (shears.getWidth() * 0.5f), toolboxButton.getCenterY() - (shears.getHeight() * 0.5f));
     }
 
     private Vector2 randomVectorNotColliding(float width, float height) {
