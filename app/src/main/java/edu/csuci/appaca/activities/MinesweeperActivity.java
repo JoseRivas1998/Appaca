@@ -122,37 +122,63 @@ public class MinesweeperActivity extends AppCompatActivity {
         boolean northExists;
         boolean westExists;
 
+        boolean southContinue = true;
+        boolean eastContinue = true;
+        boolean northContinue = true;
+        boolean westContinue = true;
+
+        boolean NEContinue = true;
+        boolean SEContinue = true;
+        boolean NWContinue = true;
+        boolean SWContinue = true;
         for (int i = 0; i < GRID_SIZE; i++) {
             southExists = (y + i) < GRID_SIZE - 1;
             eastExists = (x + i) < GRID_SIZE - 1;
             northExists = (y - i) > 0;
             westExists = (x - i) > 0;
             
-            if (northExists && !grid[y-i][x].bomb) {
+            if (northExists && !grid[y-i][x].bomb && northContinue) {
                 checkNeighboringTiles(y-i, x);
+            } else {
+                northContinue = false;
             }
-            if (eastExists && !grid[y][x+i].bomb) {
+            if (eastExists && !grid[y][x+i].bomb && eastContinue) {
                 checkNeighboringTiles( y, x+i);
+            } else {
+                eastContinue = false;
             }
-            if (southExists && !grid[y+i][x].bomb) {
+            if (southExists && !grid[y+i][x].bomb && southContinue) {
                 checkNeighboringTiles(y+i, x);
+            } else {
+                southContinue = false;
             }
-            if (westExists && !grid[y][x-i].bomb) {
+            if (westExists && !grid[y][x-i].bomb && westContinue) {
                 checkNeighboringTiles(y, x-i);
+            } else {
+                westContinue = false;
             }
 
             //diagonals
-            if (northExists && eastExists && !grid[y-i][x+i].bomb) {
+
+            if (northExists && eastExists && !grid[y-i][x+i].bomb && NEContinue) {
                 checkNeighboringTiles(y-i,x+i);
+            } else {
+                NEContinue = false;
             }
-            if (southExists && eastExists && !grid[y+i][x+i].bomb) {
+            if (southExists && eastExists && !grid[y+i][x+i].bomb && SEContinue) {
                 checkNeighboringTiles(y+i,x+i);
+            } else {
+                SEContinue = false;
             }
-            if (northExists && westExists && !grid[y-i][x-i].bomb) {
+            if (northExists && westExists && !grid[y-i][x-i].bomb && NWContinue) {
                 checkNeighboringTiles(y-i,x-i);
+            } else {
+                NWContinue = false;
             }
-            if (southExists && westExists && !grid[y+i][x-i].bomb) {
+            if (southExists && westExists && !grid[y+i][x-i].bomb && SWContinue) {
                 checkNeighboringTiles(y+i,x-i);
+            } else {
+                SWContinue = false;
             }
         }
         checkWin();
