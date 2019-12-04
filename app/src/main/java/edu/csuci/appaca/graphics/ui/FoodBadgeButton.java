@@ -44,9 +44,4 @@ public class FoodBadgeButton extends InventoryBadgeButton {
         Inventory.useFood(foodItem.id);
         SaveDataUtils.save(this.parent);
     }
-
-    @Override
-    public void onResume() {
-        throw new UnsupportedOperationException("Food Badges Do Not Need To Resume.");
-    }
 }

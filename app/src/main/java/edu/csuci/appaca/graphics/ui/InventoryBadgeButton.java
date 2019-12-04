@@ -26,7 +26,8 @@ public abstract class InventoryBadgeButton extends ButtonEntity implements Butto
         this.itemId = itemId;
         this.parent = parent;
         this.texture = new Texture(getTexturePath());
-        setSize(size, size);
+        float ratio = (float) this.texture.getHeight() / this.texture.getWidth();
+        setSize(size, size * ratio);
         this.setClickListener(this);
 
         this.amountLabel = new LabelEntity();

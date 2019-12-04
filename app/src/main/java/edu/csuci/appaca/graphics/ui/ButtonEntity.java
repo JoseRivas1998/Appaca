@@ -18,26 +18,30 @@ public abstract class ButtonEntity extends AbstractEntity {
         clickListener = null;
     }
 
-    public void handleInput(Viewport viewport) {
+    public boolean handleInput(Viewport viewport) {
         if(touchDown) {
-            updateTouchingDown(viewport);
+            return updateTouchingDown(viewport);
         } else {
             updateAwaitingTouch(viewport);
         }
+        return false;
     }
 
-    private void updateTouchingDown(Viewport viewport) {
+    private boolean updateTouchingDown(Viewport viewport) {
         if(!Gdx.input.isTouched()) {
             Vector2 touchPoint = getTouchPoint(viewport);
             if(containsPoint(touchPoint)) {
                 if(clickListener != null) {
                     clickListener.onClick();
+                    touchDown = false;
+                    return true;
                 } else {
                     Gdx.app.error(getClass().getName(), "This button was not given a click listener!");
                 }
             }
             touchDown = false;
         }
+        return false;
     }
 
     public void setClickListener(ClickListener clickListener) {

@@ -1,20 +1,34 @@
 package edu.csuci.appaca.graphics.entities.mainscreen;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Iterator;
+
 import edu.csuci.appaca.R;
+import edu.csuci.appaca.data.Alpaca;
+import edu.csuci.appaca.data.AlpacaFarm;
+import edu.csuci.appaca.data.Inventory;
+import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
+import edu.csuci.appaca.data.statics.ShopData;
+import edu.csuci.appaca.data.statics.StaticClothesItem;
+import edu.csuci.appaca.graphics.ui.ButtonEntity;
+import edu.csuci.appaca.graphics.ui.ClothingBadgeButton;
+import edu.csuci.appaca.graphics.ui.SpriteButtonEntity;
+import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.MathFunctions;
+import edu.csuci.appaca.utils.ResourceUtils;
 
 public class ClothingDrawer implements Disposable {
 
@@ -32,9 +46,12 @@ public class ClothingDrawer implements Disposable {
 
     private boolean scrollDown;
     private float pivotX;
-    private float minScrollX;
+    private float maxScrollX;
 
     private Vector2 targetPosition;
+
+    private SpriteButtonEntity removeButton;
+    private Array<ClothingBadgeButton> clothingBadgeButtons;
 
     public ClothingDrawer(int worldWidth, int worldHeight, Context parent) {
         this.parent = parent;
@@ -56,7 +73,19 @@ public class ClothingDrawer implements Disposable {
         this.buttonViewport.getCamera().update();
 
         this.scrollDown = false;
-        this.minScrollX = worldWidth * 0.5f;
+        this.maxScrollX = worldWidth * 0.5f;
+
+        this.removeButton = new SpriteButtonEntity(StaticContentManager.Image.X_2, drawerHeight - (hudPadding * 2));
+        this.removeButton.setPosition(hudPadding, hudPadding);
+        this.removeButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                confirmClothes(Alpaca.NO_CLOTHING);
+                loadClothingButtons();
+            }
+        });
+
+        this.clothingBadgeButtons = new Array<>();
 
     }
 
@@ -68,10 +97,20 @@ public class ClothingDrawer implements Disposable {
         } else if(!Gdx.input.isTouched()) {
             scrollDown = false;
         }
+        if(this.isShowing) {
+            this.removeButton.handleInput(this.buttonViewport);
+            for (ClothingBadgeButton clothingBadgeButton : clothingBadgeButtons) {
+                if(clothingBadgeButton.handleInput(buttonViewport))break;
+            }
+        }
     }
 
     public void update(float dt) {
+        this.removeButton.update(dt);
         updateViewport(dt);
+        for (ClothingBadgeButton clothingBadgeButton : clothingBadgeButtons) {
+            clothingBadgeButton.update(dt);
+        }
     }
 
     private void updateViewport(float dt) {
@@ -90,7 +129,7 @@ public class ClothingDrawer implements Disposable {
                 buttonViewportX += (pivotX - unprojected.x);
             }
         }
-        buttonViewportX = (float) MathFunctions.clamp(buttonViewportX, minScrollX, worldWidth * 0.5f);
+        buttonViewportX = (float) MathFunctions.clamp(buttonViewportX, worldWidth * 0.5f, maxScrollX);
         this.buttonViewport.getCamera().position.set(buttonViewportX, mainViewportY, 0);
         this.buttonViewport.getCamera().update();
     }
@@ -101,7 +140,7 @@ public class ClothingDrawer implements Disposable {
             camPos.y += (targetPosition.y - camPos.y) / 15f;
             if (Math.abs(targetPosition.y - camPos.y) < 1) {
                 camPos.y = targetPosition.y;
-//                if(!isShowing) clearButtons();
+                if(!isShowing) clearButtons();
             }
             this.viewport.getCamera().position.set(camPos, 0);
             this.viewport.getCamera().update();
@@ -114,13 +153,33 @@ public class ClothingDrawer implements Disposable {
         sb.draw(StaticContentManager.getTexture(StaticContentManager.Image.FOOD_DRAWER_BG), 0, 0, worldWidth, drawerHeight);
         sb.end();
 
+        drawButtons(dt, sb, sr);
+
+    }
+
+    private void drawButtons(float dt, SpriteBatch sb, ShapeRenderer sr) {
+        sb.begin();
+        sb.setProjectionMatrix(buttonViewport.getCamera().combined);
+        removeButton.draw(dt, sb, sr);
+        for (ClothingBadgeButton clothingBadgeButton : clothingBadgeButtons) {
+            clothingBadgeButton.draw(dt, sb, sr);
+        }
+        sb.end();
+
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setProjectionMatrix(buttonViewport.getCamera().combined);
-        float x = worldWidth * 0.5f - 20;
-        float y = worldHeight * 0.5f - 20;
-        sr.setColor(scrollDown ? Color.GREEN : Color.RED);
-        sr.rect(x, y, 40, 40);
+        sr.setColor(ResourceUtils.libGDXColor(this.parent, this.badgeColorID));
+        for (ClothingBadgeButton clothingBadgeButton : clothingBadgeButtons) {
+            clothingBadgeButton.drawBadgeBase(sr);
+        }
         sr.end();
+
+        sb.begin();
+        sb.setProjectionMatrix(buttonViewport.getCamera().combined);
+        for (ClothingBadgeButton clothingBadgeButton : clothingBadgeButtons) {
+            clothingBadgeButton.drawBadgeText(sb);
+        }
+        sb.end();
 
     }
 
@@ -130,7 +189,6 @@ public class ClothingDrawer implements Disposable {
     }
 
     public void toggle() {
-        Gdx.app.log(getClass().getName(), "TOGGLE");
         if (this.isShowing) {
             this.hide();
         } else {
@@ -141,6 +199,7 @@ public class ClothingDrawer implements Disposable {
     private void show() {
         this.isShowing = true;
         targetPosition.set(worldWidth * 0.5f, worldHeight * 0.5f);
+        loadClothingButtons();
     }
 
     private void hide() {
@@ -148,8 +207,54 @@ public class ClothingDrawer implements Disposable {
         targetPosition.set(worldWidth * 0.5f, (worldHeight * 0.5f) + drawerHeight);
     }
 
+    private void clearButtons() {
+        Iterator<ClothingBadgeButton> iter = clothingBadgeButtons.iterator();
+        while (iter.hasNext()) {
+            ClothingBadgeButton button = iter.next();
+            button.dispose();
+            iter.remove();
+        }
+    }
+
+    private void loadClothingButtons() {
+        clearButtons();
+        final float size = drawerHeight - (hudPadding * 2);
+        float x = this.removeButton.getX() + this.removeButton.getWidth() + hudPadding;
+        for (final StaticClothesItem clothesItem : ShopData.getAllClothes()) {
+            int amount = Inventory.getClothesAmount(clothesItem.id);
+            if(amount > 0) {
+                ClothingBadgeButton button = new ClothingBadgeButton(clothesItem.id, size, this.parent, new ListUtils.Consumer<ClothingBadgeButton>() {
+                    @Override
+                    public void accept(ClothingBadgeButton clothingBadgeButton) {
+                        confirmClothes(clothesItem.id);
+                        loadClothingButtons();
+                    }
+                });
+                button.setPosition(x, hudPadding + (size * 0.5f - (button.getHeight() * 0.5f)));
+                clothingBadgeButtons.add(button);
+                x += size + (hudPadding * 2);
+            }
+        }
+        this.maxScrollX = Math.max(x - worldWidth * 0.5f, worldWidth * 0.5f);
+        this.maxScrollX = Math.max(x - worldWidth * 0.5f, worldWidth * 0.5f);
+    }
+
+    private void confirmClothes(int clothesId) {
+        if (AlpacaFarm.getCurrentAlpaca().getClothing() != clothesId) {
+            SaveDataUtils.updateValuesAndSave(this.parent);
+            Inventory.useClothes(clothesId);
+            AlpacaFarm.getCurrentAlpaca().setClothing(clothesId);
+            SaveDataUtils.save(this.parent);
+            //finish();
+        }
+    }
+
+    public boolean isShowing() {
+        return isShowing;
+    }
+
     @Override
     public void dispose() {
-
+        clearButtons();
     }
 }

@@ -198,6 +198,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private void updateFoodDrawer(float dt) {
         if(this.shouldToggleFoodDrawer) {
             this.shouldToggleFoodDrawer = false;
+            if(clothingDrawer.isShowing()) clothingDrawer.toggle();
             foodDrawer.toggle();
         }
         foodDrawer.update(dt);
@@ -206,6 +207,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     private void updateClothingDrawer(float dt) {
         if(this.shouldToggleClothingDrawer) {
             this.shouldToggleClothingDrawer = false;
+            if(foodDrawer.isShowing()) foodDrawer.toggle();
             this.clothingDrawer.toggle();
         }
         clothingDrawer.update(dt);
