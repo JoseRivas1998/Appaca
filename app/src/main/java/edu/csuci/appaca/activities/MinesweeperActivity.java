@@ -27,6 +27,8 @@ public class MinesweeperActivity extends AppCompatActivity {
     public static int tilesRevealed = 0;
     public static int score;
 
+    private String buffer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         if (flagToggle) {
                             tile.flipFlag(context);
                         } else {
@@ -82,6 +85,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                         }
                         checkWin();
                         updateScore();
+                        checkWin();
                     }
                 });
                 grid[i][j] = tile;
@@ -145,6 +149,8 @@ public class MinesweeperActivity extends AppCompatActivity {
         boolean northExists = (y - 1) > 0;
         boolean westExists = (x - 1) > 0;
 
+        int bombsNear = 0;
+
         boolean nBomb = false;
         boolean eBomb = false;
         boolean sBomb = false;
@@ -157,7 +163,11 @@ public class MinesweeperActivity extends AppCompatActivity {
 
         if (northExists) {
             nBomb = grid[y - 1][x].bomb;
+            if (nBomb) {
+                bombsNear++;
+            }
         } if (eastExists) {
+
             eBomb = grid[y][x + 1].bomb;
         } if (southExists) {
             sBomb = grid[y + 1][x].bomb;
@@ -166,21 +176,37 @@ public class MinesweeperActivity extends AppCompatActivity {
         }
 
         if (northExists && eastExists) {
+
             neBomb = grid[y - 1][x + 1].bomb;
         } if (southExists && eastExists) {
             seBomb = grid[y + 1][x + 1].bomb;
         } if (northExists && westExists) {
             nwBomb = grid[y - 1][x - 1].bomb;
+            if (nwBomb) {
+                bombsNear++;
+            }
         } if (southExists && westExists) {
             swBomb = grid[y + 1][x - 1].bomb;
+            if (swBomb) {
+                bombsNear++;
+            }
         }
+
 
         boolean adj = nBomb || eBomb || sBomb || wBomb;
         boolean diag = neBomb || seBomb || nwBomb || swBomb;
 
         boolean bombExists = adj || diag;
 
+
         return bombExists;
+    }
+
+    private void setNumOfNearMinesString(int number) {
+        this.buffer = "";
+        if (number > 0) {
+            this.buffer += number;
+        }
     }
 
 

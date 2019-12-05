@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.content.StaticContentManager;
@@ -16,6 +17,7 @@ public class MinesweeperTile {
     public int row;
     public int column;
     public boolean bomb;
+
     public View view;
     public boolean revealed;
 
@@ -25,13 +27,14 @@ public class MinesweeperTile {
         int margin = (int) ScreenUtils.dpToPixels(context, 1);
 
         MinesweeperTile ret = new MinesweeperTile();
-        ret.view = new View(context);
+        ret.view = new TextView(context);
         ret.view.setBackgroundColor(context.getColor(R.color.bluePastel));
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = size;
         params.height = size;
         params.setMargins(margin, margin, margin, margin);
         ret.view.setLayoutParams(params);
+        ret.view.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         ret.row = row;
         ret.column = column;
