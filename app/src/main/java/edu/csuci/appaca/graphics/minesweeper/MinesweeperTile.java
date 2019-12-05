@@ -18,7 +18,7 @@ public class MinesweeperTile {
     public int column;
     public boolean bomb;
 
-    public View view;
+    public TextView view;
     public boolean revealed;
 
 
@@ -35,6 +35,7 @@ public class MinesweeperTile {
         params.setMargins(margin, margin, margin, margin);
         ret.view.setLayoutParams(params);
         ret.view.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        ret.view.setText("");
 
         ret.row = row;
         ret.column = column;
