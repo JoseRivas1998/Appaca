@@ -152,8 +152,8 @@ public class MinesweeperActivity extends AppCompatActivity {
     int doNeighborsHaveBombs(int y, int x){
         boolean southExists = (y + 1) < GRID_SIZE - 1;
         boolean eastExists = (x + 1) < GRID_SIZE - 1;
-        boolean northExists = (y - 1) > 0;
-        boolean westExists = (x - 1) > 0;
+        boolean northExists = ((y - 1) >= 0);
+        boolean westExists = ((x - 1) >= 0);
 
         int bombsNear = 0;
 
