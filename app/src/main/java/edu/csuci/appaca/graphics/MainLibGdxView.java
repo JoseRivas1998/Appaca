@@ -159,6 +159,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             @Override
             public void onClick() {
                 AlpacaFarm.prev();
+                alpaca.updateCurrentTexture(VIEWPORT_WIDTH, VIEW_HEIGHT);
             }
         });
 
@@ -169,6 +170,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             @Override
             public void onClick() {
                 AlpacaFarm.next();
+                alpaca.updateCurrentTexture(VIEWPORT_WIDTH, VIEW_HEIGHT);
             }
         });
 
@@ -446,6 +448,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updatePetting(float dt) {
+        this.petDetector.updateBoundingEntity(alpaca);
         this.petDetector.update(dt);
         if (this.petDetector.isJustPet()) {
             double happiness = MainLibGdxView.HAPPINESS_PER_PET * this.petDetector.getNumPets();
@@ -454,6 +457,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             AlpacaFarm.getCurrentAlpaca().incrementHappinessStat(happiness);
             SaveDataUtils.save(parent);
         }
+        alpaca.setPetting(this.petDetector.isPetting());
     }
 
     private void draw(float dt) {
