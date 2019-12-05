@@ -51,6 +51,7 @@
       "id": 1,
       "name": "Brownie",
       "path": "alpacas/skin_01.png",
+      "spritesheet": "alpacas/skin_01_spritesheet.png",
       "cost": 100
     }
   ]
