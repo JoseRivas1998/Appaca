@@ -14,16 +14,18 @@ import java.util.Random;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.MiniGames;
+import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.graphics.minesweeper.MinesweeperTile;
 import edu.csuci.appaca.utils.AssetsUtils;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
     private final int MAX_BOMBS = 40;
     private MinesweeperTile[][] grid;
-    private long timePlayed = 0;
     private boolean flagToggle = false;
 
+    public static long timePlayed = 0;
     public static int tilesRevealed = 0;
     public static int score;
 
@@ -37,6 +39,8 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void initMinesweeper() {
+        this.timePlayed = 0;
+        SavedTime.setToNow();
         this.score = 0;
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
@@ -74,6 +78,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                             tile.flipFlag(context);
                         } else {
                             if (tile.bomb){
+                                MinesweeperActivity.timePlayed = TimeUtils.getCurrentTime() - SavedTime.lastSavedTime();
                                 tile.reveal(context.getApplicationContext());
                                 MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
                             } else {
@@ -93,6 +98,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     private void checkWin(){
         final int NUM_SAFE_TILES = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
         if(tilesRevealed == NUM_SAFE_TILES) {
+            this.timePlayed = TimeUtils.getCurrentTime() - SavedTime.lastSavedTime();
             MiniGames.winGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
         }
     }
