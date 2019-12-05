@@ -99,7 +99,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     private void checkWin() {
         final int NUM_SAFE_TILES = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
         if (tilesRevealed == NUM_SAFE_TILES) {
-            this.timePlayed = TimeUtils.getCurrentTime() - SavedTime.lastSavedTime();
+            this.timePlayed = TimeUtils.getCurrentTime() - timeStarted;
             MiniGames.winGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
         }
     }
