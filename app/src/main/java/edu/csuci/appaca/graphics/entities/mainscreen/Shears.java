@@ -10,18 +10,18 @@ import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.AbstractSpriteEntity;
 import edu.csuci.appaca.utils.VectorUtils;
 
-public class HoseHead extends AbstractSpriteEntity {
+public class Shears extends AbstractSpriteEntity {
 
     private boolean isHeld;
     private Viewport viewport;
     private final int WORLD_WIDTH;
     private final int WORLD_HEIGHT;
 
-    public HoseHead(Viewport viewport, int world_width, int world_height) {
+    public Shears(Viewport viewport, int world_width, int world_height) {
         super();
         WORLD_WIDTH = world_width;
         WORLD_HEIGHT = world_height;
-        setImage(StaticContentManager.getTexture(StaticContentManager.Image.SHOWER_HEAD));
+        setImage(StaticContentManager.getTexture(StaticContentManager.Image.SHEARS));
         centerOrigin();
         setSize(imageWidth, imageHeight);
         setPosition(100, 100);
@@ -51,11 +51,12 @@ public class HoseHead extends AbstractSpriteEntity {
 
     @Override
     public void draw(float dt, SpriteBatch sb, ShapeRenderer sr) {
-        setImage(StaticContentManager.getTexture(StaticContentManager.Image.SHOWER_HEAD));
+        setImage(StaticContentManager.getTexture(StaticContentManager.Image.SHEARS));
         super.draw(dt, sb, sr);
     }
 
     public boolean isHeld() {
         return isHeld;
     }
+
 }
