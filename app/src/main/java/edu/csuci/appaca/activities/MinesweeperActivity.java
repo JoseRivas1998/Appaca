@@ -25,6 +25,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     private MinesweeperTile[][] grid;
     private boolean flagToggle = false;
 
+    public static long timeStarted = 0;
     public static long timePlayed = 0;
     public static int tilesRevealed = 0;
     public static int score;
@@ -39,9 +40,9 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void initMinesweeper() {
-        this.timePlayed = 0;
-        SavedTime.setToNow();
-        this.score = 0;
+        timePlayed = 0;
+        timeStarted = TimeUtils.getCurrentTime();
+        score = 0;
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
         TextView scoreText = findViewById(R.id.minesweeper_score_text);
@@ -68,8 +69,8 @@ public class MinesweeperActivity extends AppCompatActivity {
         });
 
         view.setColumnCount(GRID_SIZE);
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for(int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
                 final MinesweeperTile tile = MinesweeperTile.createTile(i, j, GRID_SIZE, this.getApplicationContext());
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -77,8 +78,8 @@ public class MinesweeperActivity extends AppCompatActivity {
                         if (flagToggle) {
                             tile.flipFlag(context);
                         } else {
-                            if (tile.bomb){
-                                MinesweeperActivity.timePlayed = TimeUtils.getCurrentTime() - SavedTime.lastSavedTime();
+                            if (tile.bomb) {
+                                timePlayed = TimeUtils.getCurrentTime() - timeStarted;
                                 tile.reveal(context.getApplicationContext());
                                 MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
                             } else {
@@ -95,15 +96,15 @@ public class MinesweeperActivity extends AppCompatActivity {
         }
     }
 
-    private void checkWin(){
+    private void checkWin() {
         final int NUM_SAFE_TILES = (GRID_SIZE * GRID_SIZE) - MAX_BOMBS;
-        if(tilesRevealed == NUM_SAFE_TILES) {
+        if (tilesRevealed == NUM_SAFE_TILES) {
             this.timePlayed = TimeUtils.getCurrentTime() - SavedTime.lastSavedTime();
             MiniGames.winGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
         }
     }
 
-    private void updateScore(){
+    private void updateScore() {
         Context context = this.getApplicationContext();
         TextView scoreText = findViewById(R.id.minesweeper_score_text);
         String format = context.getText(MiniGames.MINESWEEPER.scoreFormatId).toString();
@@ -113,13 +114,12 @@ public class MinesweeperActivity extends AppCompatActivity {
 
     private void placeBombs() {
         Random generator = new Random();
-        int x,y;
-        for (int i = 0; i < this.MAX_BOMBS; i++)
-        {
+        int x, y;
+        for (int i = 0; i < this.MAX_BOMBS; i++) {
             do {
                 x = generator.nextInt(GRID_SIZE - 1);
                 y = generator.nextInt(GRID_SIZE - 1);
-            }while (grid[x][y].bomb);
+            } while (grid[x][y].bomb);
             grid[x][y].setBomb();
         }
     }
@@ -127,13 +127,12 @@ public class MinesweeperActivity extends AppCompatActivity {
     private void revealNeighboringTiles(int y, int x) {
         boolean xOutOfBounds = x < 0 || x > (GRID_SIZE - 1);
         boolean yOutOfBounds = y < 0 || y > (GRID_SIZE - 1);
-        if (yOutOfBounds || xOutOfBounds || grid[y][x].revealed){
+        if (yOutOfBounds || xOutOfBounds || grid[y][x].revealed) {
             return;
         } else if (grid[y][x].bomb) {
             return;
-        }
-        else {
-            boolean bombExists = doNeighborsHaveBombs(y,x);
+        } else {
+            boolean bombExists = doNeighborsHaveBombs(y, x);
             grid[y][x].reveal(this.getApplicationContext());
             if (!bombExists) {
                 for (int i = y - 1; i <= y + 1; i++) {
@@ -145,7 +144,7 @@ public class MinesweeperActivity extends AppCompatActivity {
         }
     }
 
-    boolean doNeighborsHaveBombs(int y, int x){
+    boolean doNeighborsHaveBombs(int y, int x) {
         boolean southExists = (y + 1) < GRID_SIZE - 1;
         boolean eastExists = (x + 1) < GRID_SIZE - 1;
         boolean northExists = (y - 1) > 0;
@@ -163,21 +162,27 @@ public class MinesweeperActivity extends AppCompatActivity {
 
         if (northExists) {
             nBomb = grid[y - 1][x].bomb;
-        } if (eastExists) {
+        }
+        if (eastExists) {
             eBomb = grid[y][x + 1].bomb;
-        } if (southExists) {
+        }
+        if (southExists) {
             sBomb = grid[y + 1][x].bomb;
-        } if (westExists) {
+        }
+        if (westExists) {
             wBomb = grid[y][x - 1].bomb;
         }
 
         if (northExists && eastExists) {
             neBomb = grid[y - 1][x + 1].bomb;
-        } if (southExists && eastExists) {
+        }
+        if (southExists && eastExists) {
             seBomb = grid[y + 1][x + 1].bomb;
-        } if (northExists && westExists) {
+        }
+        if (northExists && westExists) {
             nwBomb = grid[y - 1][x - 1].bomb;
-        } if (southExists && westExists) {
+        }
+        if (southExists && westExists) {
             swBomb = grid[y + 1][x - 1].bomb;
         }
 
