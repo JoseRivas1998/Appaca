@@ -41,7 +41,6 @@ public class MinesweeperActivity extends AppCompatActivity {
 
     private void initMinesweeper() {
         timePlayed = 0;
-        timeStarted = TimeUtils.getCurrentTime();
         score = 0;
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
@@ -75,6 +74,10 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (tilesRevealed == 0) {
+                            timeStarted = TimeUtils.getCurrentTime();
+                        }
+
                         if (flagToggle) {
                             tile.flipFlag(context);
                         } else {
