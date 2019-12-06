@@ -73,18 +73,18 @@ public class MinesweeperActivity extends AppCompatActivity {
                 tile.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         if (flagToggle) {
                             tile.flipFlag(context);
                         } else {
-                            if (tile.bomb){
-                                tile.reveal(context.getApplicationContext());
-                                MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
-                            } else {
-                                revealNeighboringTiles(tile.row, tile.column);
+                            if (!tile.getFlag()) {
+                                if (tile.bomb) {
+                                    tile.reveal(context.getApplicationContext());
+                                    MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
+                                } else {
+                                    revealNeighboringTiles(tile.row, tile.column);
+                                }
                             }
                         }
-                        checkWin();
                         updateScore();
                         checkWin();
                     }
@@ -137,7 +137,8 @@ public class MinesweeperActivity extends AppCompatActivity {
             if (numOfBombs > 0) {
                 bombExists = true;
             }
-            grid[y][x].reveal(this.getApplicationContext());
+            boolean revealed = grid[y][x].reveal(this.getApplicationContext());
+            if (revealed)
             setNumOfNearMinesString(numOfBombs);
             grid[y][x].view.setText(buffer);
             if (!bombExists) {

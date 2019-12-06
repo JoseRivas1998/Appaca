@@ -83,5 +83,9 @@ public class MinesweeperTile {
         }
     }
 
+    public boolean getFlag() {
+        return this.flagged;
+    }
+
     public void setBomb() { this.bomb = true; }
 }
