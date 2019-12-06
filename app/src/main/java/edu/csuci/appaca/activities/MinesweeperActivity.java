@@ -24,7 +24,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     private long timePlayed = 0;
     private boolean flagToggle = false;
 
-    public static int tilesRevealed = 0;
+    public static int tilesRevealed;
     public static int score;
 
     private String buffer;
@@ -40,6 +40,7 @@ public class MinesweeperActivity extends AppCompatActivity {
 
     private void initMinesweeper() {
         this.score = 0;
+        tilesRevealed = 0;
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
         TextView scoreText = findViewById(R.id.minesweeper_score_text);
