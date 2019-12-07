@@ -102,6 +102,10 @@ public class PetDetector extends AbstractEntity {
         return this.justPet;
     }
 
+    public boolean isPetting() {
+        return this.isPetting;
+    }
+
     public void notJustPet() {
         this.justPet = false;
     }
