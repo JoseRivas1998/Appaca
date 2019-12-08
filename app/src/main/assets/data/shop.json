@@ -53,6 +53,13 @@
       "path": "alpacas/skin_01.png",
       "spritesheet": "alpacas/skin_01_spritesheet.png",
       "cost": 100
+    },
+    {
+      "id": 2,
+      "name": "Caramel",
+      "path": "alpacas/skin_02.png",
+      "spritesheet": "alpacas/skin_02_spritesheet.png",
+      "cost": 100
     }
   ]
 }
