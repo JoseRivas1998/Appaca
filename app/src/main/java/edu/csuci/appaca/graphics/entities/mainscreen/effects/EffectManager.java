@@ -28,7 +28,8 @@ public class EffectManager implements Disposable {
     private final int viewportHeight;
 
     private enum EffectActive {
-        RAINBOW;
+        RAINBOW,
+        RAINY_DAY;
         boolean active;
 
         EffectActive() {
@@ -36,8 +37,9 @@ public class EffectManager implements Disposable {
         }
     }
 
-    private RainbowEffectEntity rainbow;
     private List<EffectActive> activeEffects;
+    private RainbowEffectEntity rainbow;
+    private RainyDay rainyDay;
 
     public EffectManager(int viewportWidth, int viewportHeight) {
         this.viewportWidth = viewportWidth;
@@ -45,6 +47,7 @@ public class EffectManager implements Disposable {
         this.rainbow = new RainbowEffectEntity();
         this.rainbow.setCenter(viewportWidth * 0.5f, viewportHeight * 0.5f);
         this.activeEffects = new ArrayList<>();
+        this.rainyDay = new RainyDay();
     }
 
     public void update(float dt, AlpacaEntity alpaca) {
@@ -62,7 +65,7 @@ public class EffectManager implements Disposable {
 
     @Override
     public void dispose() {
-
+        rainyDay.dispose();
     }
 
     private void updateEffectStatus() {
@@ -77,6 +80,7 @@ public class EffectManager implements Disposable {
         float hygienePercent = (float) MathFunctions.map(currentHygiene, Alpaca.MIN_STAT, Alpaca.MAX_STAT, 0.0, 1.0);
 
         EffectActive.RAINBOW.active = Float.compare(1f - happinessPercent, EFFECT_THRESHOLD) <= 0;
+        EffectActive.RAINY_DAY.active = Float.compare(happinessPercent, EFFECT_THRESHOLD) <= 0;
 
         setActiveEffectList();
 
@@ -87,6 +91,8 @@ public class EffectManager implements Disposable {
             case RAINBOW:
                 updateRainbow(dt, alpaca);
                 break;
+            case RAINY_DAY:
+                rainyDay.update(dt, alpaca);
         }
     }
 
@@ -94,6 +100,9 @@ public class EffectManager implements Disposable {
         switch (effect) {
             case RAINBOW:
                 drawRainbow(dt, alpaca, viewport, sb, sr);
+                break;
+            case RAINY_DAY:
+                rainyDay.draw(dt, alpaca, viewport, sb, sr);
                 break;
         }
     }

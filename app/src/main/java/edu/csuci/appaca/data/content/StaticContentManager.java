@@ -88,7 +88,8 @@ public class StaticContentManager {
         TOOLBOX_OPEN("toolbox_open.png"),
         TOOLBOX_CLOSED("toolbox_closed.png"),
         SHEARS("shears.png"),
-        RAINBOW("effects/rainbow.png");
+        RAINBOW("effects/rainbow.png"),
+        RAIN_CLOUD("effects/raincloud.png");
         final String path;
 
         Image(String path) {
