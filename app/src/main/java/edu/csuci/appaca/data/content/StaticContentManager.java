@@ -90,7 +90,8 @@ public class StaticContentManager {
         SHEARS("shears.png"),
         RAINBOW("effects/rainbow.png"),
         RAIN_CLOUD("effects/raincloud.png"),
-        DIRT_CLOUD("effects/dirtcloud.png");
+        DIRT_CLOUD("effects/dirtcloud.png"),
+        SPARKLE("effects/sparkle.png");
         final String path;
 
         Image(String path) {
