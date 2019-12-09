@@ -154,6 +154,16 @@ public class MinesweeperActivity extends AppCompatActivity {
             if (revealed) {
                 setNumOfNearMinesString(numOfBombs);
                 grid[y][x].view.setText(buffer);
+                switch(numOfBombs) {
+                    case 1: {grid[y][x].view.setTextColor(getColor(R.color.minesweeperone)); break;}
+                    case 2: {grid[y][x].view.setTextColor(getColor(R.color.minesweepertwo)); break;}
+                    case 3: {grid[y][x].view.setTextColor(getColor(R.color.minesweeperthree)); break;}
+                    case 4: {grid[y][x].view.setTextColor(getColor(R.color.minesweeperfour)); break;}
+                    case 5: {grid[y][x].view.setTextColor(getColor(R.color.minesweeperfive)); break;}
+                    case 6: {grid[y][x].view.setTextColor(getColor(R.color.minesweepersix)); break;}
+                    case 7: {grid[y][x].view.setTextColor(getColor(R.color.minesweeperseven)); break;}
+                    case 8: {grid[y][x].view.setTextColor(getColor(R.color.minesweepereight)); break;}
+                }
             }
             if (!bombExists) {
                 for (int i = y - 1; i <= y + 1; i++) {
