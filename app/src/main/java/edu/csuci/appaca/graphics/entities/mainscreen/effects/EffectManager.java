@@ -29,7 +29,8 @@ public class EffectManager implements Disposable {
 
     private enum EffectActive {
         RAINBOW,
-        RAINY_DAY;
+        RAINY_DAY,
+        DIRTY_BOI;
         boolean active;
 
         EffectActive() {
@@ -40,6 +41,7 @@ public class EffectManager implements Disposable {
     private List<EffectActive> activeEffects;
     private RainbowEffectEntity rainbow;
     private RainyDay rainyDay;
+    private DirtyBoi dirtyBoi;
 
     public EffectManager(int viewportWidth, int viewportHeight) {
         this.viewportWidth = viewportWidth;
@@ -48,6 +50,7 @@ public class EffectManager implements Disposable {
         this.rainbow.setCenter(viewportWidth * 0.5f, viewportHeight * 0.5f);
         this.activeEffects = new ArrayList<>();
         this.rainyDay = new RainyDay();
+        this.dirtyBoi = new DirtyBoi();
     }
 
     public void update(float dt, AlpacaEntity alpaca) {
@@ -66,6 +69,7 @@ public class EffectManager implements Disposable {
     @Override
     public void dispose() {
         rainyDay.dispose();
+        dirtyBoi.dispose();
     }
 
     private void updateEffectStatus() {
@@ -82,6 +86,8 @@ public class EffectManager implements Disposable {
         EffectActive.RAINBOW.active = Float.compare(1f - happinessPercent, EFFECT_THRESHOLD) <= 0;
         EffectActive.RAINY_DAY.active = Float.compare(happinessPercent, EFFECT_THRESHOLD) <= 0;
 
+        EffectActive.DIRTY_BOI.active = Float.compare(hygienePercent, EFFECT_THRESHOLD) <= 0;
+
         setActiveEffectList();
 
     }
@@ -93,6 +99,9 @@ public class EffectManager implements Disposable {
                 break;
             case RAINY_DAY:
                 rainyDay.update(dt, alpaca);
+            case DIRTY_BOI:
+                dirtyBoi.update(dt, alpaca);
+                break;
         }
     }
 
@@ -103,6 +112,9 @@ public class EffectManager implements Disposable {
                 break;
             case RAINY_DAY:
                 rainyDay.draw(dt, alpaca, viewport, sb, sr);
+                break;
+            case DIRTY_BOI:
+                dirtyBoi.draw(dt, alpaca, viewport, sb, sr);
                 break;
         }
     }
