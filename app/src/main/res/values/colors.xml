@@ -11,4 +11,13 @@
     <color name="bluePastel">#C6E0E5</color>
     <color name="pinkPastel">#EDB2BD</color>
 
+    <color name="minesweeperone">#74E8C1</color>
+    <color name="minesweepertwo">#2CF733</color>
+    <color name="minesweeperthree">#C053DB</color>
+    <color name="minesweeperfour">#5390DB</color>
+    <color name="minesweeperfive">#F7CB2C</color>
+    <color name="minesweepersix">#F79438</color>
+    <color name="minesweeperseven">#DB85A0</color>
+    <color name="minesweepereight">#F2373A</color>
+
 </resources>
