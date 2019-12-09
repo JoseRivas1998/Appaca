@@ -10,6 +10,7 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import edu.csuci.appaca.R;
@@ -23,6 +24,7 @@ public class MinesweeperActivity extends AppCompatActivity {
     private final int GRID_SIZE = 16;
     private final int MAX_BOMBS = 40;
     private MinesweeperTile[][] grid;
+    private ArrayList<MinesweeperTile> bombs;
     private boolean flagToggle = false;
 
     public static long timeStarted = 0;
@@ -45,6 +47,7 @@ public class MinesweeperActivity extends AppCompatActivity {
         timePlayed = 0;
         score = 0;
         tilesRevealed = 0;
+        this.bombs = new ArrayList<>();
         final Context context = this.getApplicationContext();
         grid = new MinesweeperTile[GRID_SIZE][GRID_SIZE];
         TextView scoreText = findViewById(R.id.minesweeper_score_text);
@@ -88,6 +91,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                                 if (tile.bomb) {
                                     timePlayed = TimeUtils.getCurrentTime() - timeStarted;
                                     tile.reveal(context.getApplicationContext());
+                                    revealAllBombs();
                                     MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
                                 } else {
                                     revealNeighboringTiles(tile.row, tile.column);
@@ -129,6 +133,7 @@ public class MinesweeperActivity extends AppCompatActivity {
                 y = generator.nextInt(GRID_SIZE - 1);
             } while (grid[x][y].bomb);
             grid[x][y].setBomb();
+            bombs.add(grid[x][y]);
         }
     }
 
@@ -240,6 +245,13 @@ public class MinesweeperActivity extends AppCompatActivity {
         this.buffer = "";
         if (number > 0) {
             this.buffer += number;
+        }
+    }
+
+    private void revealAllBombs(){
+        Context context = this.getApplicationContext();
+        for (int i = 0; i < bombs.size(); i++){
+            bombs.get(i).reveal(context);
         }
     }
 
