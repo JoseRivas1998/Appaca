@@ -30,7 +30,8 @@ public class EffectManager implements Disposable {
     private enum EffectActive {
         RAINBOW,
         RAINY_DAY,
-        DIRTY_BOI;
+        DIRTY_BOI,
+        SPARKLY;
         boolean active;
 
         EffectActive() {
@@ -42,6 +43,7 @@ public class EffectManager implements Disposable {
     private RainbowEffectEntity rainbow;
     private RainyDay rainyDay;
     private DirtyBoi dirtyBoi;
+    private Sparkly sparkly;
 
     public EffectManager(int viewportWidth, int viewportHeight) {
         this.viewportWidth = viewportWidth;
@@ -51,6 +53,8 @@ public class EffectManager implements Disposable {
         this.activeEffects = new ArrayList<>();
         this.rainyDay = new RainyDay();
         this.dirtyBoi = new DirtyBoi();
+        this.sparkly = new Sparkly();
+
     }
 
     public void update(float dt, AlpacaEntity alpaca) {
@@ -70,6 +74,7 @@ public class EffectManager implements Disposable {
     public void dispose() {
         rainyDay.dispose();
         dirtyBoi.dispose();
+        sparkly.dispose();
     }
 
     private void updateEffectStatus() {
@@ -86,6 +91,8 @@ public class EffectManager implements Disposable {
         EffectActive.RAINBOW.active = Float.compare(1f - happinessPercent, EFFECT_THRESHOLD) <= 0;
         EffectActive.RAINY_DAY.active = Float.compare(happinessPercent, EFFECT_THRESHOLD) <= 0;
 
+
+        EffectActive.SPARKLY.active = Float.compare(1f - hygienePercent, EFFECT_THRESHOLD) <= 0;
         EffectActive.DIRTY_BOI.active = Float.compare(hygienePercent, EFFECT_THRESHOLD) <= 0;
 
         setActiveEffectList();
@@ -102,6 +109,9 @@ public class EffectManager implements Disposable {
             case DIRTY_BOI:
                 dirtyBoi.update(dt, alpaca);
                 break;
+            case SPARKLY:
+                sparkly.update(dt, alpaca);
+                break;
         }
     }
 
@@ -115,6 +125,9 @@ public class EffectManager implements Disposable {
                 break;
             case DIRTY_BOI:
                 dirtyBoi.draw(dt, alpaca, viewport, sb, sr);
+                break;
+            case SPARKLY:
+                sparkly.draw(dt, alpaca, viewport, sb, sr);
                 break;
         }
     }
