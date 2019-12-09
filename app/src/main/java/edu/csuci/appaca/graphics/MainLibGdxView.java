@@ -38,6 +38,7 @@ import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
 import edu.csuci.appaca.graphics.entities.mainscreen.Shears;
 import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.graphics.entities.mainscreen.effects.EffectManager;
 import edu.csuci.appaca.graphics.ui.ButtonEntity;
 import edu.csuci.appaca.graphics.ui.NinepatchButtonEntity;
 import edu.csuci.appaca.graphics.ui.SpriteButtonEntity;
@@ -105,6 +106,8 @@ public class MainLibGdxView extends ApplicationAdapter {
     private Vector2 shearsTarget;
     private boolean prevShearCollide;
 
+    private EffectManager effectManager;
+
     public MainLibGdxView(Context parent) {
         this.parent = parent;
         VIEWPORT_WIDTH = parent.getResources().getInteger(R.integer.main_view_libgdx_width);
@@ -149,6 +152,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         shears = new Shears(viewport, VIEWPORT_WIDTH, VIEW_HEIGHT);
         prevShearCollide = false;
         toolboxClosing = false;
+        effectManager = new EffectManager(VIEWPORT_WIDTH, VIEW_HEIGHT);
     }
 
     private void initButtons() {
@@ -235,6 +239,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateClothingDrawer(dt);
         updateHideDrawers();
         toolboxButton.update(dt);
+        effectManager.update(dt, alpaca);
     }
 
     private void updateToolboxOpeningClosing() {
@@ -493,6 +498,8 @@ public class MainLibGdxView extends ApplicationAdapter {
 //        petDetector.draw(dt, spriteBatch, shapeRenderer);
         shapeRenderer.end();
 
+        effectManager.draw(dt, alpaca, viewport, spriteBatch, shapeRenderer);
+
         foodDrawer.draw(dt, spriteBatch, shapeRenderer);
         clothingDrawer.draw(dt, spriteBatch, shapeRenderer);
 
@@ -582,6 +589,7 @@ public class MainLibGdxView extends ApplicationAdapter {
         }
         foodDrawer.dispose();
         clothingDrawer.dispose();
+        effectManager.dispose();
         StaticContentManager.dispose();
     }
 }
