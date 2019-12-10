@@ -29,6 +29,7 @@ public class RainyDay implements Disposable {
     }
 
     public void update(float dt, AlpacaEntity alpaca) {
+        rainCloud.update(dt);
         rainCloud.setCenterX(alpaca.getCenterX());
         rainCloud.setY(alpaca.getY() + alpaca.getHeight() + rainCloud.getHeight() * 0.25f);
         if(MathUtils.randomBoolean(0.85f)) {

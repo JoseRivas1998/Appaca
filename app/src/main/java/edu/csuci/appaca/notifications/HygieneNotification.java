@@ -6,8 +6,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import com.badlogic.gdx.math.MathUtils;
 
 import java.util.HashMap;
 
@@ -41,15 +44,18 @@ public class HygieneNotification {
             public void accept(Alpaca alpaca) {
                 long lastTime = SavedTime.lastSavedTime();
                 double predictedHygieneLoss = HygieneDepletion.hygieneDepletion(alpaca, lastTime);
+                predictedHygieneLoss = MathUtils.clamp(predictedHygieneLoss, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
                 boolean isHygieneDepleted = Double.compare(predictedHygieneLoss, Alpaca.MIN_STAT) == 0;
                 boolean wasNotificationSent = ListUtils.getOrDefault(notificationSentMap, alpaca, false);
                 if (isHygieneDepleted) {
                     if (!wasNotificationSent) {
                         sendNotification(context, alpaca.getName());
                         notificationSentMap.put(alpaca, true);
+
                     }
                 } else {
                     notificationSentMap.put(alpaca, false);
+
                 }
             }
         });
