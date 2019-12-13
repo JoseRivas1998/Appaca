@@ -22,6 +22,7 @@ import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
 import edu.csuci.appaca.notifications.NotificationChecker;
+import edu.csuci.appaca.notifications.NotificationService;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class MainActivity extends AndroidApplication {
@@ -34,7 +35,6 @@ public class MainActivity extends AndroidApplication {
     private ImageView playBtn;
     private ImageView feedBtn;
     private ImageView clothesBtn;
-    private ImageView shearBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,8 @@ public class MainActivity extends AndroidApplication {
         initCurrencyDisplays();
         updateName();
         MainScreenBackground.start(this);
-        NotificationChecker checker = NotificationChecker.getInstance(this.getApplicationContext());
-        checker.start();
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
     }
 
     private void initCurrencyDisplays() {
@@ -105,7 +105,6 @@ public class MainActivity extends AndroidApplication {
         playBtn = findViewById(R.id.playBtn);
         feedBtn = findViewById(R.id.feedBtn);
         clothesBtn = findViewById(R.id.clothesBtn);
-        shearBtn = findViewById(R.id.shearBtn);
 
         shopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,23 +125,14 @@ public class MainActivity extends AndroidApplication {
         feedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FoodSelectActivity.class);
-                startActivity(intent);
+                libGDXView.toggleFoodDrawer();
             }
         });
 
         clothesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ClothingSelectActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        shearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                libGDXView.shear();
+                libGDXView.toggleClothingDrawer();
             }
         });
 
@@ -155,7 +145,7 @@ public class MainActivity extends AndroidApplication {
         }
     }
 
-    private void updateName() {
+    public void updateName() {
         String name = AlpacaFarm.getCurrentAlpaca().getName();
         TextView view = findViewById(R.id.main_alpaca_name_view);
         view.setText(name);

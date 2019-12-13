@@ -36,6 +36,7 @@ public class StatBarFragment extends Fragment {
     public static StatBarFragment buildStatBar(Stat stat) {
         StatBarFragment fragment = new StatBarFragment();
         fragment.stat = stat;
+        fragment.setRetainInstance(true);
         return fragment;
     }
 

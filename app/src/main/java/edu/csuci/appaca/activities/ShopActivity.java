@@ -28,7 +28,7 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
         setupNavigation();
-        getSupportActionBar().setTitle("Shop");
+        getSupportActionBar().hide();
     }
 
     private void setupNavigation() {
