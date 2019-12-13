@@ -9,6 +9,16 @@
       "frame_dur": 0.5,
       "cost": 5,
       "value": 0.2
+    },
+    {
+      "id": 2,
+      "name": "Cherry",
+      "path": "food/cherry.png",
+      "anim": "food/cherry_spritesheet.png",
+      "frames": 3,
+      "frame_dur": 0.5,
+      "cost": 5,
+      "value": 0.2
     }
   ],
   "clothes": [
