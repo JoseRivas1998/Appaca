@@ -20,8 +20,8 @@
 
         <ImageButton
             android:id="@+id/flag_toggle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_above="@+id/minesweeper_grid"
             android:layout_marginStart="30dp"
             android:layout_marginBottom="30dp"
