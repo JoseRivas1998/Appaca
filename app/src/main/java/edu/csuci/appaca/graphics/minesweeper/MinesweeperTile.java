@@ -51,7 +51,7 @@ public class MinesweeperTile {
                 if (this.bomb) {
                     this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/poop.png"));
                 } else {
-                    this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
+                    this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/uncovered_tile.png"));
                     MinesweeperActivity.tilesRevealed++;
                     MinesweeperActivity.score++;
                 }
