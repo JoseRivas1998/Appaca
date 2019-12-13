@@ -28,7 +28,7 @@ public class MinesweeperTile {
 
         MinesweeperTile ret = new MinesweeperTile();
         ret.view = new TextView(context);
-        ret.view.setBackgroundColor(context.getColor(R.color.bluePastel));
+        ret.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/covered_tile.png"));
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = size;
         params.height = size;
@@ -71,7 +71,7 @@ public class MinesweeperTile {
     private void unflag(Context context) {
         if (!revealed) {
             this.flagged = false;
-            this.view.setBackgroundColor(context.getColor(R.color.bluePastel));
+            this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/covered_tile.png"));
         }
     }
 
