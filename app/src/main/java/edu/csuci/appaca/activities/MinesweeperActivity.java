@@ -56,7 +56,7 @@ public class MinesweeperActivity extends AppCompatActivity {
         scoreText.setText(text);
         GridLayout view = findViewById(R.id.minesweeper_grid);
         final ImageButton flagButton = findViewById(R.id.flag_toggle);
-        flagButton.setImageDrawable(AssetsUtils.drawableFromAsset(this, "minesweeper/orange_flag.png"));
+        flagButton.setImageDrawable(AssetsUtils.drawableFromAsset(this, "minesweeper/flag.png"));
         flagButton.setBackgroundColor(Color.TRANSPARENT);
 
         flagButton.setOnClickListener(new View.OnClickListener() {
