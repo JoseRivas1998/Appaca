@@ -49,7 +49,7 @@ public class MinesweeperTile {
         if(!flagged) {
             if (!revealed) {
                 if (this.bomb) {
-                    this.view.setBackgroundColor(context.getColor(R.color.pinkPastel));
+                    this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/poop.png"));
                 } else {
                     this.view.setBackgroundColor(context.getColor(R.color.greenPastel));
                     MinesweeperActivity.tilesRevealed++;
