@@ -42,7 +42,7 @@ public class Alpaca implements JSONAble {
         if(ShopData.getAlpaca(shopItemID) == null) {
             path = "";
         } else {
-            path = ShopData.getAlpaca(shopItemID).path;
+            path = ShopData.getAlpaca(shopItemID).spritesheet;
         }
         long lastShearTime = TimeUtils.getCurrentTime() - INITIAL_SECONDS_SINCE_SHEAR;
         return new Alpaca(id, name, path, MAX_STAT, MAX_STAT, MAX_STAT, lastShearTime, NO_CLOTHING);

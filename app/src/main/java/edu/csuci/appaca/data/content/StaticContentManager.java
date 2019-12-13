@@ -73,7 +73,25 @@ public class StaticContentManager {
         PLATFORM_BREAKABLE("alpaca-jump/img/platform_breakable.png"),
         FRUIT_CATCH_BACKGROUND("backgrounds/fruitcatch_background.png"),
         SHOWER_HEAD("shower_head.png"),
-        WATER_DROP("water_drop.png");
+        WATER_DROP("water_drop.png"),
+        GROUND_TILE("alpaca-run/ground_tile.png"),
+        OBSTACLE_SMALL("alpaca-run/obstacle_small.png"),
+        OBSTACLE_MEDIUM("alpaca-run/obstacle_medium.png"),
+        OBSTACLE_LARGE("alpaca-run/obstacle_large.png"),
+        ALPACA_RUN_PLAYER("alpaca-run/player.png"),
+        BACKGROUND_TILE("alpaca-run/background_tile.png"),
+        BUTTON_BACKGROUND_NINEPATCH("ui/button_background_ninepatch.png"),
+        ARROW_RIGHT("ui/arrow_right.png"),
+        ARROW_LEFT("ui/arrow_left.png"),
+        FOOD_DRAWER_BG("ui/food_drawer_bg.png"),
+        X_2("ui/x_2.png"),
+        TOOLBOX_OPEN("toolbox_open.png"),
+        TOOLBOX_CLOSED("toolbox_closed.png"),
+        SHEARS("shears.png"),
+        RAINBOW("effects/rainbow.png"),
+        RAIN_CLOUD("effects/raincloud.png"),
+        DIRT_CLOUD("effects/dirtcloud.png"),
+        SPARKLE("effects/sparkle.png");
         final String path;
 
         Image(String path) {

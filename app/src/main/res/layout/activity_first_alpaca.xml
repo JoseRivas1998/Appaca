@@ -59,6 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/main_view_dock_margin"
             android:layout_weight=".75"
+            android:inputType="text"
+            android:maxLines="1"
+            android:lines="1"
+            android:imeOptions="actionGo"
             android:hint="@string/alpaca_name_field_hint" />
         <Button
             android:id="@+id/first_alpaca_confirmation_button"

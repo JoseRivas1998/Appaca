@@ -99,7 +99,7 @@ public class StaminaRecovery {
             if (StaminaManager.getFirstStaminaUsedTime() == 0)
                 countDown = false;
 
-            final String message = countDown ? "Time until refill: " + String.format("%02d",minutes) + ":" + String.format("%02d", seconds) : "";
+            final String message = countDown ? "Time Until Refill: " + String.format("%02d",minutes) + ":" + String.format("%02d", seconds) : "";
 
             setMessage(StaminaManager.getCurrentStamina(), message);
 
