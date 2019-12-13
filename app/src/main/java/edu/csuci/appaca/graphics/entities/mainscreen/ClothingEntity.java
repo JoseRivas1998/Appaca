@@ -16,10 +16,15 @@ public class ClothingEntity extends AbstractSpriteEntity implements Disposable {
     private int clothingId = Alpaca.NO_CLOTHING;
     private int previousClothingId = Alpaca.NO_CLOTHING;
     private Texture currentTexture;
+    private AlpacaEntity alpaca;
 
     @Override
     public void update(float dt) {
         clothingId = AlpacaFarm.getCurrentAlpaca().getClothing();
+        if(alpaca != null && clothingId != Alpaca.NO_CLOTHING) {
+            StaticClothesItem clothesItem = ShopData.getClothes(clothingId);
+            setCenter(alpaca.getX() + clothesItem.x, alpaca.getY() + clothesItem.y);
+        }
     }
 
     public void updateClothesTexture(AlpacaEntity alpaca) {
@@ -31,7 +36,7 @@ public class ClothingEntity extends AbstractSpriteEntity implements Disposable {
             imageWidth = currentTexture.getWidth() * clothesItem.scale;
             imageHeight = currentTexture.getHeight() * clothesItem.scale;
             setSize(imageWidth, imageHeight);
-            setCenter(alpaca.getX() + clothesItem.x, alpaca.getY() + clothesItem.y);
+            this.alpaca = alpaca;
         }
         this.previousClothingId = clothingId;
     }

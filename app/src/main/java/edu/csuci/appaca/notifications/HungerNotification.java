@@ -9,6 +9,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.util.HashMap;
 
 import edu.csuci.appaca.R;
@@ -31,13 +33,14 @@ public class HungerNotification {
                 boolean sentNotification = ListUtils.getOrDefault(notificationSentMap, alpaca, false);
                 long lastTime = SavedTime.lastSavedTime();
                 double hungerStat = FoodDepletion.foodDepletion(alpaca, lastTime);
-                if(Double.compare(hungerStat, Alpaca.MIN_STAT) == 0) {
-                    if(!sentNotification) {
+                hungerStat = MathUtils.clamp(hungerStat, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
+                if (Double.compare(hungerStat, Alpaca.MIN_STAT) == 0) {
+                    if (!sentNotification) {
                         notificationSentMap.put(alpaca, true);
                         sendNotification(context, alpaca.getName());
-                    } else {
-                        notificationSentMap.put(alpaca, false);
                     }
+                } else {
+                    notificationSentMap.put(alpaca, false);
                 }
             }
         });
@@ -45,7 +48,7 @@ public class HungerNotification {
 
     private static void initMap() {
         if(notificationSentMap == null) {
-            synchronized(HappinessNotification.class) {
+            synchronized(HungerNotification.class) {
                 if(notificationSentMap == null) {
                     notificationSentMap = new HashMap<>();
                 }

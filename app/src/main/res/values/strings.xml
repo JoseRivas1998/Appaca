@@ -9,6 +9,7 @@
     <string name="play_again">Play Again</string>
     <string name="ok">OK</string>
     <string name="game_over">Game Over</string>
+    <string name="you_win">You win!</string>
     <string name="top_to_start">Tap to Start!</string>
     <string name="hunger">Hunger</string>
     <string name="happiness">Happiness</string>
@@ -25,4 +26,10 @@
     <string name="fruit_catch_high_score_format">High Score: %03d</string>
     <string name="fruit_catch_misses_format">Misses: %d / %d</string>
     <string name="happiness_notification_name">Your alpaca is no longer happy!</string>
+    <string name="alpaca_run">Alpaca Run</string>
+    <string name="alpaca_run_score_format">Score: %03d</string>
+    <string name="alpaca_run_high_score_format">High Score: %03d</string>
+    <string name="minesweeper">Minesweeper</string>
+    <string name="minesweeper_score_format">Score: %03d</string>
+    <string name="minesweeper_high_score_format">High Score: %03d</string>
 </resources>
