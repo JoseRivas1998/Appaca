@@ -154,9 +154,6 @@ public class MinesweeperActivity extends AppCompatActivity {
             if (revealed) {
                 setNumOfNearMinesString(numOfBombs);
                 grid[y][x].view.setText(buffer);
-                if (numOfBombs > 0) {
-                    grid[y][x].view.setBackground(AssetsUtils.drawableFromAsset(this.getApplicationContext(), "minesweeper/uncovered_tile_with_text.png"));
-                }
                 switch (numOfBombs) {
                     case 1:
                         grid[y][x].view.setTextColor(getColor(R.color.minesweeperone));
