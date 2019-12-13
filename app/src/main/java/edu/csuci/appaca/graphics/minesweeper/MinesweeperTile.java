@@ -51,7 +51,7 @@ public class MinesweeperTile {
                 if (this.bomb) {
                     this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/poop.png"));
                 } else {
-                    this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/uncovered_tile.png"));
+                    this.view.setBackgroundResource(R.drawable.uncovered_tile);
                     MinesweeperActivity.tilesRevealed++;
                     MinesweeperActivity.score++;
                 }
