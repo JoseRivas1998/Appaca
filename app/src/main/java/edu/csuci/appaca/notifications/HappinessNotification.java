@@ -8,6 +8,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.util.HashMap;
 
 import edu.csuci.appaca.R;
@@ -32,6 +34,7 @@ public class HappinessNotification {
                 boolean sentNotification = ListUtils.getOrDefault(notificationSentMap, alpaca, false);
                 long lastTime = SavedTime.lastSavedTime();
                 double happinessStat = HappinessCalc.calcHappiness(alpaca, lastTime);
+                happinessStat = MathUtils.clamp(happinessStat, Alpaca.MIN_STAT, Alpaca.MAX_STAT);
                 if (Double.compare(happinessStat, Alpaca.MIN_STAT) == 0) {
                     if(!sentNotification) {
                         notificationSentMap.put(alpaca, true);

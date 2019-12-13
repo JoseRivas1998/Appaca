@@ -161,6 +161,10 @@ public class FoodDrawer implements Disposable {
         }
     }
 
+    public boolean isShowing() {
+        return this.isShowing;
+    }
+
     private void hide() {
         this.isShowing = false;
         targetPosition.set(worldWidth * 0.5f, (worldHeight * 0.5f) + drawerHeight);

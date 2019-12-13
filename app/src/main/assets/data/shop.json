@@ -9,6 +9,16 @@
       "frame_dur": 0.5,
       "cost": 5,
       "value": 0.2
+    },
+    {
+      "id": 2,
+      "name": "Cherry",
+      "path": "food/cherry.png",
+      "anim": "food/cherry_spritesheet.png",
+      "frames": 3,
+      "frame_dur": 0.5,
+      "cost": 5,
+      "value": 0.2
     }
   ],
   "clothes": [
@@ -51,6 +61,14 @@
       "id": 1,
       "name": "Brownie",
       "path": "alpacas/skin_01.png",
+      "spritesheet": "alpacas/skin_01_spritesheet.png",
+      "cost": 100
+    },
+    {
+      "id": 2,
+      "name": "Caramel",
+      "path": "alpacas/skin_02.png",
+      "spritesheet": "alpacas/skin_02_spritesheet.png",
       "cost": 100
     }
   ]

@@ -4,28 +4,13 @@ import android.content.Context;
 
 public class NotificationChecker extends Thread
 {
-    private Context context;
-    private static final NotificationChecker instance = new NotificationChecker();
 
-    private NotificationChecker()
-    {
-
+    public static void checkNotifications(Context context) {
+        HygieneNotification.checkIfAnyAlpacasLowHygiene(context);
+        WoolNotification.checkIfAnyAlpacasMaxWool(context);
+        HappinessNotification.checkForLowHappiness(context);
+        StaminaNotification.checkIfStaminaIsFull(context);
+        HungerNotification.checkForLowHunger(context);
     }
 
-    public static NotificationChecker getInstance(Context context)
-    {
-        instance.context = context;
-        return instance;
-    }
-
-    @Override
-    public void run() {
-        while(true) {
-            HygieneNotification.checkIfAnyAlpacasLowHygiene(context);
-            WoolNotification.checkIfAnyAlpacasMaxWool(context);
-            HappinessNotification.checkForLowHappiness(context);
-            StaminaNotification.checkIfStaminaIsFull(context);
-            HungerNotification.checkForLowHunger(context);
-        }
-    }
 }

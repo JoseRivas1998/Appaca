@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -26,18 +28,23 @@ import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.content.StaticContentManager;
 import edu.csuci.appaca.graphics.entities.LabelEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.AlpacaEntity;
+import edu.csuci.appaca.graphics.entities.mainscreen.ClothingDrawer;
 import edu.csuci.appaca.graphics.entities.mainscreen.ClothingEntity;
 import edu.csuci.appaca.graphics.entities.mainscreen.EatingFood;
 import edu.csuci.appaca.graphics.entities.mainscreen.FoodDrawer;
 import edu.csuci.appaca.graphics.entities.mainscreen.Heart;
 import edu.csuci.appaca.graphics.entities.mainscreen.HoseHead;
 import edu.csuci.appaca.graphics.entities.mainscreen.PetDetector;
+import edu.csuci.appaca.graphics.entities.mainscreen.Shears;
 import edu.csuci.appaca.graphics.entities.mainscreen.WaterDrop;
 import edu.csuci.appaca.graphics.entities.mainscreen.ZoomText;
+import edu.csuci.appaca.graphics.entities.mainscreen.effects.EffectManager;
 import edu.csuci.appaca.graphics.ui.ButtonEntity;
 import edu.csuci.appaca.graphics.ui.NinepatchButtonEntity;
+import edu.csuci.appaca.graphics.ui.SpriteButtonEntity;
 import edu.csuci.appaca.utils.ActionTimer;
 import edu.csuci.appaca.utils.ShearUtils;
+import edu.csuci.appaca.utils.VectorUtils;
 
 public class MainLibGdxView extends ApplicationAdapter {
 
@@ -66,15 +73,17 @@ public class MainLibGdxView extends ApplicationAdapter {
     private EatingFood foodEating;
 
     private HoseHead hoseHead;
+    private Shears shears;
 
     private static final float MIN_DROP_TIME = 0.05f;
     private static final float MAX_DROP_TIME = 0.15f;
+    private static final float TOOLBOX_ITEM_SMOOTHING = 10f;
     private List<WaterDrop> waterDrops;
     private ActionTimer waterDropTimer;
     private static final double HYGIENE_PER_DROP = (Alpaca.MAX_STAT - Alpaca.MIN_STAT) * 0.01f;
 
     private enum HeldItem {
-        NONE, HOSE
+        NONE, HOSE, SHEARS
     }
 
     private ButtonEntity prevButton;
@@ -83,8 +92,21 @@ public class MainLibGdxView extends ApplicationAdapter {
     private HeldItem currentlyHeld = HeldItem.NONE;
 
     private FoodDrawer foodDrawer;
+    private ClothingDrawer clothingDrawer;
 
     private boolean shouldToggleFoodDrawer;
+    private boolean shouldToggleClothingDrawer;
+    private boolean hideDown;
+
+    private SpriteButtonEntity toolboxButton;
+    private boolean toolboxOpen;
+    private boolean toolboxOpening;
+    private boolean toolboxClosing;
+    private Vector2 hoseHeadTarget;
+    private Vector2 shearsTarget;
+    private boolean prevShearCollide;
+
+    private EffectManager effectManager;
 
     public MainLibGdxView(Context parent) {
         this.parent = parent;
@@ -119,8 +141,18 @@ public class MainLibGdxView extends ApplicationAdapter {
 
         this.foodDrawer = new FoodDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, FOOD_DRAWER_HEIGHT, HUD_PADDING, R.color.pinkPastel, parent);
         this.shouldToggleFoodDrawer = false;
+        this.clothingDrawer = new ClothingDrawer(VIEWPORT_WIDTH, VIEW_HEIGHT, parent);
+        this.shouldToggleClothingDrawer = false;
         initButtons();
+        hideDown = false;
+        toolboxOpen = false;
+        hoseHeadTarget = new Vector2();
+        shearsTarget = new Vector2();
 
+        shears = new Shears(viewport, VIEWPORT_WIDTH, VIEW_HEIGHT);
+        prevShearCollide = false;
+        toolboxClosing = false;
+        effectManager = new EffectManager(VIEWPORT_WIDTH, VIEW_HEIGHT);
     }
 
     private void initButtons() {
@@ -131,6 +163,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             @Override
             public void onClick() {
                 AlpacaFarm.prev();
+                alpaca.updateCurrentTexture(VIEWPORT_WIDTH, VIEW_HEIGHT);
             }
         });
 
@@ -141,9 +174,23 @@ public class MainLibGdxView extends ApplicationAdapter {
             @Override
             public void onClick() {
                 AlpacaFarm.next();
+                alpaca.updateCurrentTexture(VIEWPORT_WIDTH, VIEW_HEIGHT);
             }
         });
 
+        toolboxButton = new SpriteButtonEntity(StaticContentManager.Image.TOOLBOX_CLOSED);
+        toolboxButton.setPosition(HUD_PADDING, HUD_PADDING);
+        toolboxButton.setClickListener(new ButtonEntity.ClickListener() {
+            @Override
+            public void onClick() {
+                if (foodDrawer.isShowing() || clothingDrawer.isShowing()) return;
+                if (!toolboxOpen) {
+                    openToolbox();
+                } else {
+                    closeToolbox();
+                }
+            }
+        });
     }
 
     private float getDropTime() {
@@ -167,15 +214,18 @@ public class MainLibGdxView extends ApplicationAdapter {
             petDetector.handleInput(viewport);
             handleButtonInputs();
             foodDrawer.handleInput();
+            clothingDrawer.handleInput();
         }
     }
 
     private void handleButtonInputs() {
         prevButton.handleInput(viewport);
         nextButton.handleInput(viewport);
+        toolboxButton.handleInput(viewport);
     }
 
     private void update(float dt) {
+        updateToolboxOpeningClosing();
         updateHoldingItem(dt);
         addPendingCoins();
         addHearts();
@@ -186,14 +236,72 @@ public class MainLibGdxView extends ApplicationAdapter {
         updateWaterDrops(dt);
         viewport.apply(true);
         updateFoodDrawer(dt);
+        updateClothingDrawer(dt);
+        updateHideDrawers();
+        toolboxButton.update(dt);
+        effectManager.update(dt, alpaca);
+    }
+
+    private void updateToolboxOpeningClosing() {
+        if (toolboxOpening || toolboxClosing) {
+            shears.setX(shears.getX() + ((shearsTarget.x - shears.getX()) / TOOLBOX_ITEM_SMOOTHING));
+            shears.setY(shears.getY() + ((shearsTarget.y - shears.getY()) / TOOLBOX_ITEM_SMOOTHING));
+            hoseHead.setX(hoseHead.getX() + ((hoseHeadTarget.x - hoseHead.getX()) / TOOLBOX_ITEM_SMOOTHING));
+            hoseHead.setY(hoseHead.getY() + ((hoseHeadTarget.y - hoseHead.getY()) / TOOLBOX_ITEM_SMOOTHING));
+            if (VectorUtils.dist(shears.getPosition(), shearsTarget) < 5 &&
+                    VectorUtils.dist(hoseHead.getPosition(), hoseHeadTarget) < 5) {
+                if(toolboxOpening) toolboxOpening = false;
+                if(toolboxClosing) {
+                    toolboxClosing = false;
+                    toolboxOpen = false;
+                    toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_CLOSED);
+                }
+            }
+        }
+    }
+
+    private void updateHideDrawers() {
+        if (foodDrawer.isShowing() || clothingDrawer.isShowing()) {
+            if (!hideDown) {
+                if (Gdx.input.justTouched()) {
+                    Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+                    if (touchPoint.y > FOOD_DRAWER_HEIGHT) {
+                        hideDown = true;
+                    }
+                }
+            } else {
+                if (!Gdx.input.isTouched()) {
+                    Vector2 touchPoint = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+                    if (touchPoint.y > FOOD_DRAWER_HEIGHT) {
+                        if (foodDrawer.isShowing()) foodDrawer.toggle();
+                        if (clothingDrawer.isShowing()) clothingDrawer.toggle();
+                    }
+                    hideDown = false;
+                }
+            }
+        } else {
+            hideDown = false;
+        }
     }
 
     private void updateFoodDrawer(float dt) {
-        if(this.shouldToggleFoodDrawer) {
+        if (this.shouldToggleFoodDrawer) {
             this.shouldToggleFoodDrawer = false;
+            if (clothingDrawer.isShowing()) clothingDrawer.toggle();
+            if(toolboxOpen) closeToolbox();
             foodDrawer.toggle();
         }
         foodDrawer.update(dt);
+    }
+
+    private void updateClothingDrawer(float dt) {
+        if (this.shouldToggleClothingDrawer) {
+            this.shouldToggleClothingDrawer = false;
+            if (foodDrawer.isShowing()) foodDrawer.toggle();
+            if(toolboxOpen) closeToolbox();
+            this.clothingDrawer.toggle();
+        }
+        clothingDrawer.update(dt);
     }
 
     private void updateWaterDrops(float dt) {
@@ -218,14 +326,46 @@ public class MainLibGdxView extends ApplicationAdapter {
             case NONE:
                 updatePetting(dt);
                 updateHoseHead(dt);
+                updateShears(dt);
                 break;
             case HOSE:
                 updateHoseHead(dt);
                 break;
+            case SHEARS:
+                updateShears(dt);
+                break;
         }
     }
 
+    private void updateShears(float dt) {
+        if (!toolboxOpen || toolboxOpening || toolboxClosing) return;
+        shears.update(dt);
+        switch (currentlyHeld) {
+            case SHEARS:
+                if(!shears.isHeld()) {
+                    currentlyHeld = HeldItem.NONE;
+                } else {
+                    shearsCollisions();
+                }
+                break;
+            case NONE:
+                if(shears.isHeld()) {
+                    currentlyHeld = HeldItem.SHEARS;
+                    prevShearCollide = shears.collidingWith(alpaca);
+                }
+        }
+    }
+
+    private void shearsCollisions() {
+        boolean colliding = shears.collidingWith(alpaca);
+        if(colliding && !prevShearCollide) {
+            shear();
+        }
+        prevShearCollide = colliding;
+    }
+
     private void updateHoseHead(float dt) {
+        if (!toolboxOpen || toolboxOpening || toolboxClosing) return;
         hoseHead.update(dt);
         switch (currentlyHeld) {
             case HOSE:
@@ -313,6 +453,7 @@ public class MainLibGdxView extends ApplicationAdapter {
     }
 
     private void updatePetting(float dt) {
+        this.petDetector.updateBoundingEntity(alpaca);
         this.petDetector.update(dt);
         if (this.petDetector.isJustPet()) {
             double happiness = MainLibGdxView.HAPPINESS_PER_PET * this.petDetector.getNumPets();
@@ -321,6 +462,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             AlpacaFarm.getCurrentAlpaca().incrementHappinessStat(happiness);
             SaveDataUtils.save(parent);
         }
+        alpaca.setPetting(this.petDetector.isPetting());
     }
 
     private void draw(float dt) {
@@ -333,7 +475,11 @@ public class MainLibGdxView extends ApplicationAdapter {
         alpaca.draw(dt, spriteBatch, shapeRenderer);
         clothingEntity.draw(dt, spriteBatch, shapeRenderer);
         if (foodEating != null) foodEating.draw(dt, spriteBatch, shapeRenderer);
-        hoseHead.draw(dt, spriteBatch, shapeRenderer);
+        if (toolboxOpen){
+            hoseHead.draw(dt, spriteBatch, shapeRenderer);
+            shears.draw(dt, spriteBatch, shapeRenderer);
+        }
+        toolboxButton.draw(dt, spriteBatch, shapeRenderer);
         for (WaterDrop waterDrop : waterDrops) {
             waterDrop.draw(dt, spriteBatch, shapeRenderer);
         }
@@ -352,7 +498,10 @@ public class MainLibGdxView extends ApplicationAdapter {
 //        petDetector.draw(dt, spriteBatch, shapeRenderer);
         shapeRenderer.end();
 
+        effectManager.draw(dt, alpaca, viewport, spriteBatch, shapeRenderer);
+
         foodDrawer.draw(dt, spriteBatch, shapeRenderer);
+        clothingDrawer.draw(dt, spriteBatch, shapeRenderer);
 
     }
 
@@ -369,6 +518,44 @@ public class MainLibGdxView extends ApplicationAdapter {
         this.shouldToggleFoodDrawer = true;
     }
 
+    public void toggleClothingDrawer() {
+        this.shouldToggleClothingDrawer = true;
+    }
+
+    private void openToolbox() {
+        toolboxOpen = true;
+        toolboxOpening = true;
+        hoseHead.setPosition(toolboxButton.getPosition());
+        hoseHeadTarget.set(randomVectorNotColliding(hoseHead.getWidth(), hoseHead.getHeight()));
+        shears.setPosition(toolboxButton.getPosition());
+        shearsTarget.set(randomVectorNotColliding(shears.getWidth(), shears.getHeight()));
+        toolboxButton.setImage(StaticContentManager.Image.TOOLBOX_OPEN);
+    }
+
+    private void closeToolbox() {
+        toolboxClosing = true;
+        hoseHeadTarget.set(toolboxButton.getCenterX() - (hoseHead.getWidth() * 0.5f), toolboxButton.getCenterY() - (hoseHead.getHeight() * 0.5f));
+        shearsTarget.set(toolboxButton.getCenterY() - (shears.getWidth() * 0.5f), toolboxButton.getCenterY() - (shears.getHeight() * 0.5f));
+    }
+
+    private Vector2 randomVectorNotColliding(float width, float height) {
+        Rectangle rectangle = new Rectangle();
+        rectangle.width = width;
+        rectangle.height = height;
+        do {
+            rectangle.x = MathUtils.random(0, VIEWPORT_WIDTH - rectangle.width);
+            rectangle.y = MathUtils.random(0, VIEW_HEIGHT - rectangle.height);
+        } while (rectangleCollidingWithAlpacaOrButtons(rectangle));
+        return new Vector2(rectangle.x, rectangle.y);
+    }
+
+    private boolean rectangleCollidingWithAlpacaOrButtons(Rectangle r) {
+        if (alpaca.collidingWith(r)) return true;
+        if (prevButton.collidingWith(r)) return true;
+        if (nextButton.collidingWith(r)) return true;
+        return toolboxButton.collidingWith(r);
+    }
+
     @Override
     public void resize(int width, int height) {
         Gdx.app.log("MainLibGdxView", String.format("%d, %d", width, height));
@@ -377,6 +564,7 @@ public class MainLibGdxView extends ApplicationAdapter {
             zoomText.resize(width, height);
         }
         foodDrawer.resize(width, height);
+        clothingDrawer.resize(width, height);
     }
 
     @Override
@@ -400,6 +588,8 @@ public class MainLibGdxView extends ApplicationAdapter {
             foodEating = null;
         }
         foodDrawer.dispose();
+        clothingDrawer.dispose();
+        effectManager.dispose();
         StaticContentManager.dispose();
     }
 }

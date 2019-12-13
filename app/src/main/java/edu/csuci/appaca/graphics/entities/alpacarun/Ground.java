@@ -21,7 +21,7 @@ public class Ground extends AbstractEntity {
         imageX = 0;
         groundTile = StaticContentManager.getTexture(StaticContentManager.Image.GROUND_TILE);
         imageWidth = groundTile.getWidth();
-        setSize(worldWidth(), groundTile.getHeight() * 0.75f);
+        setSize(worldWidth(), groundTile.getHeight() * 0.65f);
         setVelocity(-speed(), 0);
     }
 

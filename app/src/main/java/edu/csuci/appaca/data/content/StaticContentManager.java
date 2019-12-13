@@ -83,7 +83,15 @@ public class StaticContentManager {
         BUTTON_BACKGROUND_NINEPATCH("ui/button_background_ninepatch.png"),
         ARROW_RIGHT("ui/arrow_right.png"),
         ARROW_LEFT("ui/arrow_left.png"),
-        FOOD_DRAWER_BG("ui/food_drawer_bg.png");
+        FOOD_DRAWER_BG("ui/food_drawer_bg.png"),
+        X_2("ui/x_2.png"),
+        TOOLBOX_OPEN("toolbox_open.png"),
+        TOOLBOX_CLOSED("toolbox_closed.png"),
+        SHEARS("shears.png"),
+        RAINBOW("effects/rainbow.png"),
+        RAIN_CLOUD("effects/raincloud.png"),
+        DIRT_CLOUD("effects/dirtcloud.png"),
+        SPARKLE("effects/sparkle.png");
         final String path;
 
         Image(String path) {
