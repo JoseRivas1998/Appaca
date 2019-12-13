@@ -28,7 +28,7 @@ public class MinesweeperTile {
 
         MinesweeperTile ret = new MinesweeperTile();
         ret.view = new TextView(context);
-        ret.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/covered_tile.png"));
+        ret.view.setBackgroundResource(R.drawable.covered_tile);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = size;
         params.height = size;
@@ -45,11 +45,11 @@ public class MinesweeperTile {
         return ret;
     }
 
-    public boolean reveal(Context context) {
+    public boolean reveal() {
         if(!flagged) {
             if (!revealed) {
                 if (this.bomb) {
-                    this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/poop.png"));
+                    this.view.setBackgroundResource(R.drawable.poop);
                 } else {
                     this.view.setBackgroundResource(R.drawable.uncovered_tile);
                     MinesweeperActivity.tilesRevealed++;
@@ -61,25 +61,25 @@ public class MinesweeperTile {
         return this.revealed;
     }
 
-    private void flag(Context context) {
+    private void flag() {
         if (!revealed) {
             this.flagged = true;
-            this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/flag_tile.png"));
+            this.view.setBackgroundResource(R.drawable.flag_tile);
         }
     }
 
-    private void unflag(Context context) {
+    private void unflag() {
         if (!revealed) {
             this.flagged = false;
-            this.view.setBackground(AssetsUtils.drawableFromAsset(context, "minesweeper/covered_tile.png"));
+            this.view.setBackgroundResource(R.drawable.covered_tile);
         }
     }
 
-    public void flipFlag(Context context) {
+    public void flipFlag() {
         if (this.flagged) {
-            unflag(context);
+            unflag();
         } else {
-            flag(context);
+            flag();
         }
     }
 

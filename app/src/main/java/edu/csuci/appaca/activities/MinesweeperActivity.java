@@ -56,7 +56,7 @@ public class MinesweeperActivity extends AppCompatActivity {
         scoreText.setText(text);
         GridLayout view = findViewById(R.id.minesweeper_grid);
         final ImageButton flagButton = findViewById(R.id.flag_toggle);
-        flagButton.setImageDrawable(AssetsUtils.drawableFromAsset(this, "minesweeper/flag.png"));
+        flagButton.setImageDrawable(context.getDrawable(R.drawable.flag));
         flagButton.setBackgroundColor(Color.TRANSPARENT);
 
         flagButton.setOnClickListener(new View.OnClickListener() {
@@ -85,12 +85,12 @@ public class MinesweeperActivity extends AppCompatActivity {
                         }
 
                         if (flagToggle) {
-                            tile.flipFlag(context);
+                            tile.flipFlag();
                         } else {
                             if (!tile.getFlag()) {
                                 if (tile.bomb) {
                                     timePlayed = TimeUtils.getCurrentTime() - timeStarted;
-                                    tile.reveal(context.getApplicationContext());
+                                    tile.reveal();
                                     revealAllBombs();
                                     MiniGames.endGame(MinesweeperActivity.this, MiniGames.MINESWEEPER, score, timePlayed);
                                 } else {
@@ -150,7 +150,7 @@ public class MinesweeperActivity extends AppCompatActivity {
             if (numOfBombs > 0) {
                 bombExists = true;
             }
-            boolean revealed = grid[y][x].reveal(this.getApplicationContext());
+            boolean revealed = grid[y][x].reveal();
             if (revealed) {
                 setNumOfNearMinesString(numOfBombs);
                 grid[y][x].view.setText(buffer);
@@ -275,9 +275,8 @@ public class MinesweeperActivity extends AppCompatActivity {
     }
 
     private void revealAllBombs() {
-        Context context = this.getApplicationContext();
         for (int i = 0; i < bombs.size(); i++) {
-            bombs.get(i).reveal(context);
+            bombs.get(i).reveal();
         }
     }
 
