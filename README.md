@@ -1,4 +1,4 @@
-# Appcaca
+# Appaca
 CSUCI Fall 2019 COMP 350 Project
 
 ## Getting Started
