@@ -15,14 +15,37 @@
         android:background="@color/yellowPastel"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/main_alpaca_name_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_top_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:paddingTop="5dp"
-            android:text="TEMP"
-            android:textSize="@dimen/main_alpaca_name_size" />
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/main_alpaca_name_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TEMP"
+                android:textAlignment="center"
+                android:textSize="@dimen/main_alpaca_name_size"
+                app:layout_constraintBottom_toBottomOf="@id/main_top_bar"
+                app:layout_constraintLeft_toLeftOf="@id/main_top_bar"
+                app:layout_constraintRight_toRightOf="@id/main_top_bar"
+                app:layout_constraintTop_toTopOf="@id/main_top_bar" />
+
+            <ImageButton
+                android:id="@+id/main_settings_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_settings_black_24dp"
+                android:adjustViewBounds="true"
+                android:paddingRight="@dimen/hud_padding"
+                android:background="#00000000"
+                app:layout_constraintRight_toRightOf="@id/main_top_bar"
+                app:layout_constraintTop_toTopOf="@id/main_top_bar"
+                app:layout_constraintBottom_toBottomOf="@id/main_top_bar"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <LinearLayout
@@ -94,8 +117,8 @@
         android:layout_width="match_parent"
         android:layout_height="71dp"
         android:background="@color/pinkPastel"
-        android:padding="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/feedBtn"
@@ -108,12 +131,12 @@
 
         <ImageView
             android:id="@+id/clothesBtn"
-            android:adjustViewBounds="true"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/main_view_dock_margin"
             android:layout_marginRight="@dimen/main_view_dock_margin"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
             android:src="@drawable/closet" />
 
         <ImageView

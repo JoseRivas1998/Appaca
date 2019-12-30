@@ -63,7 +63,7 @@ public class MainActivity extends AndroidApplication {
         MainScreenBackground.start(this);
         Intent intent = new Intent(this, NotificationService.class);
         startService(intent);
-        findViewById(R.id.main_alpaca_name_view).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.main_settings_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, SettingsActivity.class);
