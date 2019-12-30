@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:context=".fragments.settings.TCGAccountLoginSignupFragment">
+
+    <Button
+        android:id="@+id/tcg_login_signup_signup_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="@string/sign_up"
+        android:layout_marginEnd="@dimen/horizontal_button_spacing"
+        android:background="@drawable/stat_bar_inner_full"/>
+
+    <Button
+        android:id="@+id/tcg_login_signup_login_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="@string/login"
+        android:background="@drawable/stat_bar_inner_full"/>
+
+</LinearLayout>
