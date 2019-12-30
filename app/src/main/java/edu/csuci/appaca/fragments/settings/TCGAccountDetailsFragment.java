@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -74,7 +77,7 @@ public class TCGAccountDetailsFragment extends Fragment {
                 TCGAccount.clear();
                 SaveDataUtils.updateValuesAndSave(getContext());
                 Activity activity = getActivity();
-                if(activity instanceof SettingsActivity) {
+                if (activity instanceof SettingsActivity) {
                     SettingsActivity settingsActivity = (SettingsActivity) activity;
                     settingsActivity.replaceAccountDetailsWithLogin();
                 }
@@ -93,32 +96,24 @@ public class TCGAccountDetailsFragment extends Fragment {
         final TextView usernameView = view.findViewById(R.id.tcg_details_username);
         final ImageView profileImageView = view.findViewById(R.id.tcg_details_profile_img);
         usernameView.setText(tcgUsername);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(tcgProfileImage);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    final InputStream response = connection.getInputStream();
-                    final Bitmap profileImage = BitmapFactory.decodeStream(response);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            profileImageView.setImageBitmap(profileImage);
-                            loadingView.setVisibility(View.GONE);
-                            detailsView.setVisibility(View.VISIBLE);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(getClass().getName(), e.getMessage(), e);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "Unable to download profile image!", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        }).start();
+        Picasso
+                .get()
+                .load(tcgProfileImage)
+                .error(R.drawable.sparkle_poo)
+                .into(profileImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        detailsView.setVisibility(View.VISIBLE);
+                        loadingView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Toast.makeText(getActivity(), "Unable to show profile image!", Toast.LENGTH_LONG).show();
+                        detailsView.setVisibility(View.VISIBLE);
+                        loadingView.setVisibility(View.GONE);
+                        Log.e(getClass().getName(), e.getMessage(), e);
+                    }
+                });
     }
 }
