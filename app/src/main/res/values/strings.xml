@@ -32,4 +32,5 @@
     <string name="minesweeper">Minesweeper</string>
     <string name="minesweeper_score_format">Score: %03d</string>
     <string name="minesweeper_high_score_format">High Score: %03d</string>
+    <string name="webapi_base_url">http://192.168.1.69:8880</string>
 </resources>

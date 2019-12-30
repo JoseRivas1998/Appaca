@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import edu.csuci.appaca.utils.ListUtils;
 
@@ -60,6 +58,7 @@ public class SaveDataUtils {
             } else {
                 HighScore.init();
             }
+            TCGDeviceId.load(jsonObject);
         } catch (FileNotFoundException e) {
             Log.i(SaveDataUtils.class.getName(), "No save data yet!");
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
@@ -79,6 +78,7 @@ public class SaveDataUtils {
             StaminaManager.init();
             Inventory.init();
             HighScore.init();
+            TCGDeviceId.setDeviceId("");
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage());
         }
@@ -99,6 +99,7 @@ public class SaveDataUtils {
             saveData.put("inventory", inventory);
             JSONArray highScores = HighScore.toJSONArray();
             saveData.put("high_scores", highScores);
+            saveData.put("deviceId", TCGDeviceId.getDeviceId());
         } catch (JSONException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }

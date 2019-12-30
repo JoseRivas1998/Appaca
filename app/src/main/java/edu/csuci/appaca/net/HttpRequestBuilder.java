@@ -35,7 +35,7 @@ public class HttpRequestBuilder {
     private ContentType contentType;
 
     private JSONObject jsonBody;
-    private Map<String, Object> nameValueMap;
+    private Map<String, ?> nameValueMap;
 
     private boolean sent;
 
@@ -81,7 +81,7 @@ public class HttpRequestBuilder {
         return this;
     }
 
-    public HttpRequestBuilder setBody(Map<String, Object> nameValueMap) {
+    public HttpRequestBuilder setBody(Map<String, ?> nameValueMap) {
         verifyState();
         this.setContentType(ContentType.NAME_VALUE_MAP);
         this.nameValueMap = nameValueMap;

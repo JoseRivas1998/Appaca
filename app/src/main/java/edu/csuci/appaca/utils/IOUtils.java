@@ -42,7 +42,7 @@ public class IOUtils {
         return sb.toString();
     }
 
-    public static String nameValuePairsToUrlEncodedSTring(Map<String, Object> params) throws UnsupportedEncodingException {
+    public static String nameValuePairsToUrlEncodedSTring(Map<String, ?> params) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         for (String name : params.keySet()) {
             Object value = params.get(name);
