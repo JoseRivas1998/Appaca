@@ -24,5 +24,9 @@
     <dimen name="appaca_text_small">20sp</dimen>
     <dimen name="minigame_select_stamina_text_size">42sp</dimen>
     <dimen name="main_alpaca_name_size">32sp</dimen>
+    <dimen name="horizontal_rule_height">1dp</dimen>
+    <dimen name="settings_subsection_textsize">28sp</dimen>
+    <dimen name="horizontal_button_spacing">20dp</dimen>
+    <dimen name="error_icon_size">50dp</dimen>
 
 </resources>
