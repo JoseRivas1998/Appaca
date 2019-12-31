@@ -1,5 +1,6 @@
 package edu.csuci.appaca.data;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
+import edu.csuci.appaca.net.DataUploadQueue;
 import edu.csuci.appaca.utils.ListUtils;
 
 public class SaveDataUtils {
@@ -85,6 +87,10 @@ public class SaveDataUtils {
     }
 
     public static void save(Context context) {
+        save(context, true);
+    }
+
+    public static void save(Context context, boolean upload) {
         JSONObject saveData = new JSONObject();
         try {
             JSONArray alpacas = AlpacaFarm.toJSONArray();
@@ -109,16 +115,27 @@ public class SaveDataUtils {
         } catch (IOException e) {
             Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
         }
+        if(upload && TCGDeviceId.getDeviceId().length() > 0 && TCGAccount.isLoggedIn() && context instanceof Activity) {
+            try {
+                DataUploadQueue.addUpload((Activity) context);
+            } catch (JSONException e) {
+                Log.e(SaveDataUtils.class.getName(), e.getMessage(), e);
+            }
+        }
     }
 
     public static void updateValuesAndSave(Context context) {
+        updateValuesAndSave(context, true);
+    }
+
+    public static void updateValuesAndSave(Context context, boolean upload) {
         AlpacaFarm.forEach(new ListUtils.Consumer<Alpaca>() {
             @Override
             public void accept(Alpaca alpaca) {
                 alpaca.updateValuesBasedOnTime();
             }
         });
-        SaveDataUtils.save(context);
+        SaveDataUtils.save(context, upload);
     }
 
 }
