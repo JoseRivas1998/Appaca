@@ -23,12 +23,14 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
+import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.data.TCGAccount;
 import edu.csuci.appaca.data.TCGDeviceId;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
+import edu.csuci.appaca.net.ExceptionHandler;
 import edu.csuci.appaca.net.HttpCallback;
 import edu.csuci.appaca.net.HttpRequestBuilder;
 import edu.csuci.appaca.notifications.NotificationService;
@@ -89,8 +91,22 @@ public class MainActivity extends AndroidApplication {
                             JSONObject response = new JSONObject(data);
                             TCGAccount.setAccountData(response);
                         } catch (JSONException e) {
-                            Log.e("MAIN LOGIN", e.getMessage(), e);
+                            Log.e("MAIN_LOGIN", e.getMessage(), e);
                         }
+                    }
+                })
+                .setOnError(new HttpCallback() {
+                    @Override
+                    public void callback(int responseCode, String data) {
+                        TCGDeviceId.setDeviceId("");
+                        TCGAccount.clear();
+                        SaveDataUtils.updateValuesAndSave(MainActivity.this);
+                    }
+                })
+                .setOnException(new ExceptionHandler() {
+                    @Override
+                    public void catchException(Exception e) {
+                        Log.e("MAIN_LOGIN", e.getMessage(), e);
                     }
                 })
                 .send();
