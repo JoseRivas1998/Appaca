@@ -39,7 +39,6 @@ public class DataUploadQueue {
             return;
         }
         isProcessing = true;
-        Log.i(DataUploadQueue.class.getName(), "PROCESSING...");
         try {
             ChunkQueue.INSTANCE.queue.take().process();
         } catch (InterruptedException e) {

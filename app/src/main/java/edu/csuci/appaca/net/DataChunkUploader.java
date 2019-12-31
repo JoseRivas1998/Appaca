@@ -159,7 +159,6 @@ public class DataChunkUploader {
 
     private void uploadNextClothing() {
         JSONObject clothing = this.clothing.remove(0);
-        Log.i(getClass().getName(), clothing.toString());
         HttpRequestBuilder.newPost(parent.getString(R.string.webapi_base_url) + "/appaca/upload/clothing", this.parent)
                 .setBodyJSON(clothing)
                 .setOnSuccess(onSuccess)
