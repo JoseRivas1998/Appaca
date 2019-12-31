@@ -31,6 +31,10 @@ public class StaminaManager {
         StaminaInstance.INSTANCE.maxValue++;
     }
 
+    public static int getMaxStamina() {
+        return StaminaInstance.INSTANCE.maxValue;
+    }
+
     public static void decreaseCurrentStamina() {
         if (StaminaInstance.INSTANCE.currentValue > 0) {
             if (getCurrentStamina() == StaminaInstance.INSTANCE.maxValue)
