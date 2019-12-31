@@ -56,7 +56,7 @@ public class DataChunkUploader {
         food = new ArrayList<>();
         highScores = new ArrayList<>();
         userData = new JSONObject();
-        this.done = true;
+        this.done = false;
     }
 
     public static DataChunkUploader newUploader(Activity parent) throws JSONException {
@@ -145,9 +145,7 @@ public class DataChunkUploader {
         }
         if (!done) {
             uploadUserData();
-            return;
         }
-        finish();
     }
 
     private void uploadNextAlpaca() {
@@ -161,6 +159,7 @@ public class DataChunkUploader {
 
     private void uploadNextClothing() {
         JSONObject clothing = this.clothing.remove(0);
+        Log.i(getClass().getName(), clothing.toString());
         HttpRequestBuilder.newPost(parent.getString(R.string.webapi_base_url) + "/appaca/upload/clothing", this.parent)
                 .setBodyJSON(clothing)
                 .setOnSuccess(onSuccess)
@@ -187,7 +186,7 @@ public class DataChunkUploader {
     }
 
     private void uploadUserData() {
-        HttpRequestBuilder.newPost(parent.getString(R.string.webapi_base_url) + "/upload/userdata", this.parent)
+        HttpRequestBuilder.newPost(parent.getString(R.string.webapi_base_url) + "/appaca/upload/userdata", this.parent)
                 .setBodyJSON(this.userData)
                 .setOnSuccess(new HttpCallback() {
                     @Override

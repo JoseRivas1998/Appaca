@@ -19,12 +19,14 @@ public class DataUploadQueue {
         }
     }
 
+    static boolean isProcessing = false;
+
     public static void addUpload(Activity parent) throws JSONException {
         try {
             final int size = ChunkQueue.INSTANCE.queue.size();
             ChunkQueue.INSTANCE.queue.put(DataChunkUploader.newUploader(parent));
-            if(size == 0) {
-                process(); // start processing if queue was recently empty
+            if(size == 0 && !isProcessing) {
+                process(); // start processing if queue was recently empty and not currently busy
             }
         } catch (InterruptedException e) {
             Log.e(DataUploadQueue.class.getName(), e.getMessage(), e);
@@ -33,8 +35,11 @@ public class DataUploadQueue {
 
     public static void process() {
         if (ChunkQueue.INSTANCE.queue.size() == 0) {
+            isProcessing = false;
             return;
         }
+        isProcessing = true;
+        Log.i(DataUploadQueue.class.getName(), "PROCESSING...");
         try {
             ChunkQueue.INSTANCE.queue.take().process();
         } catch (InterruptedException e) {
