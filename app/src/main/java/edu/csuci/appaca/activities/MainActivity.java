@@ -229,6 +229,7 @@ public class MainActivity extends AndroidApplication {
     protected void onResume() {
         super.onResume();
         MainScreenBackground.start(this);
+        updateName();
     }
 
     @Override

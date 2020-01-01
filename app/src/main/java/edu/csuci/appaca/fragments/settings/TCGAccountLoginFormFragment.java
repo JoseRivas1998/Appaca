@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import edu.csuci.appaca.activities.SettingsActivity;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.TCGAccount;
 import edu.csuci.appaca.data.TCGDeviceId;
+import edu.csuci.appaca.net.DataUploadQueue;
 import edu.csuci.appaca.net.HttpCallback;
 import edu.csuci.appaca.net.HttpRequestBuilder;
 
@@ -69,6 +71,7 @@ public class TCGAccountLoginFormFragment extends Fragment {
         final View loggingIn = view.findViewById(R.id.tcg_login_form_logging_in);
         final View errorView = view.findViewById(R.id.tcg_login_form_error_view);
         final TextView errorText = view.findViewById(R.id.tcg_login_form_error_text);
+        final CheckBox uploadCheckbox = view.findViewById(R.id.tcg_login_form_upload_checkbox);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +87,7 @@ public class TCGAccountLoginFormFragment extends Fragment {
                     errorView.setVisibility(View.VISIBLE);
                     return;
                 }
+                final boolean shouldUpload = uploadCheckbox.isChecked();
                 loginButton.setVisibility(View.GONE);
                 errorView.setVisibility(View.GONE);
                 loggingIn.setVisibility(View.VISIBLE);
@@ -98,7 +102,7 @@ public class TCGAccountLoginFormFragment extends Fragment {
                                 try {
                                     JSONObject response = new JSONObject(data);
                                     TCGDeviceId.setDeviceId(response.getString("deviceId"));
-                                    SaveDataUtils.updateValuesAndSave(activity);
+                                    SaveDataUtils.updateValuesAndSave(activity, false);
                                     HttpRequestBuilder.newPost(getString(R.string.webapi_base_url) + "/users/user", activity)
                                             .setBodyJSON(response)
                                             .setOnSuccess(new HttpCallback() {
@@ -107,6 +111,9 @@ public class TCGAccountLoginFormFragment extends Fragment {
                                                     try {
                                                         JSONObject userData = new JSONObject(data);
                                                         TCGAccount.setAccountData(userData);
+                                                        if (shouldUpload) {
+                                                            DataUploadQueue.addUpload(activity);
+                                                        }
                                                         if (activity instanceof SettingsActivity) {
                                                             ((SettingsActivity) activity).replaceLoginFormWithAccountDetails();
                                                         }
