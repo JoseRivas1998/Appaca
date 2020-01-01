@@ -8,6 +8,8 @@ import org.json.JSONException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import edu.csuci.appaca.utils.TimeUtils;
+
 public class DataUploadQueue {
 
     private enum ChunkQueue {
@@ -19,9 +21,20 @@ public class DataUploadQueue {
         }
     }
 
-    static boolean isProcessing = false;
+    private static boolean isProcessing = false;
+    private static long lastUploadTime = 0;
+    private static DataChunkUploader mostRecentUploaded = null;
+
+    public static boolean isProcessing() {
+        return isProcessing;
+    }
 
     public static void addUpload(Activity parent) throws JSONException {
+        long currentTime = TimeUtils.getCurrentTime();
+        if(currentTime - lastUploadTime < 5) {
+            return;
+        }
+        lastUploadTime = currentTime;
         try {
             final int size = ChunkQueue.INSTANCE.queue.size();
             ChunkQueue.INSTANCE.queue.put(DataChunkUploader.newUploader(parent));
@@ -35,12 +48,16 @@ public class DataUploadQueue {
 
     public static void process() {
         if (ChunkQueue.INSTANCE.queue.size() == 0) {
-            isProcessing = false;
+            if(mostRecentUploaded != null && mostRecentUploaded.isDone()) {
+                isProcessing = false;
+                mostRecentUploaded = null;
+            }
             return;
         }
         isProcessing = true;
         try {
-            ChunkQueue.INSTANCE.queue.take().process();
+            mostRecentUploaded = ChunkQueue.INSTANCE.queue.take();
+            mostRecentUploaded.process();
         } catch (InterruptedException e) {
             Log.e(DataUploadQueue.class.getName(), e.getMessage(), e);
         }

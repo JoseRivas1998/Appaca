@@ -17,6 +17,12 @@ public class CurrencyManager {
         }
     }
 
+    public static void clear() {
+        Currency.INSTANCE.currencyAlpaca = 0;
+        Currency.INSTANCE.currencyOther = 0;
+        Currency.INSTANCE.loaded = false;
+    }
+
     public static void load(JSONObject jsonObject) {
         if(Currency.INSTANCE.loaded) return;
         try {

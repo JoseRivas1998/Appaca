@@ -20,6 +20,11 @@ public class HighScore {
         }
     }
 
+    public static void clear() {
+        HighScoreInstance.INSTANCE.highScores = new HashMap<>();
+        HighScoreInstance.INSTANCE.loaded = false;
+    }
+
     public static int getHighScore(MiniGames miniGame) {
         if(!HighScoreInstance.INSTANCE.highScores.containsKey(miniGame)) {
             HighScoreInstance.INSTANCE.highScores.put(miniGame, 0);
