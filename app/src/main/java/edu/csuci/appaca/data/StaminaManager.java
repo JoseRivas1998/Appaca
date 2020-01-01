@@ -25,6 +25,14 @@ public class StaminaManager {
 
     }
 
+    public static void clear() {
+        StaminaInstance.INSTANCE.currentValue = 0;
+        StaminaInstance.INSTANCE.maxValue = 0;
+        StaminaInstance.INSTANCE.loaded = false;
+        // just initialize it to zero
+        StaminaInstance.INSTANCE.firstStaminaUsedTime = 0;
+    }
+
     public static final int MAX_STAMINA = 4;
 
     public static void increaseMaxStamina() {

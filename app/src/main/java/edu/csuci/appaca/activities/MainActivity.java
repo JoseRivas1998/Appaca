@@ -24,17 +24,21 @@ import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
 import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.data.TCGAccount;
 import edu.csuci.appaca.data.TCGDeviceId;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
+import edu.csuci.appaca.net.DataSync;
+import edu.csuci.appaca.net.DataUploadQueue;
 import edu.csuci.appaca.net.ExceptionHandler;
 import edu.csuci.appaca.net.HttpCallback;
 import edu.csuci.appaca.net.HttpRequestBuilder;
 import edu.csuci.appaca.notifications.NotificationService;
 import edu.csuci.appaca.utils.ListUtils;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class MainActivity extends AndroidApplication {
 
@@ -79,6 +83,9 @@ public class MainActivity extends AndroidApplication {
         if (TCGDeviceId.getDeviceId().length() == 0 || TCGAccount.isLoggedIn()) {
             return;
         }
+        Log.i(getClass().getName(), String.format("CURRENT TIME: %d", TimeUtils.getCurrentTime()));
+        final long lastSavedTime = SavedTime.lastSavedTime();
+        Log.i(getClass().getName(), String.format("LAST SAVED TIME: %d", lastSavedTime));
         String deviceId = TCGDeviceId.getDeviceId();
         Map<String, String> loginParam = new HashMap<>();
         loginParam.put("deviceId", deviceId);
@@ -90,6 +97,7 @@ public class MainActivity extends AndroidApplication {
                         try {
                             JSONObject response = new JSONObject(data);
                             TCGAccount.setAccountData(response);
+                            DataSync.syncData(lastSavedTime, MainActivity.this);
                         } catch (JSONException e) {
                             Log.e("MAIN_LOGIN", e.getMessage(), e);
                         }
@@ -206,6 +214,10 @@ public class MainActivity extends AndroidApplication {
         TextView view = findViewById(R.id.main_alpaca_name_view);
         view.setText(name);
     }
+    public void updateUploading() {
+        final View progressBar = findViewById(R.id.main_upload_indicator);
+        progressBar.setVisibility(DataUploadQueue.isProcessing() ? View.VISIBLE : View.GONE);
+    }
 
     @Override
     protected void onPause() {
@@ -217,6 +229,7 @@ public class MainActivity extends AndroidApplication {
     protected void onResume() {
         super.onResume();
         MainScreenBackground.start(this);
+        updateName();
     }
 
     @Override

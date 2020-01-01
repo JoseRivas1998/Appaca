@@ -36,6 +36,32 @@
         android:id="@+id/tcg_accounts_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/hud_padding"/>
+        android:layout_marginBottom="@dimen/hud_padding" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/horizontal_rule_height"
+        android:layout_marginBottom="@dimen/hud_padding"
+        android:background="@color/horizontal_rule_color" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/hud_padding"
+        android:text="@string/data_management"
+        android:textAlignment="center"
+        android:textSize="@dimen/settings_subsection_textsize" />
+
+    <fragment
+        android:id="@+id/settings_data_management"
+        android:name="edu.csuci.appaca.fragments.settings.DataManagementFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/hud_padding"
+        tools:layout="@layout/fragment_data_management" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/hud_padding" />
 
 </LinearLayout>

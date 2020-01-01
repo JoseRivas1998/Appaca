@@ -32,7 +32,7 @@
     <string name="minesweeper">Minesweeper</string>
     <string name="minesweeper_score_format">Score: %03d</string>
     <string name="minesweeper_high_score_format">High Score: %03d</string>
-    <string name="webapi_base_url">https://webapi.tinycountrygames.com</string>
+    <string name="webapi_base_url">https://dev.webapi.tinycountrygames.com</string>
     <string name="tcg_account_manage_page">https://tinycountrygames.com/tcgaccounts/manage/</string>
     <string name="tcg_account_signup_page">https://tinycountrygames.com/tcgaccounts/signup/</string>
     <string name="tcg_account_reset_page">https://tinycountrygames.com/tcgaccounts/reset/</string>
@@ -51,4 +51,10 @@
     <string name="enter_a_username">Enter a username!</string>
     <string name="enter_a_password">Enter a password!</string>
     <string name="loading_account_details">Loading Account Details</string>
+    <string name="upload_current_data_to_cloud">Upload Current Data to Cloud</string>
+    <string name="please_login_to_continue">Please Login to Continue</string>
+    <string name="data_management">Data Management</string>
+    <string name="upload_data">Upload Data</string>
+    <string name="download_data">Download Data</string>
+    <string name="keep_latest">Keep Latest</string>
 </resources>

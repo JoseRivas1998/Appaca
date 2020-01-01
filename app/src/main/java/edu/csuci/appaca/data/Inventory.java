@@ -27,6 +27,12 @@ public class Inventory {
         }
     }
 
+    public static void clear() {
+        InventoryInstance.INSTANCE.food = new HashMap<>();
+        InventoryInstance.INSTANCE.clothes = new HashMap<>();
+        InventoryInstance.INSTANCE.loaded = false;
+    }
+
     public static void init() {
         for (StaticFoodItem foodItem : ShopData.getAllFood()) {
             InventoryInstance.INSTANCE.food.put(foodItem, 0);

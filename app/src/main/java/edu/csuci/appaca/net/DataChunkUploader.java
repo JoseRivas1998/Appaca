@@ -117,6 +117,10 @@ public class DataChunkUploader {
 
     }
 
+    public boolean isDone() {
+        return this.done;
+    }
+
     private void finish() {
         alpacas.clear();
         clothing.clear();

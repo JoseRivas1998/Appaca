@@ -21,6 +21,7 @@ import edu.csuci.appaca.R;
 import edu.csuci.appaca.data.SaveDataUtils;
 import edu.csuci.appaca.data.TCGAccount;
 import edu.csuci.appaca.data.TCGDeviceId;
+import edu.csuci.appaca.fragments.settings.DataManagementFragment;
 import edu.csuci.appaca.fragments.settings.TCGAccountDetailsFragment;
 import edu.csuci.appaca.fragments.settings.TCGAccountLoginFormFragment;
 import edu.csuci.appaca.fragments.settings.TCGAccountLoginSignupFragment;
@@ -41,6 +42,24 @@ public class SettingsActivity extends AppCompatActivity {
     public void replaceAccountDetailsWithLogin() {
         Fragment fragment = new TCGAccountLoginSignupFragment();
         replaceTCGAccount(fragment);
+        updateDataManagement();
+    }
+
+    public void replaceLoginButtonsWithForm() {
+        Fragment fragment = new TCGAccountLoginFormFragment();
+        replaceTCGAccount(fragment);
+        updateDataManagement();
+    }
+
+    public void replaceLoginFormWithAccountDetails() {
+        Fragment fragment = new TCGAccountDetailsFragment();
+        replaceTCGAccount(fragment);
+        updateDataManagement();
+    }
+
+    public void updateDataManagement() {
+        final DataManagementFragment fragment = (DataManagementFragment) getSupportFragmentManager().findFragmentById(R.id.settings_data_management);
+        fragment.update();
     }
 
     private void replaceTCGAccount(Fragment fragment) {
@@ -48,16 +67,6 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.tcg_accounts_fragment_container, fragment)
                 .commit();
-    }
-
-    public void replaceLoginButtonsWithForm() {
-        Fragment fragment = new TCGAccountLoginFormFragment();
-        replaceTCGAccount(fragment);
-    }
-
-    public void replaceLoginFormWithAccountDetails() {
-        Fragment fragment = new TCGAccountDetailsFragment();
-        replaceTCGAccount(fragment);
     }
 
     private void setupTCGAccounts() {

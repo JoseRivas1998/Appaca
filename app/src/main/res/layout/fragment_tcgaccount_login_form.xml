@@ -29,6 +29,13 @@
         android:layout_marginBottom="@dimen/hud_padding"
         android:inputType="textPassword" />
 
+    <CheckBox
+        android:id="@+id/tcg_login_form_upload_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/hud_padding"
+        android:text="@string/upload_current_data_to_cloud" />
+
     <Button
         android:id="@+id/tcg_login_form_login_btn"
         android:layout_width="match_parent"
@@ -47,9 +54,9 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_marginEnd="@dimen/hud_padding"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/hud_padding" />
 
         <TextView
             android:layout_width="wrap_content"
