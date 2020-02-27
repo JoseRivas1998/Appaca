@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.settings.DataManagementFragment">
+
+    <TextView
+        android:id="@+id/data_management_please"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/please_login_to_continue"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:id="@+id/data_management_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/data_management_upload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/stat_bar_inner_full"
+            android:layout_marginEnd="@dimen/horizontal_button_spacing"
+            android:text="@string/upload_data" />
+
+        <Button
+            android:id="@+id/data_management_download"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/stat_bar_inner_full"
+            android:layout_marginEnd="@dimen/horizontal_button_spacing"
+            android:text="@string/download_data" />
+
+        <Button
+            android:id="@+id/data_management_keep"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/stat_bar_inner_full"
+            android:text="@string/keep_latest" />
+
+    </LinearLayout>
+
+</LinearLayout>

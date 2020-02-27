@@ -2,28 +2,43 @@ package edu.csuci.appaca.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.csuci.appaca.R;
 import edu.csuci.appaca.concurrency.MainScreenBackground;
 import edu.csuci.appaca.data.AlpacaFarm;
 import edu.csuci.appaca.data.CurrencyManager;
+import edu.csuci.appaca.data.SaveDataUtils;
+import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
+import edu.csuci.appaca.data.TCGAccount;
+import edu.csuci.appaca.data.TCGDeviceId;
 import edu.csuci.appaca.fragments.CurrencyDisplayFragment;
 import edu.csuci.appaca.fragments.StatBarFragment;
 import edu.csuci.appaca.graphics.MainLibGdxView;
-import edu.csuci.appaca.notifications.NotificationChecker;
+import edu.csuci.appaca.net.DataSync;
+import edu.csuci.appaca.net.DataUploadQueue;
+import edu.csuci.appaca.net.ExceptionHandler;
+import edu.csuci.appaca.net.HttpCallback;
+import edu.csuci.appaca.net.HttpRequestBuilder;
 import edu.csuci.appaca.notifications.NotificationService;
 import edu.csuci.appaca.utils.ListUtils;
+import edu.csuci.appaca.utils.TimeUtils;
 
 public class MainActivity extends AndroidApplication {
 
@@ -54,6 +69,55 @@ public class MainActivity extends AndroidApplication {
         MainScreenBackground.start(this);
         Intent intent = new Intent(this, NotificationService.class);
         startService(intent);
+        findViewById(R.id.main_settings_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(i);
+            }
+        });
+        login();
+    }
+
+    private void login() {
+        if (TCGDeviceId.getDeviceId().length() == 0 || TCGAccount.isLoggedIn()) {
+            return;
+        }
+        Log.i(getClass().getName(), String.format("CURRENT TIME: %d", TimeUtils.getCurrentTime()));
+        final long lastSavedTime = SavedTime.lastSavedTime();
+        Log.i(getClass().getName(), String.format("LAST SAVED TIME: %d", lastSavedTime));
+        String deviceId = TCGDeviceId.getDeviceId();
+        Map<String, String> loginParam = new HashMap<>();
+        loginParam.put("deviceId", deviceId);
+        HttpRequestBuilder.newPost(getString(R.string.webapi_base_url) + "/users/user", this)
+                .setBody(loginParam)
+                .setOnSuccess(new HttpCallback() {
+                    @Override
+                    public void callback(int responseCode, String data) {
+                        try {
+                            JSONObject response = new JSONObject(data);
+                            TCGAccount.setAccountData(response);
+                            DataSync.syncData(lastSavedTime, MainActivity.this);
+                        } catch (JSONException e) {
+                            Log.e("MAIN_LOGIN", e.getMessage(), e);
+                        }
+                    }
+                })
+                .setOnError(new HttpCallback() {
+                    @Override
+                    public void callback(int responseCode, String data) {
+                        TCGDeviceId.setDeviceId("");
+                        TCGAccount.clear();
+                        SaveDataUtils.updateValuesAndSave(MainActivity.this);
+                    }
+                })
+                .setOnException(new ExceptionHandler() {
+                    @Override
+                    public void catchException(Exception e) {
+                        Log.e("MAIN_LOGIN", e.getMessage(), e);
+                    }
+                })
+                .send();
     }
 
     private void initCurrencyDisplays() {
@@ -150,6 +214,10 @@ public class MainActivity extends AndroidApplication {
         TextView view = findViewById(R.id.main_alpaca_name_view);
         view.setText(name);
     }
+    public void updateUploading() {
+        final View progressBar = findViewById(R.id.main_upload_indicator);
+        progressBar.setVisibility(DataUploadQueue.isProcessing() ? View.VISIBLE : View.GONE);
+    }
 
     @Override
     protected void onPause() {
@@ -161,6 +229,7 @@ public class MainActivity extends AndroidApplication {
     protected void onResume() {
         super.onResume();
         MainScreenBackground.start(this);
+        updateName();
     }
 
     @Override

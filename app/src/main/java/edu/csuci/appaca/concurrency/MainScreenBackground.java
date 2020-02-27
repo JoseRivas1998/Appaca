@@ -16,6 +16,7 @@ import edu.csuci.appaca.data.HygieneDepletion;
 import edu.csuci.appaca.data.SavedTime;
 import edu.csuci.appaca.data.Stat;
 import edu.csuci.appaca.fragments.StatBarFragment;
+import edu.csuci.appaca.net.DataUploadQueue;
 import edu.csuci.appaca.notifications.HygieneNotification;
 import edu.csuci.appaca.utils.ListUtils;
 import edu.csuci.appaca.utils.TimeUtils;
@@ -57,6 +58,7 @@ public class MainScreenBackground {
         private boolean running;
         private MainActivity parent;
         private int currentAlpacaId;
+        private boolean isUploading;
 
         public BackgroundThread(MainActivity parent) {
             super();
@@ -80,12 +82,26 @@ public class MainScreenBackground {
                 updateStats(currentValues, current);
                 updateCurrencyDisplays();
                 updateName(current);
+                updateUploading();
                 try {
                     Thread.sleep(1000 / UPDATES_PER_SECOND);
                 } catch (InterruptedException e) {
                     Log.e(getClass().getSimpleName() + ":" + getId(), e.getMessage(), e);
                 }
             }
+        }
+
+        private void updateUploading() {
+            final boolean currentUploading = DataUploadQueue.isProcessing();
+            if(currentUploading != isUploading) {
+                parent.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        parent.updateUploading();
+                    }
+                });
+            }
+            isUploading = currentUploading;
         }
 
         private void updateName(Alpaca alpaca) {

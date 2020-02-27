@@ -1,11 +1,14 @@
 package edu.csuci.appaca.data;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import edu.csuci.appaca.utils.ListUtils;
 
@@ -14,10 +17,12 @@ public class AlpacaFarm {
     private enum FarmInstance {
         INSTANCE;
         int currentAlpaca;
+        Semaphore semaphore;
         boolean loaded;
         List<Alpaca> alpacas;
 
         FarmInstance() {
+            semaphore = new Semaphore(1, true);
             this.currentAlpaca = 0;
             this.loaded = false;
             this.alpacas = new ArrayList<>();
@@ -36,6 +41,12 @@ public class AlpacaFarm {
 
         FarmInstance.INSTANCE.loaded = true;
         return FarmInstance.INSTANCE.loaded;
+    }
+
+    public static void clear() {
+        FarmInstance.INSTANCE.currentAlpaca = 0;
+        FarmInstance.INSTANCE.loaded = false;
+        FarmInstance.INSTANCE.alpacas = new ArrayList<>();
     }
 
     public static void addAlpaca(int shopItemId, String name) {
@@ -61,8 +72,23 @@ public class AlpacaFarm {
         return maxAlpaca.getId();
     }
 
+    public static synchronized void openFarm() {
+        try {
+            FarmInstance.INSTANCE.semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeFarm() {
+        FarmInstance.INSTANCE.semaphore.release();
+    }
+
     public static Alpaca getCurrentAlpaca() {
-        return FarmInstance.INSTANCE.alpacas.get(FarmInstance.INSTANCE.currentAlpaca);
+        openFarm();
+        Alpaca alpaca = FarmInstance.INSTANCE.alpacas.get(FarmInstance.INSTANCE.currentAlpaca);
+        closeFarm();
+        return alpaca;
     }
 
     public static int numberOfAlpacas() {

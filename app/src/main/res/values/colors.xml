@@ -19,5 +19,6 @@
     <color name="minesweepersix">#4C4955</color>
     <color name="minesweeperseven">#4D5606</color>
     <color name="minesweepereight">#15325B</color>
+    <color name="horizontal_rule_color">#d2d2d2d2</color>
 
 </resources>
