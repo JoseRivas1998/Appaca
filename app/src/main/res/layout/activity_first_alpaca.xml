@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/first_alpaca_sprite_height"
             android:layout_weight=".5"
-            android:src="@drawable/apple" />
+            android:src="@drawable/fatalpaca" />
 
         <Space
             android:layout_width="0dp"
